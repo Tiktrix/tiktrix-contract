@@ -41,12 +41,12 @@ contract GameEscrow is AccessControl {
     }
 
     // MINTER_ROLE 부여 기능
-    function grantMinterRole(address account) public onlyRole(MINTER_ROLE) {
+    function grantMinterRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
         grantRole(MINTER_ROLE, account);
     }
 
     // MINTER_ROLE 제거 기능
-    function revokeMinterRole(address account) public onlyRole(MINTER_ROLE) {
+    function revokeMinterRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
         revokeRole(MINTER_ROLE, account);
     }
 
