@@ -287,6 +287,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "grantMinterRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes32",
 						"name": "role",
 						"type": "bytes32"
@@ -395,6 +408,19 @@
 					}
 				],
 				"name": "renounceRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "revokeMinterRole",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -613,11 +639,11 @@
 	},
 	"sources": {
 		"contracts/token/tTVGToken.sol": {
-			"keccak256": "0xc5cce0f0d80581c7865b1d3542f40bc27ec7ebdc5bd2d727270d2fa5fd318be3",
+			"keccak256": "0x9ffbfd9e022e4a9a2f55f7dce28f20fb99f35b2e69afb890b6e6e919948e91d0",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a38e0f19072482fbd14cb7bd02588abb430911ed2142741cc4dcd46a6a1f63f5",
-				"dweb:/ipfs/QmaQxArJmEdgvcDr5eq8cPRpuqfhGbLGnVPa2txZFrfyvQ"
+				"bzz-raw://3af20bf6be614be86d0d212e220b6627a9ed93df488208c415462790bfb82f3b",
+				"dweb:/ipfs/QmXu1c9UCMuiWTGwvQisd6F5536afsWrAG2dWNYpWcHSKo"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {

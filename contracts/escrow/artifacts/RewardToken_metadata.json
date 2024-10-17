@@ -598,7 +598,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/escrow/GameEscrow.sol": "RewardToken"
+			"contracts/escrow/TikTrixGameEscrow.sol": "RewardToken"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -612,12 +612,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/escrow/GameEscrow.sol": {
-			"keccak256": "0x17c157c61d1bbb3a59a1c601fd7c8dbe736bafb62e73225ebbe93efc03b18e33",
+		"contracts/escrow/TikTrixGameEscrow.sol": {
+			"keccak256": "0x39f48c60cbfdb945e2208c23f50aed8fead95e87f6c36bd4994209eba7887de7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5c6cf5df49581a0cac62a79315947427d839eb57da0f6b5b8445e3509e0cd54e",
-				"dweb:/ipfs/QmfJqSMQY1yEvNTJLEeyzC4W3EPym2yJXyad56UYLKq4pY"
+				"bzz-raw://708995b1a8907c8038c43657410bdb89d5492a291865688c3f77b3b881eed9f3",
+				"dweb:/ipfs/QmXTyY9usZT7LUsR3nS4EzzErzDz3uQv3Rqwd3dQzf9rJC"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {
