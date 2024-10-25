@@ -207,9 +207,9 @@
 						"type": "address[]"
 					},
 					{
-						"internalType": "uint256",
-						"name": "tokenAmount",
-						"type": "uint256"
+						"internalType": "uint256[]",
+						"name": "tokenAmounts",
+						"type": "uint256[]"
 					}
 				],
 				"name": "distributePrizes",
@@ -222,7 +222,7 @@
 				"name": "entToken",
 				"outputs": [
 					{
-						"internalType": "contract IERC20",
+						"internalType": "contract tENT",
 						"name": "",
 						"type": "address"
 					}
@@ -386,7 +386,7 @@
 				"name": "rptToken",
 				"outputs": [
 					{
-						"internalType": "contract IERC20",
+						"internalType": "contract tRPT",
 						"name": "",
 						"type": "address"
 					}
@@ -490,11 +490,19 @@
 	},
 	"sources": {
 		"contracts/escrow/tTikTrixGameEscrow.sol": {
-			"keccak256": "0x8bbc49d68c4b6c0da555eec41f7b61fa9f2ec1d57b5527f2dfb0c83eae31b7c1",
+			"keccak256": "0x9ccc44546aefe8314b3734270b40e69e5bc42de026d612a012aa9604947c2210",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ce7a3f55b4fc9110c6b82d045a685fe3987b0986a30c3f362966a23d1c5b7c26",
-				"dweb:/ipfs/QmVGqoZ1o1vWL2v7j9vSHbeapvCwKXhVv4pozjBFuwdCYx"
+				"bzz-raw://b072f0db26c6fc039eae616178acb84f9d8df2e950cb549c3c545c87a9674b07",
+				"dweb:/ipfs/QmQUyiQGKMUN8wgYTipReC8owmsH7od6yfoYVUSRzhu1Lu"
+			]
+		},
+		"contracts/token/tENTToken.sol": {
+			"keccak256": "0x98bc451ec5dc0a97eacc593fdd4bbf086b9adaa7d6a41e1e25d03f499d9ffcb7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a5bdecbe1668f312419cd731423b15d767bdb1873cfa5a3c583c27abe827c23e",
+				"dweb:/ipfs/QmedqggUwd6tb7qpbFY8Ja7QRvvWpMpsX9X3GPvMSSwqKd"
 			]
 		},
 		"contracts/token/tRPTToken.sol": {

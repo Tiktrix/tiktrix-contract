@@ -3,13 +3,14 @@ pragma solidity ^0.8.26;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/token/ERC20/ERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol";
+import "../token/tENTToken.sol";
 import "../token/tRPTToken.sol";
 
 contract tTikTrixGameEscrow is AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     
-    IERC20 public entToken;
-    IERC20 public rptToken; 
+    tENT public entToken;
+    tRPT public rptToken; 
 
     struct Challenge {
         uint256 gameSeq;
@@ -23,8 +24,8 @@ contract tTikTrixGameEscrow is AccessControl {
     mapping(uint256 => mapping(uint256 => mapping(uint256 => Challenge))) public challenges;
 
     constructor(address entTokenAddress, address rptTokenAddress) {
-        entToken = IERC20(entTokenAddress);
-        rptToken = IERC20(rptTokenAddress);  // 민팅 가능한 ERC20 토큰 설정
+        entToken = tENT(entTokenAddress);
+        rptToken = tRPT(rptTokenAddress);  // 민팅 가능한 ERC20 토큰 설정
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);  // 계약 배포자는 기본 관리자
         _setupRole(ADMIN_ROLE, msg.sender);  // ADMIN_ROLE 역할 부여
     }
@@ -87,15 +88,17 @@ contract tTikTrixGameEscrow is AccessControl {
     }
 
     // 상금 분배 기능 (민팅 기반)
-    function distributePrizes(address[] calldata recipients, uint256 tokenAmount) external onlyRole(ADMIN_ROLE) {
+   function distributePrizes(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(ADMIN_ROLE) {
+        require(recipients.length == tokenAmounts.length, "Recipients and token amounts length mismatch");
+
         for (uint256 i = 0; i < recipients.length; i++) {
-            tRPT(address(rptToken)).mint(recipients[i], tokenAmount);  // 민팅하여 지급
+            tRPT(address(rptToken)).mint(recipients[i], tokenAmounts[i]);  // 각 recipient에게 지정된 수량만큼 민팅하여 지급
         }
     }
 
     // 상금 분배 및 참여할 때 사용할 토큰 설정 기능
     function setTokens(address entTokenAddress, address rptTokenAddress) external onlyRole(ADMIN_ROLE) {
-        entToken = IERC20(entTokenAddress);
-        rptToken = IERC20(rptTokenAddress);
+        entToken = tENT(entTokenAddress);
+        rptToken = tRPT(rptTokenAddress);
     }
 }
