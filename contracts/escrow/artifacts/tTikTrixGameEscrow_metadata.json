@@ -26,6 +26,257 @@
 				"inputs": [
 					{
 						"indexed": true,
+						"internalType": "uint256",
+						"name": "yyyymmdd",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tokenAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "ChallengeRegistred",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "GameDeleted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "GameEnded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "GameLiked",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "GamePlayed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "developerSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					}
+				],
+				"name": "GameRegistered",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "developerSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					}
+				],
+				"name": "GameUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "tokenAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "MemberRegistered",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address[]",
+						"name": "recipients",
+						"type": "address[]"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256[]",
+						"name": "tokenAmounts",
+						"type": "uint256[]"
+					}
+				],
+				"name": "PrizesDistributed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "yyyymmdd",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newScore",
+						"type": "uint256"
+					}
+				],
+				"name": "RankScoreUpdateChallenge",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "yyyymmdd",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newScore",
+						"type": "uint256"
+					}
+				],
+				"name": "RankScoreUpdateNoraml",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
 						"internalType": "bytes32",
 						"name": "role",
 						"type": "bytes32"
@@ -145,7 +396,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "challenge",
+				"name": "challengeRegister",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -233,6 +484,220 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "gameDelete",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "gameEnd",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "gameInfos",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "developerSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "exists",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "gameLike",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "gamePlay",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "developerSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					}
+				],
+				"name": "gameRegister",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "developerSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					}
+				],
+				"name": "gameUpdate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "getGameInfo",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "developerSeq",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "gameSeq",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"internalType": "bool",
+								"name": "exists",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct tTikTrixGameEscrow.GameInfo",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "getMemberInfo",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "memberSeq",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct tTikTrixGameEscrow.MemberInfo",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes32",
 						"name": "role",
 						"type": "bytes32"
@@ -308,6 +773,25 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "memberInfos",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "yyyymmdd",
 						"type": "uint256"
 					},
@@ -327,7 +811,58 @@
 						"type": "uint256"
 					}
 				],
-				"name": "registerScore",
+				"name": "rankScoreUpdateChallenge",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "yyyymmdd",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "newScore",
+						"type": "uint256"
+					}
+				],
+				"name": "rankScoreUpdateNormal",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "mintAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "registerMember",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -490,11 +1025,11 @@
 	},
 	"sources": {
 		"contracts/escrow/tTikTrixGameEscrow.sol": {
-			"keccak256": "0x9ccc44546aefe8314b3734270b40e69e5bc42de026d612a012aa9604947c2210",
+			"keccak256": "0x786d97acccd318ab2bf5e00365880fa670a28863b327197bda653f41c400c0ab",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b072f0db26c6fc039eae616178acb84f9d8df2e950cb549c3c545c87a9674b07",
-				"dweb:/ipfs/QmQUyiQGKMUN8wgYTipReC8owmsH7od6yfoYVUSRzhu1Lu"
+				"bzz-raw://991386f7a79efbc6f0ed8d046b70b67d3059d6e711fac55e571320b799a02718",
+				"dweb:/ipfs/QmUGjf4fspf8hSy92NRrCJ9fqDFqXbmfXTzANZrTN4k8Bh"
 			]
 		},
 		"contracts/token/tENTToken.sol": {

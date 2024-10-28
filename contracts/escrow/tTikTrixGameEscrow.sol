@@ -8,11 +8,18 @@ import "../token/tRPTToken.sol";
 
 contract tTikTrixGameEscrow is AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
-    
-    tENT public entToken;
-    tRPT public rptToken; 
 
-    struct Challenge {
+    tENT public entToken;
+    tRPT public rptToken;
+
+    struct GameInfo {
+        uint256 developerSeq;
+        uint256 gameSeq;
+        string title;
+        bool exists;
+    }
+
+    struct ChallengeScore {
         uint256 gameSeq;
         uint256 memberSeq;
         uint256 tokenAmount;
@@ -20,85 +27,171 @@ contract tTikTrixGameEscrow is AccessControl {
         bool exists;
     }
 
-    // mapping: 기준일자 => 게임 고유 번호 => 회원 번호 => 챌린지 정보
-    mapping(uint256 => mapping(uint256 => mapping(uint256 => Challenge))) public challenges;
+    struct MemberInfo {
+        uint256 memberSeq;
+    }
+
+    mapping(uint256 => mapping(uint256 => mapping(uint256 => ChallengeScore))) public challenges;
+    mapping(uint256 => GameInfo) public gameInfos;
+    mapping(uint256 => MemberInfo) public memberInfos;
+
+    event ChallengeRegistred(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 tokenAmount);
+    event RankScoreUpdateNoraml(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 newScore);
+    event RankScoreUpdateChallenge(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 newScore);
+    event PrizesDistributed(address[] recipients, uint256[] tokenAmounts);
+
+    event GamePlayed(uint256 indexed gameSeq, uint256 indexed memberSeq);
+    event GameEnded(uint256 indexed gameSeq, uint256 indexed memberSeq);
+    event GameLiked(uint256 indexed gameSeq, uint256 indexed memberSeq);
+
+    event GameRegistered(uint256 developerSeq, uint256 gameSeq, string title);
+    event GameUpdated(uint256 developerSeq, uint256 gameSeq, string title);
+    event GameDeleted(uint256 indexed gameSeq);
+    event MemberRegistered(uint256 memberSeq, uint256 tokenAmount);
 
     constructor(address entTokenAddress, address rptTokenAddress) {
         entToken = tENT(entTokenAddress);
-        rptToken = tRPT(rptTokenAddress);  // 민팅 가능한 ERC20 토큰 설정
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);  // 계약 배포자는 기본 관리자
-        _setupRole(ADMIN_ROLE, msg.sender);  // ADMIN_ROLE 역할 부여
+        rptToken = tRPT(rptTokenAddress);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(ADMIN_ROLE, msg.sender);
     }
 
-    // ADMIN_ROLE 부여 기능
     function grantAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
         grantRole(ADMIN_ROLE, account);
     }
 
-    // ADMIN_ROLE 제거 기능
     function revokeAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
         revokeRole(ADMIN_ROLE, account);
     }
 
-    // 챌린지 도전 기능
-    function challenge(
+    function gameRegister(uint256 developerSeq, uint256 gameSeq, string memory title) external onlyRole(ADMIN_ROLE) {
+        gameInfos[gameSeq] = GameInfo({
+            developerSeq: developerSeq,
+            gameSeq: gameSeq,
+            title: title,
+            exists: true
+        });
+
+        emit GameRegistered(developerSeq, gameSeq, title);
+    }
+
+    function gameUpdate(uint256 developerSeq, uint256 gameSeq, string memory title) external onlyRole(ADMIN_ROLE) {
+        require(gameInfos[gameSeq].exists, "Game does not exist");
+
+        GameInfo storage gameInfo = gameInfos[gameSeq];
+        gameInfo.developerSeq = developerSeq;
+        gameInfo.gameSeq = gameSeq;
+        gameInfo.title = title;
+
+        emit GameUpdated(developerSeq, gameSeq, title);
+    }
+
+    function gameDelete(uint256 gameSeq) external onlyRole(ADMIN_ROLE) {
+        require(gameInfos[gameSeq].exists, "Game does not exist");
+        delete gameInfos[gameSeq];
+        emit GameDeleted(gameSeq);
+    }
+
+    function registerMember(uint256 memberSeq, address mintAddress, uint256 tokenAmount) external onlyRole(ADMIN_ROLE) {
+        require(memberInfos[memberSeq].memberSeq == 0, "Member already registered");
+
+        memberInfos[memberSeq] = MemberInfo({
+            memberSeq: memberSeq
+        });
+
+        entToken.mint(mintAddress, tokenAmount);
+
+        emit MemberRegistered(memberSeq, tokenAmount);
+    }
+
+    function challengeRegister(
         uint256 yyyymmdd,
         uint256 gameSeq,
         uint256 memberSeq,
         uint256 tokenAmount
     ) external {
-        // 이미 챌린지가 존재하는지 확인
         require(!challenges[yyyymmdd][gameSeq][memberSeq].exists, "Challenge already exists for this member, date, and game");
 
-        // 사용자가 컨트랙트에 대해 허용한 토큰 수량(allowance) 확인
         uint256 allowance = entToken.allowance(msg.sender, address(this));
         require(allowance >= tokenAmount, "Insufficient token allowance");
 
-        // 사용자 지갑의 토큰 잔액 확인
         uint256 balance = entToken.balanceOf(msg.sender);
         require(balance >= tokenAmount, "Insufficient token balance");
 
-        // 사용자 지갑에서 컨트랙트로 참여 토큰 전송
         require(entToken.transferFrom(msg.sender, address(this), tokenAmount), "Token transfer failed");
 
-        // 챌린지 정보 저장
-        challenges[yyyymmdd][gameSeq][memberSeq] = Challenge({
+        challenges[yyyymmdd][gameSeq][memberSeq] = ChallengeScore({
             gameSeq: gameSeq,
             memberSeq: memberSeq,
             tokenAmount: tokenAmount,
-            score: 0,  // 스코어는 아직 없음
+            score: 0,
             exists: true
         });
+
+        emit ChallengeRegistred(yyyymmdd, gameSeq, memberSeq, tokenAmount);
     }
 
-    // 챌린지 스코어 등록 기능 (관리자만 호출 가능)
-    function registerScore(
+    function rankScoreUpdateNormal(
+        uint256 yyyymmdd,
+        uint256 gameSeq,
+        uint256 memberSeq,
+        uint256 newScore
+    ) external onlyRole(ADMIN_ROLE) {
+        emit RankScoreUpdateNoraml(yyyymmdd, gameSeq, memberSeq, newScore);
+    }
+
+    function rankScoreUpdateChallenge(
         uint256 yyyymmdd,
         uint256 gameSeq,
         uint256 memberSeq,
         uint256 newScore
     ) external onlyRole(ADMIN_ROLE) {
         require(challenges[yyyymmdd][gameSeq][memberSeq].exists, "Challenge does not exist");
-        require(challenges[yyyymmdd][gameSeq][memberSeq].gameSeq == gameSeq, "Game sequence mismatch");
 
-        // 기존 스코어보다 높은 경우에만 갱신
         if (newScore > challenges[yyyymmdd][gameSeq][memberSeq].score) {
             challenges[yyyymmdd][gameSeq][memberSeq].score = newScore;
         }
+
+        emit RankScoreUpdateChallenge(yyyymmdd, gameSeq, memberSeq, newScore);
     }
 
-    // 상금 분배 기능 (민팅 기반)
-   function distributePrizes(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(ADMIN_ROLE) {
+    function distributePrizes(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(ADMIN_ROLE) {
         require(recipients.length == tokenAmounts.length, "Recipients and token amounts length mismatch");
 
         for (uint256 i = 0; i < recipients.length; i++) {
-            tRPT(address(rptToken)).mint(recipients[i], tokenAmounts[i]);  // 각 recipient에게 지정된 수량만큼 민팅하여 지급
+            rptToken.mint(recipients[i], tokenAmounts[i]);
         }
+
+        emit PrizesDistributed(recipients, tokenAmounts);
     }
 
-    // 상금 분배 및 참여할 때 사용할 토큰 설정 기능
     function setTokens(address entTokenAddress, address rptTokenAddress) external onlyRole(ADMIN_ROLE) {
         entToken = tENT(entTokenAddress);
         rptToken = tRPT(rptTokenAddress);
+    }
+
+    function gamePlay(uint256 gameSeq, uint256 memberSeq) external {
+        require(gameInfos[gameSeq].exists, "Game does not exist");
+        emit GamePlayed(gameSeq, memberSeq);
+    }
+
+    function gameEnd(uint256 gameSeq, uint256 memberSeq) external {
+        require(gameInfos[gameSeq].exists, "Game does not exist");
+        emit GameEnded(gameSeq, memberSeq);
+    }
+
+    function gameLike(uint256 gameSeq, uint256 memberSeq) external {
+        require(gameInfos[gameSeq].exists, "Game does not exist");
+        emit GameLiked(gameSeq, memberSeq);
+    }
+
+    function getGameInfo(uint256 gameSeq) external view returns (GameInfo memory) {
+        require(gameInfos[gameSeq].exists, "Game does not exist");
+        return gameInfos[gameSeq];
+    }
+
+    function getMemberInfo(uint256 memberSeq) external view returns (MemberInfo memory) {
+        require(memberInfos[memberSeq].memberSeq > 0, "Member does not exist");
+        return memberInfos[memberSeq];
     }
 }
