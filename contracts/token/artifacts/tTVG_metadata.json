@@ -639,11 +639,11 @@
 	},
 	"sources": {
 		"contracts/token/tTVGToken.sol": {
-			"keccak256": "0x9ffbfd9e022e4a9a2f55f7dce28f20fb99f35b2e69afb890b6e6e919948e91d0",
+			"keccak256": "0xd3b9f2a2013812400e9dc494ac8c858119544506549f8745d40cc539fb869f7b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3af20bf6be614be86d0d212e220b6627a9ed93df488208c415462790bfb82f3b",
-				"dweb:/ipfs/QmXu1c9UCMuiWTGwvQisd6F5536afsWrAG2dWNYpWcHSKo"
+				"bzz-raw://9c9fe98d5e1c49aad1fc7bc21d05f69c59cd2347a3699a49e9bb009f6ca8c4b8",
+				"dweb:/ipfs/QmYmnU1YB8AKj92kh2BZG2oCGES76cp8H53J3jdTjjm5sR"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {

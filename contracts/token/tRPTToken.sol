@@ -17,12 +17,10 @@ contract tRPT is ERC20, AccessControl {
         _mint(to, amount);
     }
 
-    // MINTER_ROLE 부여 기능
     function grantMinterRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
         grantRole(MINTER_ROLE, account);
     }
 
-    // MINTER_ROLE 제거 기능
     function revokeMinterRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
         revokeRole(MINTER_ROLE, account);
     }

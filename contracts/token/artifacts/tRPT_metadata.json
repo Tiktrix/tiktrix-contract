@@ -639,11 +639,11 @@
 	},
 	"sources": {
 		"contracts/token/tRPTToken.sol": {
-			"keccak256": "0x89e133675c6a56b0ecfe09e4226b1078954494df580025d2bbf21b75665181d7",
+			"keccak256": "0x42084d2a454f1d857d21354eddef7fdfe69ba6e5ceb6503eb6ef0847cc6973c2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://726ec8c4e1ec91938266f3a3840d53dd8648e1d330b2b3e62f4b61fc454e6ba4",
-				"dweb:/ipfs/QmV6sMX8YazALYhszqT4yDZjK9xzVZGPCvtS21LRF4zaDg"
+				"bzz-raw://609cd7a65e13c295388ed6dc61fce822df74ea858499cf7c178676b518aeb376",
+				"dweb:/ipfs/QmQ7dd8nPH7zq8Sw9ojeZayW4T5d8jUtnTm1L1XuimevU8"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {
