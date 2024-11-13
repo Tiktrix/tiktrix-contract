@@ -66,4 +66,8 @@ contract TikTrix is AccessControl {
         return gameInfos[gameSeq];
     }
 
+    function isGameExists(uint256 gameSeq) external view returns (bool) {
+        return gameInfos[gameSeq].exists;
+    }
+
 }

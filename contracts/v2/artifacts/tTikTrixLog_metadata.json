@@ -6,7 +6,13 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tikTrixGameAddress",
+						"type": "address"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -18,59 +24,53 @@
 						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
 					}
 				],
-				"name": "GameDeleted",
+				"name": "GameEnded",
 				"type": "event"
 			},
 			{
 				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
 					},
 					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
 					}
 				],
-				"name": "GameRegistered",
+				"name": "GameLiked",
 				"type": "event"
 			},
 			{
 				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
 					},
 					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
 					}
 				],
-				"name": "GameUpdated",
+				"name": "GamePlayed",
 				"type": "event"
 			},
 			{
@@ -180,89 +180,14 @@
 						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
-					}
-				],
-				"name": "gameDelete",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
+					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "memberSeq",
 						"type": "uint256"
 					}
 				],
-				"name": "gameInfos",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "gameSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "bool",
-						"name": "exists",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "gameSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					}
-				],
-				"name": "gameRegister",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "gameSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					}
-				],
-				"name": "gameUpdate",
+				"name": "gameEnd",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -273,39 +198,34 @@
 						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
-					}
-				],
-				"name": "getGameInfo",
-				"outputs": [
+					},
 					{
-						"components": [
-							{
-								"internalType": "uint256",
-								"name": "developerSeq",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "gameSeq",
-								"type": "uint256"
-							},
-							{
-								"internalType": "string",
-								"name": "title",
-								"type": "string"
-							},
-							{
-								"internalType": "bool",
-								"name": "exists",
-								"type": "bool"
-							}
-						],
-						"internalType": "struct TikTrix.GameInfo",
-						"name": "",
-						"type": "tuple"
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "gameLike",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "gamePlay",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -385,25 +305,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "gameSeq",
-						"type": "uint256"
-					}
-				],
-				"name": "isGameExists",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "bytes32",
 						"name": "role",
 						"type": "bytes32"
@@ -468,6 +369,19 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "tikTrixGame",
+				"outputs": [
+					{
+						"internalType": "contract TikTrix",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -513,7 +427,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/v2/TikTrixGame.sol": "TikTrix"
+			"contracts/v2/TikTrixLog.sol": "tTikTrixLog"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -533,6 +447,14 @@
 			"urls": [
 				"bzz-raw://7434b6685cf41977ca6ccb49f54b378be28e8122d37429fc606ed8c8c257626e",
 				"dweb:/ipfs/Qme6tuGNDG85r7VSdTVWTAArq61g8kBt8t2cpucqjiG5yr"
+			]
+		},
+		"contracts/v2/TikTrixLog.sol": {
+			"keccak256": "0xba15ed122df23fb9fc0186fdf447156f7af55103edee79b34ce167e0b11fbeba",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a869e0f06db9825c089a97f95ec8c73c10a55b9dbfd1d60017a2ca2b2e047a84",
+				"dweb:/ipfs/QmaEhiHAFGKWzffmX2NDZQup8jobSMW6B59Sneoc8sruoP"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {
