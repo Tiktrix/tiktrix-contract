@@ -582,50 +582,6 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "normalScores",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "gameSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "score",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "exists",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
 						"name": "yyyymmdd",
 						"type": "uint256"
 					},
@@ -836,11 +792,11 @@
 	},
 	"sources": {
 		"contracts/v2/TikTrixEscrow.sol": {
-			"keccak256": "0x0f4b9c94cdc9b0c8216ad9e0d11bbf4186ac4e6905118c101e90a919e769d593",
+			"keccak256": "0x8871b751adaa9e8024bc53d61bfce8df3570c390f015dae8600263360c0d7488",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4dd07ba16991d7ac575923c53585fa870aef93915fcf741eaa13e951ee376573",
-				"dweb:/ipfs/QmWoqeFfWGveacizY6MN4yAXs7tWeRfrYqTa6MXhsLim6z"
+				"bzz-raw://62b43275b3c818c49c00cea0e44804e9fecd5b47c80e6ef41f2f2dd73921e9d4",
+				"dweb:/ipfs/QmSGcXsENPGuxWXjHYvVzNXnRPMFFLj2S9BkJXqaMh6WDM"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {

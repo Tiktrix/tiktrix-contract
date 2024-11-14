@@ -19,13 +19,6 @@ contract TikTrixEscrow is AccessControl {
         uint256 memberSeq;
     }
 
-    struct NormalScore {
-        uint256 gameSeq;
-        uint256 memberSeq;
-        uint256 score;
-        bool exists;
-    }
-
     struct ChallengeScore {
         uint256 gameSeq;
         uint256 memberSeq;
@@ -37,7 +30,6 @@ contract TikTrixEscrow is AccessControl {
     mapping(uint256 => MemberInfo) public memberInfos;
     uint256[] public memberIds; // Array to track registered member IDs
 
-    mapping(uint256 => mapping(uint256 => mapping(uint256 => NormalScore))) public normalScores;
     mapping(uint256 => mapping(uint256 => mapping(uint256 => ChallengeScore))) public challengeScores;
 
     event MemberRegistered(uint256 memberSeq, uint256 tokenAmount);
@@ -112,17 +104,7 @@ contract TikTrixEscrow is AccessControl {
         uint256 memberSeq,
         uint256 newScore
     ) external onlyRole(ADMIN_ROLE) {
-        if (!normalScores[yyyymmdd][gameSeq][memberSeq].exists) {
-            normalScores[yyyymmdd][gameSeq][memberSeq] = NormalScore({
-                gameSeq: gameSeq,
-                memberSeq: memberSeq,
-                score: 0,
-                exists: true
-            });
-        } else if (newScore > normalScores[yyyymmdd][gameSeq][memberSeq].score) {
-            normalScores[yyyymmdd][gameSeq][memberSeq].score = newScore;
-        }
-
+       
         emit RankScoreUpdateNoraml(yyyymmdd, gameSeq, memberSeq, newScore);
     }
 
