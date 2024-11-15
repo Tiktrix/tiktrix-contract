@@ -6,13 +6,7 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "tikTrixGameAddress",
-						"type": "address"
-					}
-				],
+				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -369,19 +363,6 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "tikTrixGame",
-				"outputs": [
-					{
-						"internalType": "contract TikTrix",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -427,7 +408,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/v2/TikTrixLog.sol": "tTikTrixLog"
+			"contracts/v2/TikTrixAction.sol": "tTikTrixLog"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -441,20 +422,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/v2/TikTrixGame.sol": {
-			"keccak256": "0x576852c33003072169b2b4755f986733e1c103562f4036501825be1947d53c84",
+		"contracts/v2/TikTrixAction.sol": {
+			"keccak256": "0x7debd42f87907a99215dc08fafef3477be615be7c247d8f31d60d2b2b6fd0429",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7434b6685cf41977ca6ccb49f54b378be28e8122d37429fc606ed8c8c257626e",
-				"dweb:/ipfs/Qme6tuGNDG85r7VSdTVWTAArq61g8kBt8t2cpucqjiG5yr"
-			]
-		},
-		"contracts/v2/TikTrixLog.sol": {
-			"keccak256": "0xba15ed122df23fb9fc0186fdf447156f7af55103edee79b34ce167e0b11fbeba",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://a869e0f06db9825c089a97f95ec8c73c10a55b9dbfd1d60017a2ca2b2e047a84",
-				"dweb:/ipfs/QmaEhiHAFGKWzffmX2NDZQup8jobSMW6B59Sneoc8sruoP"
+				"bzz-raw://063dfc927794283042061187950f3522466cc9ade9fa187f3b3564790d965afe",
+				"dweb:/ipfs/QmX8aVFCZYz5vgh2tV6pJUg4LkrZsYDhsoo14rj9NuiKqc"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {

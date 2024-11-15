@@ -19,13 +19,6 @@ contract TikTrixEscrow is AccessControl {
         uint256 memberSeq;
     }
 
-    struct NormalScore {
-        uint256 gameSeq;
-        uint256 memberSeq;
-        uint256 score;
-        bool exists;
-    }
-
     struct ChallengeScore {
         uint256 gameSeq;
         uint256 memberSeq;
@@ -35,7 +28,8 @@ contract TikTrixEscrow is AccessControl {
     }
 
     mapping(uint256 => MemberInfo) public memberInfos;
-    mapping(uint256 => mapping(uint256 => mapping(uint256 => NormalScore))) public normalScores;
+    uint256[] public memberIds; // Array to track registered member IDs
+
     mapping(uint256 => mapping(uint256 => mapping(uint256 => ChallengeScore))) public challengeScores;
 
     event MemberRegistered(uint256 memberSeq, uint256 tokenAmount);
@@ -70,15 +64,11 @@ contract TikTrixEscrow is AccessControl {
         memberInfos[memberSeq] = MemberInfo({
             memberSeq: memberSeq
         });
+        memberIds.push(memberSeq);
 
         entToken.mint(mintAddress, tokenAmount);
 
         emit MemberRegistered(memberSeq, tokenAmount);
-    }
-
-    function getMemberInfo(uint256 memberSeq) external view returns (MemberInfo memory) {
-        require(memberInfos[memberSeq].memberSeq > 0, "Member does not exist");
-        return memberInfos[memberSeq];
     }
 
     function challengeRegister(
@@ -114,18 +104,7 @@ contract TikTrixEscrow is AccessControl {
         uint256 memberSeq,
         uint256 newScore
     ) external onlyRole(ADMIN_ROLE) {
-
-        if (!normalScores[yyyymmdd][gameSeq][memberSeq].exists) {
-            normalScores[yyyymmdd][gameSeq][memberSeq] = NormalScore({
-                gameSeq: gameSeq,
-                memberSeq: memberSeq,
-                score: 0,
-                exists: true
-            });
-        } else if (newScore > normalScores[yyyymmdd][gameSeq][memberSeq].score) {
-            normalScores[yyyymmdd][gameSeq][memberSeq].score = newScore;
-        }
-
+       
         emit RankScoreUpdateNoraml(yyyymmdd, gameSeq, memberSeq, newScore);
     }
 
@@ -152,6 +131,16 @@ contract TikTrixEscrow is AccessControl {
         }
 
         emit PrizesDistributed(recipients, tokenAmounts);
+    }
+
+    function getMemberInfo(uint256 memberSeq) external view returns (MemberInfo memory) {
+        require(memberInfos[memberSeq].memberSeq > 0, "Member does not exist");
+        return memberInfos[memberSeq];
+    }
+
+    function getChallengeScore(uint256 yyyymmdd, uint256 gameSeq, uint256 memberSeq) external view returns (ChallengeScore memory) {
+        require(challengeScores[yyyymmdd][gameSeq][memberSeq].exists, "Challenge score does not exist");
+        return challengeScores[yyyymmdd][gameSeq][memberSeq];
     }
 
 }

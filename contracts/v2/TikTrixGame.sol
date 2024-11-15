@@ -4,13 +4,12 @@ pragma solidity ^0.8.26;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/token/ERC20/IERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol";
 
-contract TikTrix is AccessControl {
+contract TikTrixGame is AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
     struct GameInfo {
         uint256 developerSeq;
         uint256 gameSeq;
-        string title;
         bool exists;
     }
 
@@ -37,7 +36,6 @@ contract TikTrix is AccessControl {
         gameInfos[gameSeq] = GameInfo({
             developerSeq: developerSeq,
             gameSeq: gameSeq,
-            title: title,
             exists: true
         });
 
@@ -46,11 +44,6 @@ contract TikTrix is AccessControl {
 
     function gameUpdate(uint256 developerSeq, uint256 gameSeq, string memory title) external onlyRole(ADMIN_ROLE) {
         require(gameInfos[gameSeq].exists, "Game does not exist");
-
-        GameInfo storage gameInfo = gameInfos[gameSeq];
-        gameInfo.developerSeq = developerSeq;
-        gameInfo.gameSeq = gameSeq;
-        gameInfo.title = title;
 
         emit GameUpdated(developerSeq, gameSeq, title);
     }

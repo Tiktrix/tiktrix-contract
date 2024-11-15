@@ -6,18 +6,7 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "entTokenAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "rptTokenAddress",
-						"type": "address"
-					}
-				],
+				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -27,29 +16,36 @@
 					{
 						"indexed": true,
 						"internalType": "uint256",
-						"name": "yyyymmdd",
+						"name": "gameSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "GameDeleted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "developerSeq",
 						"type": "uint256"
 					},
 					{
-						"indexed": true,
+						"indexed": false,
 						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
 					},
 					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "tokenAmount",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
 					}
 				],
-				"name": "ChallengeRegistred",
+				"name": "GameRegistered",
 				"type": "event"
 			},
 			{
@@ -58,98 +54,23 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "memberSeq",
+						"name": "developerSeq",
 						"type": "uint256"
 					},
 					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "tokenAmount",
-						"type": "uint256"
-					}
-				],
-				"name": "MemberRegistered",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "address[]",
-						"name": "recipients",
-						"type": "address[]"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256[]",
-						"name": "tokenAmounts",
-						"type": "uint256[]"
-					}
-				],
-				"name": "PrizesDistributed",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "yyyymmdd",
-						"type": "uint256"
-					},
-					{
-						"indexed": true,
 						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
 					},
 					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "newScore",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
 					}
 				],
-				"name": "RankScoreUpdateChallenge",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "yyyymmdd",
-						"type": "uint256"
-					},
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "gameSeq",
-						"type": "uint256"
-					},
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "newScore",
-						"type": "uint256"
-					}
-				],
-				"name": "RankScoreUpdateNoraml",
+				"name": "GameUpdated",
 				"type": "event"
 			},
 			{
@@ -257,26 +178,11 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "yyyymmdd",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "gameSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenAmount",
 						"type": "uint256"
 					}
 				],
-				"name": "challengeRegister",
+				"name": "gameDelete",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -287,39 +193,24 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
 					}
 				],
-				"name": "challengeScores",
+				"name": "gameInfos",
 				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "developerSeq",
+						"type": "uint256"
+					},
 					{
 						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenAmount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "score",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
 					},
 					{
 						"internalType": "bool",
@@ -333,39 +224,8 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address[]",
-						"name": "recipients",
-						"type": "address[]"
-					},
-					{
-						"internalType": "uint256[]",
-						"name": "tokenAmounts",
-						"type": "uint256[]"
-					}
-				],
-				"name": "distributePrizes",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "entToken",
-				"outputs": [
-					{
-						"internalType": "contract IERC20Mintable",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "uint256",
-						"name": "yyyymmdd",
+						"name": "developerSeq",
 						"type": "uint256"
 					},
 					{
@@ -374,34 +234,65 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					}
+				],
+				"name": "gameRegister",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
-						"name": "memberSeq",
+						"name": "developerSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					}
+				],
+				"name": "gameUpdate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
 						"type": "uint256"
 					}
 				],
-				"name": "getChallengeScore",
+				"name": "getGameInfo",
 				"outputs": [
 					{
 						"components": [
+							{
+								"internalType": "uint256",
+								"name": "developerSeq",
+								"type": "uint256"
+							},
 							{
 								"internalType": "uint256",
 								"name": "gameSeq",
 								"type": "uint256"
 							},
 							{
-								"internalType": "uint256",
-								"name": "memberSeq",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "tokenAmount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "score",
-								"type": "uint256"
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
 							},
 							{
 								"internalType": "bool",
@@ -409,33 +300,7 @@
 								"type": "bool"
 							}
 						],
-						"internalType": "struct TikTrixEscrow.ChallengeScore",
-						"name": "",
-						"type": "tuple"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					}
-				],
-				"name": "getMemberInfo",
-				"outputs": [
-					{
-						"components": [
-							{
-								"internalType": "uint256",
-								"name": "memberSeq",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct TikTrixEscrow.MemberInfo",
+						"internalType": "struct TikTrixGame.GameInfo",
 						"name": "",
 						"type": "tuple"
 					}
@@ -521,117 +386,19 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "gameSeq",
 						"type": "uint256"
 					}
 				],
-				"name": "memberIds",
+				"name": "isGameExists",
 				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "bool",
 						"name": "",
-						"type": "uint256"
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "memberInfos",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "mintAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenAmount",
-						"type": "uint256"
-					}
-				],
-				"name": "memberRegister",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "yyyymmdd",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "gameSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "newScore",
-						"type": "uint256"
-					}
-				],
-				"name": "rankScoreUpdateChallenge",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "yyyymmdd",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "gameSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "memberSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "newScore",
-						"type": "uint256"
-					}
-				],
-				"name": "rankScoreUpdateNormal",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -679,37 +446,6 @@
 					}
 				],
 				"name": "revokeRole",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "rptToken",
-				"outputs": [
-					{
-						"internalType": "contract IERC20Mintable",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "entTokenAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "rptTokenAddress",
-						"type": "address"
-					}
-				],
-				"name": "setTokens",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -777,7 +513,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/v2/TikTrixEscrow.sol": "TikTrixEscrow"
+			"contracts/v2/TikTrixGame.sol": "TikTrixGame"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -791,12 +527,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/v2/TikTrixEscrow.sol": {
-			"keccak256": "0x8871b751adaa9e8024bc53d61bfce8df3570c390f015dae8600263360c0d7488",
+		"contracts/v2/TikTrixGame.sol": {
+			"keccak256": "0xc18a75ee94d152f0a917ee67bb4ce64930a3c46b58fcbe1782e40c14d0942c4e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://62b43275b3c818c49c00cea0e44804e9fecd5b47c80e6ef41f2f2dd73921e9d4",
-				"dweb:/ipfs/QmSGcXsENPGuxWXjHYvVzNXnRPMFFLj2S9BkJXqaMh6WDM"
+				"bzz-raw://486d8df5f6d008097d61952893d5d281b077bf4cad3936946cf9516bc3fbee5b",
+				"dweb:/ipfs/QmU9tkoU3unasWwALt2R91DEose9BKM5bFVvHt3CqUVmkL"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {
