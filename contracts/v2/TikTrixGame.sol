@@ -33,6 +33,8 @@ contract TikTrixGame is AccessControl {
     }
 
     function gameRegister(uint256 gameSeq, uint256 memberSeq) external onlyRole(ADMIN_ROLE) {
+        require(!gameInfos[gameSeq].exists, "Game already exist");
+
         gameInfos[gameSeq] = GameInfo({
             gameSeq: gameSeq,
             memberSeq: memberSeq,

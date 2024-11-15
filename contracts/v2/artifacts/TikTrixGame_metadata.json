@@ -485,11 +485,11 @@
 	},
 	"sources": {
 		"contracts/v2/TikTrixGame.sol": {
-			"keccak256": "0x24812df3730e36a201eab3d73de0cdd60d824596b43ce4a8912f5b9975f37715",
+			"keccak256": "0x458edc5f1307019d0d3e13843e378e2dab20f1e611311ed3c7368aaed3fa711e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://942d187662ebec17e79b3eac48a8e5509c3f61f49ba344a59647f0b864ce432e",
-				"dweb:/ipfs/QmUwXHNLuBkHjyrs9mxP7bk9mS8JwxzXyyw9Qmj6bNdQzq"
+				"bzz-raw://9a0edcb7bd735f852a555ffe1741c45cf98e5b9aa3d73063dd945f34ce03953d",
+				"dweb:/ipfs/QmYVGmJCNo9daA7PWwH5aaUKMNSnDkzbnCqtaQLzgkYx5j"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {
