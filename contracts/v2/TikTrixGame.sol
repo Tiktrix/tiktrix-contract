@@ -10,7 +10,6 @@ contract TikTrixGame is AccessControl {
     struct GameInfo {
         uint256 developerSeq;
         uint256 gameSeq;
-        string title;
         bool exists;
     }
 
@@ -37,7 +36,6 @@ contract TikTrixGame is AccessControl {
         gameInfos[gameSeq] = GameInfo({
             developerSeq: developerSeq,
             gameSeq: gameSeq,
-            title: title,
             exists: true
         });
 
@@ -46,11 +44,6 @@ contract TikTrixGame is AccessControl {
 
     function gameUpdate(uint256 developerSeq, uint256 gameSeq, string memory title) external onlyRole(ADMIN_ROLE) {
         require(gameInfos[gameSeq].exists, "Game does not exist");
-
-        GameInfo storage gameInfo = gameInfos[gameSeq];
-        gameInfo.developerSeq = developerSeq;
-        gameInfo.gameSeq = gameSeq;
-        gameInfo.title = title;
 
         emit GameUpdated(developerSeq, gameSeq, title);
     }
