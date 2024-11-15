@@ -4,7 +4,7 @@ pragma solidity ^0.8.26;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/token/ERC20/IERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol";
 
-contract tTikTrixAction is AccessControl {
+contract TikTrixAction is AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
     event GamePlayed(uint256 indexed gameSeq, uint256 indexed memberSeq);

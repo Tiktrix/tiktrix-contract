@@ -262,11 +262,11 @@
 	},
 	"sources": {
 		"contracts/v2/TikTrixEscrow.sol": {
-			"keccak256": "0x8871b751adaa9e8024bc53d61bfce8df3570c390f015dae8600263360c0d7488",
+			"keccak256": "0x5cc33d345dae87229c34b3c5dd6cd558542a7906d2f41b4266a5907ec7a49f32",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://62b43275b3c818c49c00cea0e44804e9fecd5b47c80e6ef41f2f2dd73921e9d4",
-				"dweb:/ipfs/QmSGcXsENPGuxWXjHYvVzNXnRPMFFLj2S9BkJXqaMh6WDM"
+				"bzz-raw://0e8918c7a89db08c4c50ff634708f950a9ad71255754854c2dae3697b0fe3916",
+				"dweb:/ipfs/Qmb5R4bqt4c7r5suohZ32Cy5D6yzo3mntTWCX4hwidcvnk"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {

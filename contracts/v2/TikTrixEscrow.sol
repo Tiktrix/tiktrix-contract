@@ -127,7 +127,11 @@ contract TikTrixEscrow is AccessControl {
         require(recipients.length == tokenAmounts.length, "Recipients and token amounts length mismatch");
 
         for (uint256 i = 0; i < recipients.length; i++) {
-            require(rptToken.transfer(recipients[i], tokenAmounts[i]), "Token transfer failed");
+            try rptToken.mint(recipients[i], tokenAmounts[i]) {
+                // Mint succeeded
+            } catch {
+                revert("Minting failed for recipient");
+            }
         }
 
         emit PrizesDistributed(recipients, tokenAmounts);
