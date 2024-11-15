@@ -29,20 +29,14 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
 					},
 					{
 						"indexed": false,
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
 					}
 				],
 				"name": "GameRegistered",
@@ -54,20 +48,8 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
 					}
 				],
 				"name": "GameUpdated",
@@ -199,18 +181,13 @@
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
 					},
 					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
 					},
 					{
 						"internalType": "bool",
@@ -225,18 +202,13 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
 					},
 					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
 					}
 				],
 				"name": "gameRegister",
@@ -248,18 +220,8 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "developerSeq",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "gameSeq",
 						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
 					}
 				],
 				"name": "gameUpdate",
@@ -281,18 +243,13 @@
 						"components": [
 							{
 								"internalType": "uint256",
-								"name": "developerSeq",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
 								"name": "gameSeq",
 								"type": "uint256"
 							},
 							{
-								"internalType": "string",
-								"name": "title",
-								"type": "string"
+								"internalType": "uint256",
+								"name": "memberSeq",
+								"type": "uint256"
 							},
 							{
 								"internalType": "bool",
@@ -528,11 +485,11 @@
 	},
 	"sources": {
 		"contracts/v2/TikTrixGame.sol": {
-			"keccak256": "0xc18a75ee94d152f0a917ee67bb4ce64930a3c46b58fcbe1782e40c14d0942c4e",
+			"keccak256": "0x24812df3730e36a201eab3d73de0cdd60d824596b43ce4a8912f5b9975f37715",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://486d8df5f6d008097d61952893d5d281b077bf4cad3936946cf9516bc3fbee5b",
-				"dweb:/ipfs/QmU9tkoU3unasWwALt2R91DEose9BKM5bFVvHt3CqUVmkL"
+				"bzz-raw://942d187662ebec17e79b3eac48a8e5509c3f61f49ba344a59647f0b864ce432e",
+				"dweb:/ipfs/QmUwXHNLuBkHjyrs9mxP7bk9mS8JwxzXyyw9Qmj6bNdQzq"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {
