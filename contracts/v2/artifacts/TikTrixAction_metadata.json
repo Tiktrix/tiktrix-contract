@@ -64,7 +64,45 @@
 						"type": "uint256"
 					}
 				],
+				"name": "GamePaused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
 				"name": "GamePlayed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "GameUnPaused",
 				"type": "event"
 			},
 			{
@@ -217,7 +255,43 @@
 						"type": "uint256"
 					}
 				],
+				"name": "gamePause",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
 				"name": "gamePlay",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "gameSeq",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "memberSeq",
+						"type": "uint256"
+					}
+				],
+				"name": "gameUnPause",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -423,11 +497,11 @@
 	},
 	"sources": {
 		"contracts/v2/TikTrixAction.sol": {
-			"keccak256": "0x9bc285e23f5943936c20a8028c5ee16698e93514abd1127ab10fe4d34b013847",
+			"keccak256": "0xc69681eb4d71d0335c1f6dac563ad68821d48a44d1f7c3afa447902d0eaa6e65",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f33b04a515a25e47c3d41f8e91c0e2cf33b97791545e5690bf90143c90ecf81f",
-				"dweb:/ipfs/QmaMu3C9VuQQreoDpma9YkPQfVw3pHXFCFzNBa1JoUyuKU"
+				"bzz-raw://129c77ef740753d4f98a8747b91da0eb556ff6605d580648b3ec45bba79dad36",
+				"dweb:/ipfs/QmZaAaPoo5oy5B2LHHDbTp3ndZkxMNJLGrQTH8shFm5g5z"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {

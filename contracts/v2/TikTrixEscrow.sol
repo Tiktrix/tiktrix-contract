@@ -33,8 +33,8 @@ contract TikTrixEscrow is AccessControl {
     mapping(uint256 => mapping(uint256 => mapping(uint256 => ChallengeScore))) public challengeScores;
 
     event MemberRegistered(uint256 memberSeq, uint256 tokenAmount);
-    event ChallengeRegistred(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 tokenAmount);
-    event RankScoreUpdateNoraml(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 newScore);
+    event ChallengeRegisterd(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 tokenAmount);
+    event RankScoreUpdateNormal(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 newScore);
     event RankScoreUpdateChallenge(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 newScore);
     event PrizesDistributed(address[] recipients, uint256[] tokenAmounts);
 
@@ -95,7 +95,7 @@ contract TikTrixEscrow is AccessControl {
             exists: true
         });
 
-        emit ChallengeRegistred(yyyymmdd, gameSeq, memberSeq, tokenAmount);
+        emit ChallengeRegisterd(yyyymmdd, gameSeq, memberSeq, tokenAmount);
     }
 
     function rankScoreUpdateNormal(
@@ -105,7 +105,7 @@ contract TikTrixEscrow is AccessControl {
         uint256 newScore
     ) external onlyRole(ADMIN_ROLE) {
        
-        emit RankScoreUpdateNoraml(yyyymmdd, gameSeq, memberSeq, newScore);
+        emit RankScoreUpdateNormal(yyyymmdd, gameSeq, memberSeq, newScore);
     }
 
     function rankScoreUpdateChallenge(

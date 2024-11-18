@@ -9,6 +9,8 @@ contract TikTrixAction is AccessControl {
 
     event GamePlayed(uint256 indexed gameSeq, uint256 indexed memberSeq);
     event GameEnded(uint256 indexed gameSeq, uint256 indexed memberSeq);
+    event GamePaused(uint256 indexed gameSeq, uint256 indexed memberSeq);
+    event GameUnPaused(uint256 indexed gameSeq, uint256 indexed memberSeq);
     event GameLiked(uint256 indexed gameSeq, uint256 indexed memberSeq);
 
     constructor() {
@@ -32,6 +34,16 @@ contract TikTrixAction is AccessControl {
     function gameEnd(uint256 gameSeq, uint256 memberSeq) external {
 
         emit GameEnded(gameSeq, memberSeq);
+    }
+
+    function gamePause(uint256 gameSeq, uint256 memberSeq) external {
+
+        emit GamePaused(gameSeq, memberSeq);
+    }
+
+     function gameUnPause(uint256 gameSeq, uint256 memberSeq) external {
+
+        emit GameUnPaused(gameSeq, memberSeq);
     }
 
     function gameLike(uint256 gameSeq, uint256 memberSeq) external {
