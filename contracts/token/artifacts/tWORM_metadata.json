@@ -624,7 +624,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/token/tWORMToken.sol": "tENT"
+			"contracts/token/tWORMToken.sol": "tWORM"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -639,11 +639,11 @@
 	},
 	"sources": {
 		"contracts/token/tWORMToken.sol": {
-			"keccak256": "0xd85a55f5d1e5a5360a49dd3988b109fb29bdf70a72f2e2c163d1863a1122c143",
+			"keccak256": "0x8280230c6a821d8df4a33e06698c74a72fe0778d4f3f16eb9668259a05f4483a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://96516b2c3591aaa17ae113e2432afaab7971412f030b0f356fdd39e1b4ac0d7f",
-				"dweb:/ipfs/QmRH22sAdiptadsuzKQARBzzahvArjsZHvPe4f1TkBSgRM"
+				"bzz-raw://c916983555c6e59a769df3979f151e8e0288831395c1712e39e9e39e44f16d5c",
+				"dweb:/ipfs/QmQnV4qEHezC7j7D4WtHhYDAo3cFNxFZraQxRKoaH4qH85"
 			]
 		},
 		"https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol": {
