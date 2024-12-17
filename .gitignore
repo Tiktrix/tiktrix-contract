@@ -1,0 +1,5 @@
+
+.states
+**/artifacts/
+**/artifacts/build-info/
+/.states
