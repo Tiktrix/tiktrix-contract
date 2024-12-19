@@ -1,23 +1,23 @@
-# TikTrix 컨트랙트
+# TikTrix Contract
 
-## 개요
-TikTrix는 Web3 기반의 HTML5 게임 참여 플랫폼입니다.
+## Overview
+TikTrix is a Web3-based HTML5 game participation platform.
 
-## 주요 기능
+## Key Features
 
-### 게임 관리
-- 크리에이터가 새로운 게임 챌린지를 생성하고 관리
-- 게임 규칙 및 챌리닞 수수료 설정
+### Game Management
+- Creators can create and manage new game challenges.
+- Set game rules and challenge fees.
 
-### 게임 플레이 및 스코어 처리
-- 사용자의 게임 참여 기록 저장
-- 점수 계산 및 순위 시스템
-- 게임 결과 검증 및 기록
+### Gameplay and Score Processing
+- Store users' game participation records.
+- Calculate scores and manage ranking systems.
+- Validate and record game results.
 
-### 게임 챌린지 참여
-- 팬들의 게임 참여 신청 처리
-- 참가비 지불 처리
+### Game Challenge Participation
+- Process applications from fans for game participation.
+- Handle entry fee payments.
 
-### 게임 챌린지 리워드
-- 승자 선정 및 보상금 지급
-- 크리에이터 수익 분배
+### Game Challenge Rewards
+- Select winners and distribute rewards.
+- Allocate earnings to creators.

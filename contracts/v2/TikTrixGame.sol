@@ -1,22 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/token/ERC20/IERC20.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol";
 
 contract TikTrixGame is AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
     struct GameInfo {
-        uint256 developerSeq;
         uint256 gameSeq;
+        uint256 memberSeq;
         bool exists;
     }
 
     mapping(uint256 => GameInfo) public gameInfos;
 
-    event GameRegistered(uint256 developerSeq, uint256 gameSeq, string title);
-    event GameUpdated(uint256 developerSeq, uint256 gameSeq, string title);
+    event GameRegistered(uint256 gameSeq, uint256 memberSeq);
+    event GameUpdated(uint256 gameSeq);
     event GameDeleted(uint256 indexed gameSeq);
 
     constructor() {
@@ -32,20 +31,22 @@ contract TikTrixGame is AccessControl {
         revokeRole(ADMIN_ROLE, account);
     }
 
-    function gameRegister(uint256 developerSeq, uint256 gameSeq, string memory title) external onlyRole(ADMIN_ROLE) {
+    function gameRegister(uint256 gameSeq, uint256 memberSeq) external onlyRole(ADMIN_ROLE) {
+        require(!gameInfos[gameSeq].exists, "Game already exist");
+
         gameInfos[gameSeq] = GameInfo({
-            developerSeq: developerSeq,
             gameSeq: gameSeq,
+            memberSeq: memberSeq,
             exists: true
         });
 
-        emit GameRegistered(developerSeq, gameSeq, title);
+        emit GameRegistered(gameSeq, memberSeq);
     }
 
-    function gameUpdate(uint256 developerSeq, uint256 gameSeq, string memory title) external onlyRole(ADMIN_ROLE) {
+    function gameUpdate(uint256 gameSeq) external onlyRole(ADMIN_ROLE) {
         require(gameInfos[gameSeq].exists, "Game does not exist");
 
-        emit GameUpdated(developerSeq, gameSeq, title);
+        emit GameUpdated(gameSeq);
     }
 
     function gameDelete(uint256 gameSeq) external onlyRole(ADMIN_ROLE) {

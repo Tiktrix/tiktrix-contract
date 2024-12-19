@@ -3,7 +3,7 @@ pragma solidity ^0.8.26;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol";
 
-contract tTikTrixEvent is AccessControl {
+contract TikTrixEvent is AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
     struct MemberInfo {
