@@ -13,7 +13,8 @@ contract TikTrixReward is AccessControl {
 
     IERC20Mintable public rewardToken;
     
-    event DistributeReward(address[] recipients, uint256[] tokenAmounts);
+    event DistributeReward(address recipient, uint256 tokenAmount);
+    event MultiDistributeReward(address[] recipients, uint256[] tokenAmounts);
 
     constructor(address rewardTokenAddress) {
         rewardToken = IERC20Mintable(rewardTokenAddress);
@@ -29,13 +30,23 @@ contract TikTrixReward is AccessControl {
         revokeRole(ADMIN_ROLE, account);
     }
 
-    function distributeReward(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(ADMIN_ROLE) {
+    function setRewardToken(address rewardTokenAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        rewardToken = IERC20Mintable(rewardTokenAddress);
+    }
+
+    function distributeReward(address recipient, uint256 tokenAmount) external onlyRole(ADMIN_ROLE) {
+        rewardToken.mint(recipient, tokenAmount);
+
+        emit DistributeReward(recipient, tokenAmount);
+    }
+
+    function multiDistributeReward(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(ADMIN_ROLE) {
         require(recipients.length == tokenAmounts.length, "Recipients and token amounts length mismatch");
 
         for (uint256 i = 0; i < recipients.length; i++) {
-            require(rewardToken.transfer(recipients[i], tokenAmounts[i]), "Token transfer failed");
+            rewardToken.mint(recipients[i], tokenAmounts[i]);
         }
 
-        emit DistributeReward(recipients, tokenAmounts);
+        emit MultiDistributeReward(recipients, tokenAmounts);
     }
 }
