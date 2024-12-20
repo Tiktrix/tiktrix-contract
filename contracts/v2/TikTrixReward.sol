@@ -13,8 +13,15 @@ contract TikTrixReward is AccessControl {
 
     IERC20Mintable public rewardToken;
     
-    event DistributeReward(address recipient, uint256 tokenAmount);
-    event MultiDistributeReward(address[] recipients, uint256[] tokenAmounts);
+    mapping(uint256 => mapping(uint256 => bool)) public isRewardDistributed;
+    
+    event ManualReward(address recipient, uint256 tokenAmount);
+    event DailyGameRankingReward(
+        uint256 indexed yyyymmdd,
+        uint256 indexed gameSeq,
+        address[] recipients,
+        uint256[] tokenAmounts
+    );
 
     constructor(address rewardTokenAddress) {
         rewardToken = IERC20Mintable(rewardTokenAddress);
@@ -34,19 +41,32 @@ contract TikTrixReward is AccessControl {
         rewardToken = IERC20Mintable(rewardTokenAddress);
     }
 
-    function distributeReward(address recipient, uint256 tokenAmount) external onlyRole(ADMIN_ROLE) {
+    function manualReward(address recipient, uint256 tokenAmount) external onlyRole(ADMIN_ROLE) {
         rewardToken.mint(recipient, tokenAmount);
 
-        emit DistributeReward(recipient, tokenAmount);
+        emit ManualReward(recipient, tokenAmount);
     }
 
-    function multiDistributeReward(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(ADMIN_ROLE) {
+    function dailyGameRankingReward(
+        uint256 yyyymmdd,
+        uint256 gameSeq,
+        address[] calldata recipients,
+        uint256[] calldata tokenAmounts
+    ) external onlyRole(ADMIN_ROLE) {
+        require(!isRewardDistributed[yyyymmdd][gameSeq], "Reward already distributed for this game");
         require(recipients.length == tokenAmounts.length, "Recipients and token amounts length mismatch");
+        require(recipients.length > 0, "Recipients array is empty");
 
         for (uint256 i = 0; i < recipients.length; i++) {
             rewardToken.mint(recipients[i], tokenAmounts[i]);
         }
 
-        emit MultiDistributeReward(recipients, tokenAmounts);
+        isRewardDistributed[yyyymmdd][gameSeq] = true;
+
+        emit DailyGameRankingReward(yyyymmdd, gameSeq, recipients, tokenAmounts);
+    }
+
+    function checkRewardDistributed(uint256 yyyymmdd, uint256 gameSeq) external view returns (bool) {
+        return isRewardDistributed[yyyymmdd][gameSeq];
     }
 }

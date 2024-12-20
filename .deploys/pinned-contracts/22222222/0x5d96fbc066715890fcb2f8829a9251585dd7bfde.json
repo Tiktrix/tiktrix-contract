@@ -1,21 +1,31 @@
 {
   "name": "TikTrixReward",
-  "address": "0x23d700a1764f46f522f46e60c2e8f74a15bb69e0",
+  "address": "0x5d96fbc066715890fcb2f8829a9251585dd7bfde",
   "abi": [
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "recipient",
-          "type": "address"
+          "internalType": "uint256",
+          "name": "yyyymmdd",
+          "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "tokenAmount",
+          "name": "gameSeq",
           "type": "uint256"
+        },
+        {
+          "internalType": "address[]",
+          "name": "recipients",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "tokenAmounts",
+          "type": "uint256[]"
         }
       ],
-      "name": "distributeReward",
+      "name": "dailyGameRankingReward",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -35,19 +45,31 @@
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
-          "internalType": "address",
-          "name": "recipient",
-          "type": "address"
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "yyyymmdd",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "gameSeq",
+          "type": "uint256"
         },
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "tokenAmount",
-          "type": "uint256"
+          "internalType": "address[]",
+          "name": "recipients",
+          "type": "address[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "tokenAmounts",
+          "type": "uint256[]"
         }
       ],
-      "name": "DistributeReward",
+      "name": "DailyGameRankingReward",
       "type": "event"
     },
     {
@@ -84,17 +106,17 @@
     {
       "inputs": [
         {
-          "internalType": "address[]",
-          "name": "recipients",
-          "type": "address[]"
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
         },
         {
-          "internalType": "uint256[]",
-          "name": "tokenAmounts",
-          "type": "uint256[]"
+          "internalType": "uint256",
+          "name": "tokenAmount",
+          "type": "uint256"
         }
       ],
-      "name": "multiDistributeReward",
+      "name": "manualReward",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -104,18 +126,18 @@
       "inputs": [
         {
           "indexed": false,
-          "internalType": "address[]",
-          "name": "recipients",
-          "type": "address[]"
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
         },
         {
           "indexed": false,
-          "internalType": "uint256[]",
-          "name": "tokenAmounts",
-          "type": "uint256[]"
+          "internalType": "uint256",
+          "name": "tokenAmount",
+          "type": "uint256"
         }
       ],
-      "name": "MultiDistributeReward",
+      "name": "ManualReward",
       "type": "event"
     },
     {
@@ -269,6 +291,30 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "yyyymmdd",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "gameSeq",
+          "type": "uint256"
+        }
+      ],
+      "name": "checkRewardDistributed",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "DEFAULT_ADMIN_ROLE",
       "outputs": [
@@ -325,6 +371,30 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "isRewardDistributed",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "rewardToken",
       "outputs": [
@@ -358,5 +428,5 @@
     }
   ],
   "filePath": "tiktrix-contract-1731483430463/contracts/v2/TikTrixReward.sol",
-  "pinnedAt": 1734657325957
+  "pinnedAt": 1734659338197
 }
