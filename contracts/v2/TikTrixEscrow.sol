@@ -10,13 +10,14 @@ contract TikTrixEscrow is AccessControl {
     struct Deposit {
         uint256 amount;
         bool isReturned;
+        address depositor;
     }
     
     mapping(uint256 => mapping(uint256 => mapping(uint256 => Deposit))) public deposits;
     
     event DepositMade(uint256 baseDate, uint256 gameSeq, uint256 memberSeq, uint256 amount);
     event DepositReturned(uint256 baseDate, uint256 gameSeq, uint256 memberSeq, uint256 amount);
-    event BatchDepositsReturned(uint256 baseDate, uint256 gameSeq, uint256 count);
+    event BatchDepositsReturned(uint256 baseDate, uint256 gameSeq, uint256 count, uint256 totalAmount);
     
     constructor() {
         owner = msg.sender;
@@ -37,16 +38,17 @@ contract TikTrixEscrow is AccessControl {
         revokeRole(ADMIN_ROLE, account);
     }
     
-    function depositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq, uint256 amount) external payable {
-        require(amount > 0, "Deposit amount must be greater than 0");
+    function depositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) external payable {
+        require(msg.value > 0, "Deposit amount must be greater than 0");
         require(deposits[baseDate][gameSeq][memberSeq].amount == 0, "Deposit already exists");
         
         deposits[baseDate][gameSeq][memberSeq] = Deposit({
-            amount: amount,
-            isReturned: false
+            amount: msg.value,
+            isReturned: false,
+            depositor: msg.sender
         });
         
-        emit DepositMade(baseDate, gameSeq, memberSeq, amount);
+        emit DepositMade(baseDate, gameSeq, memberSeq, msg.value);
     }
     
     function returnDepositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) external onlyRole(ADMIN_ROLE) {
@@ -56,8 +58,11 @@ contract TikTrixEscrow is AccessControl {
         
         uint256 amount = deposit.amount;
         deposit.isReturned = true;
+
+        address depositor = deposit.depositor;
+        require(depositor != address(0), "Invalid depositor address");
         
-        (bool success, ) = payable(msg.sender).call{value: amount}("");
+        (bool success, ) = payable(depositor).call{value: amount}("");
         require(success, "Return transfer failed");
         
         emit DepositReturned(baseDate, gameSeq, memberSeq, amount);
@@ -75,19 +80,22 @@ contract TikTrixEscrow is AccessControl {
             Deposit storage deposit = deposits[baseDate][gameSeq][memberSeq];
             
             if(deposit.amount > 0 && !deposit.isReturned) {
+                uint256 amount = deposit.amount;
                 deposit.isReturned = true;
+
                 totalReturned += deposit.amount;
+
+                address depositor = deposit.depositor;
+                require(depositor != address(0), "Invalid depositor address");
+                
+                (bool success, ) = payable(depositor).call{value: amount}("");
+                require(success, "Return transfer failed");
                 
                 emit DepositReturned(baseDate, gameSeq, memberSeq, deposit.amount);
             }
         }
         
-        if(totalReturned > 0) {
-            (bool success, ) = payable(msg.sender).call{value: totalReturned}("");
-            require(success, "Batch return transfer failed");
-        }
-        
-        emit BatchDepositsReturned(baseDate, gameSeq, memberSeqs.length);
+        emit BatchDepositsReturned(baseDate, gameSeq, memberSeqs.length, totalReturned);
     }
     
     function getDepositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) 
