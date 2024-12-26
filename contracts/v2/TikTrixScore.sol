@@ -4,7 +4,7 @@ pragma solidity ^0.8.26;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol";
 import "./TikTrixEscrow.sol";
 
-contract TikTrixChallenge is AccessControl {
+contract TikTrixScore is AccessControl {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
     TikTrixEscrow public escrow;    
@@ -17,6 +17,8 @@ contract TikTrixChallenge is AccessControl {
         uint256 newScore,
         uint256 previousScore
     );
+
+    event RankScoreUpdateNoraml(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 newScore);
     
     constructor(address _escrowAddress) {
         escrow = TikTrixEscrow(_escrowAddress);
@@ -30,6 +32,16 @@ contract TikTrixChallenge is AccessControl {
 
     function revokeAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
         revokeRole(ADMIN_ROLE, account);
+    }
+
+    function rankScoreUpdateNormal(
+        uint256 yyyymmdd,
+        uint256 gameSeq,
+        uint256 memberSeq,
+        uint256 newScore
+    ) external onlyRole(ADMIN_ROLE) {
+       
+        emit RankScoreUpdateNoraml(yyyymmdd, gameSeq, memberSeq, newScore);
     }
     
     function rankScoreUpdateChallenge(
