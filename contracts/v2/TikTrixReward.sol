@@ -16,6 +16,7 @@ contract TikTrixReward is AccessControl {
     mapping(uint256 => mapping(uint256 => bool)) public isRewardDistributed;
     
     event ManualReward(address recipient, uint256 tokenAmount);
+    event ManualRewardBatch(address[] recipients, uint256[] tokenAmounts);
     event DailyGameRankingReward(
         uint256 indexed yyyymmdd,
         uint256 indexed gameSeq,
@@ -45,6 +46,17 @@ contract TikTrixReward is AccessControl {
         rewardToken.mint(recipient, tokenAmount);
 
         emit ManualReward(recipient, tokenAmount);
+    }
+
+    function batchManualReward(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(ADMIN_ROLE) {
+        require(recipients.length == tokenAmounts.length, "Recipients and token amounts length mismatch");
+        require(recipients.length > 0, "Recipients array is empty");
+        
+        for (uint256 i = 0; i < recipients.length; i++) {
+            rewardToken.mint(recipients[i], tokenAmounts[i]);
+        }
+
+        emit ManualRewardBatch(recipients, tokenAmounts);
     }
 
     function dailyGameRankingReward(
