@@ -3,3 +3,6 @@
 **/artifacts/
 **/artifacts/build-info/
 /.states
+node_modules
+typechain
+cache

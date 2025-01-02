@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.8.0/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract TikTrixEscrow is AccessControl {
     address public owner;
@@ -21,8 +21,8 @@ contract TikTrixEscrow is AccessControl {
     
     constructor() {
         owner = msg.sender;
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(ADMIN_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, msg.sender);
     }
     
     modifier onlyOwner() {
@@ -31,11 +31,11 @@ contract TikTrixEscrow is AccessControl {
     }
 
     function grantAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        grantRole(ADMIN_ROLE, account);
+        _grantRole(ADMIN_ROLE, account);
     }
 
     function revokeAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        revokeRole(ADMIN_ROLE, account);
+        _revokeRole(ADMIN_ROLE, account);
     }
     
     function depositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) external payable {
