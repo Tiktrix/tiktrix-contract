@@ -26,3 +26,4 @@ contract tWORMToken is ERC20, AccessControl {
         revokeRole(MINTER_ROLE, account);
     }
 }
+

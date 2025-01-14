@@ -21,3 +21,4 @@ TikTrix is a Web3-based HTML5 game participation platform.
 ### Game Challenge Rewards
 - Select winners and distribute rewards.
 - Allocate earnings to creators.
+

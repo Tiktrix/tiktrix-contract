@@ -107,3 +107,4 @@ contract TikTrixEscrow is AccessControl {
         return (deposit.amount, deposit.isReturned);
     }
 }
+

@@ -26,3 +26,4 @@ contract WORMToken is ERC20, AccessControl {
         revokeRole(MINTER_ROLE, account);
     }
 }
+
