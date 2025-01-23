@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/Multicall.sol";
 
-contract TikTrixEscrow is AccessControl {
+contract TikTrixEscrow is PermissionsEnumerable, Multicall {
     address public owner;
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     
     struct Deposit {
         uint256 amount;
@@ -21,21 +22,13 @@ contract TikTrixEscrow is AccessControl {
     
     constructor() {
         owner = msg.sender;
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(ADMIN_ROLE, msg.sender);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
     }
     
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can call this function");
         _;
-    }
-
-    function grantAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _grantRole(ADMIN_ROLE, account);
-    }
-
-    function revokeAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _revokeRole(ADMIN_ROLE, account);
     }
     
     function depositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) external payable {
@@ -51,7 +44,7 @@ contract TikTrixEscrow is AccessControl {
         emit DepositMade(baseDate, gameSeq, memberSeq, msg.value);
     }
     
-    function returnDepositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) external onlyRole(ADMIN_ROLE) {
+    function returnDepositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) external onlyRole(FACTORY_ROLE) {
         Deposit storage deposit = deposits[baseDate][gameSeq][memberSeq];
         require(deposit.amount > 0, "No deposit found");
         require(!deposit.isReturned, "Deposit already returned");
@@ -72,7 +65,7 @@ contract TikTrixEscrow is AccessControl {
         uint256 baseDate,
         uint256 gameSeq,
         uint256[] calldata memberSeqs
-    ) external onlyRole(ADMIN_ROLE) {
+    ) external onlyRole(FACTORY_ROLE) {
         uint256 totalReturned = 0;
         
         for(uint256 i = 0; i < memberSeqs.length; i++) {

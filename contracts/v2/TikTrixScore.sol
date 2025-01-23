@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/Multicall.sol";
 import "./TikTrixEscrow.sol";
 
-contract TikTrixScore is AccessControl {
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+contract TikTrixScore is PermissionsEnumerable, Multicall {
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
 
     TikTrixEscrow public escrow;    
     mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) public highScores;
@@ -22,16 +23,8 @@ contract TikTrixScore is AccessControl {
     
     constructor(address _escrowAddress) {
         escrow = TikTrixEscrow(_escrowAddress);
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(ADMIN_ROLE, msg.sender);
-    }
-
-    function grantAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _grantRole(ADMIN_ROLE, account);
-    }
-
-    function revokeAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _revokeRole(ADMIN_ROLE, account);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
     }
 
     function rankScoreUpdateNormal(
@@ -39,7 +32,7 @@ contract TikTrixScore is AccessControl {
         uint256 gameSeq,
         uint256 memberSeq,
         uint256 newScore
-    ) external onlyRole(ADMIN_ROLE) {
+    ) external onlyRole(FACTORY_ROLE) {
        
         emit RankScoreUpdateNoraml(yyyymmdd, gameSeq, memberSeq, newScore);
     }
@@ -49,7 +42,7 @@ contract TikTrixScore is AccessControl {
         uint256 gameSeq,
         uint256 memberSeq,
         uint256 newScore
-    ) external onlyRole(ADMIN_ROLE) {
+    ) external onlyRole(FACTORY_ROLE) {
         (uint256 depositAmount, bool isReturned) = escrow.getDepositFee(baseDate, gameSeq, memberSeq);
         require(depositAmount > 0, "No deposit found for this challenge");
         require(!isReturned, "Deposit has already been returned");        

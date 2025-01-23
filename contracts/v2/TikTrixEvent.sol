@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/Multicall.sol";
 
-contract TikTrixEvent is AccessControl {
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+contract TikTrixEvent is PermissionsEnumerable, Multicall {
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
 
     struct MemberInfo {
         uint256 memberSeq;
@@ -21,19 +22,11 @@ contract TikTrixEvent is AccessControl {
     event GameLiked(uint256 indexed gameSeq, uint256 indexed memberSeq);
 
     constructor() {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(ADMIN_ROLE, msg.sender);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
     }
 
-    function grantAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _grantRole(ADMIN_ROLE, account);
-    }
-
-    function revokeAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _revokeRole(ADMIN_ROLE, account);
-    }
-
-    function memberRegister(uint256 memberSeq) external onlyRole(ADMIN_ROLE) {
+    function memberRegister(uint256 memberSeq) external onlyRole(FACTORY_ROLE) {
         require(memberInfos[memberSeq].memberSeq == 0, "Member already registered");
 
         memberInfos[memberSeq] = MemberInfo({
@@ -49,7 +42,7 @@ contract TikTrixEvent is AccessControl {
         uint256 gameSeq,
         uint256 memberSeq,
         uint256 newScore
-    ) external onlyRole(ADMIN_ROLE) {
+    ) external onlyRole(FACTORY_ROLE) {
        
         emit RankScoreUpdateNoraml(yyyymmdd, gameSeq, memberSeq, newScore);
     }

@@ -2,14 +2,15 @@
 pragma solidity ^0.8.26;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/Multicall.sol";
 
 interface IERC20Mintable is IERC20 {
     function mint(address to, uint256 amount) external;
 }
 
-contract TikTrixReward is AccessControl {
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+contract TikTrixReward is PermissionsEnumerable, Multicall {
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
 
     IERC20Mintable public rewardToken;
     
@@ -26,29 +27,21 @@ contract TikTrixReward is AccessControl {
 
     constructor(address rewardTokenAddress) {
         rewardToken = IERC20Mintable(rewardTokenAddress);
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(ADMIN_ROLE, msg.sender);
-    }
-
-    function grantAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _grantRole(ADMIN_ROLE, account);
-    }
-
-    function revokeAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _revokeRole(ADMIN_ROLE, account);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
     }
 
     function setRewardToken(address rewardTokenAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
         rewardToken = IERC20Mintable(rewardTokenAddress);
     }
 
-    function manualReward(address recipient, uint256 tokenAmount) external onlyRole(ADMIN_ROLE) {
+    function manualReward(address recipient, uint256 tokenAmount) external onlyRole(FACTORY_ROLE) {
         rewardToken.mint(recipient, tokenAmount);
 
         emit ManualReward(recipient, tokenAmount);
     }
 
-    function batchManualReward(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(ADMIN_ROLE) {
+    function batchManualReward(address[] calldata recipients, uint256[] calldata tokenAmounts) external onlyRole(FACTORY_ROLE) {
         require(recipients.length == tokenAmounts.length, "Recipients and token amounts length mismatch");
         require(recipients.length > 0, "Recipients array is empty");
         
@@ -64,7 +57,7 @@ contract TikTrixReward is AccessControl {
         uint256 gameSeq,
         address[] calldata recipients,
         uint256[] calldata tokenAmounts
-    ) external onlyRole(ADMIN_ROLE) {
+    ) external onlyRole(FACTORY_ROLE) {
         require(!isRewardDistributed[yyyymmdd][gameSeq], "Reward already distributed for this game");
         require(recipients.length == tokenAmounts.length, "Recipients and token amounts length mismatch");
         require(recipients.length > 0, "Recipients array is empty");

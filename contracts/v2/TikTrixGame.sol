@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/Multicall.sol";
 
-contract TikTrixGame is AccessControl {
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+contract TikTrixGame is PermissionsEnumerable, Multicall {
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
 
     struct GameInfo {
         uint256 gameSeq;
@@ -19,19 +20,11 @@ contract TikTrixGame is AccessControl {
     event GameDeleted(uint256 indexed gameSeq);
 
     constructor() {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(ADMIN_ROLE, msg.sender);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
     }
 
-    function grantAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _grantRole(ADMIN_ROLE, account);
-    }
-
-    function revokeAdminRole(address account) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        _revokeRole(ADMIN_ROLE, account);
-    }
-
-    function gameRegister(uint256 gameSeq, uint256 memberSeq) external onlyRole(ADMIN_ROLE) {
+    function gameRegister(uint256 gameSeq, uint256 memberSeq) external onlyRole(FACTORY_ROLE) {
         require(!gameInfos[gameSeq].exists, "Game already exist");
 
         gameInfos[gameSeq] = GameInfo({
@@ -43,13 +36,13 @@ contract TikTrixGame is AccessControl {
         emit GameRegistered(gameSeq, memberSeq);
     }
 
-    function gameUpdate(uint256 gameSeq) external onlyRole(ADMIN_ROLE) {
+    function gameUpdate(uint256 gameSeq) external onlyRole(FACTORY_ROLE) {
         require(gameInfos[gameSeq].exists, "Game does not exist");
 
         emit GameUpdated(gameSeq);
     }
 
-    function gameDelete(uint256 gameSeq) external onlyRole(ADMIN_ROLE) {
+    function gameDelete(uint256 gameSeq) external onlyRole(FACTORY_ROLE) {
         require(gameInfos[gameSeq].exists, "Game does not exist");
         delete gameInfos[gameSeq];
         emit GameDeleted(gameSeq);
