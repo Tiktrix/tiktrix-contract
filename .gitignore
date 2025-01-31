@@ -8,3 +8,11 @@ typechain
 cache
 .deploys
 .deploys/*
+.idea/codeStyles/codeStyleConfig.xml
+.idea/codeStyles/Project.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/tiktrix-contract.iml
+.idea/vcs.xml
