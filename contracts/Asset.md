@@ -13,5 +13,5 @@
 
 >### L3 Asset
 > * https://thirdweb.com/22222222/[contract address]
-> * tWrapped TRIX `0xDD7594F7B8EAccedA3A9fa3183dD8B860A2B960c`
+> * tWrapped TRIX `[Not Deployed]`
 > * TiktrixNodeRewardManager 1.4.1 `0x02308809451507cED7A6c678DEa9bBC74013E48D`
