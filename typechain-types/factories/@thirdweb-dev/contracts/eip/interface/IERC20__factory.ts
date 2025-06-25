@@ -6,7 +6,7 @@ import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
   IERC20,
   IERC20Interface,
-} from "../../../../../@openzeppelin/contracts/token/ERC20/IERC20";
+} from "../../../../../@thirdweb-dev/contracts/eip/interface/IERC20";
 
 const _abi = [
   {
@@ -111,7 +111,7 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "account",
+        name: "who",
         type: "address",
       },
     ],
