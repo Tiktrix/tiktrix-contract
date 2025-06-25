@@ -1,16 +1,19 @@
 // SPDX-License-Identifier: MIT
+// TikTrix-Game-Reward 1.0.1
 pragma solidity ^0.8.26;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/Multicall.sol";
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
-interface IERC20Mintable is IERC20 {
+interface IERC20Mintable is IERC20, ContractMetadata {
     function mint(address to, uint256 amount) external;
 }
 
-contract TikTrixReward is PermissionsEnumerable, Multicall {
+contract TikTrixGameReward is PermissionsEnumerable, Multicall {
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
+    address public deployer;
 
     IERC20Mintable public rewardToken;
     
@@ -29,6 +32,10 @@ contract TikTrixReward is PermissionsEnumerable, Multicall {
         rewardToken = IERC20Mintable(rewardTokenAddress);
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);
+    }
+
+    function _canSetContractURI() internal view override returns (bool) {
+        return msg.sender == deployer;
     }
 
     function setRewardToken(address rewardTokenAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {

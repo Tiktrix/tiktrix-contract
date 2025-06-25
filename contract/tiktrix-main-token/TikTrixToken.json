@@ -1,0 +1,8 @@
+{
+  "name": "TikTrix Token",
+  "symbol": "IMT",
+  "description": "TikTrix Token is a fixed-supply ERC-20 token designed for secure and transparent community use.",
+  "image": "ipfs://bafybeifb76gl6ineewgysvsoz53rclurgxpwy5tkzdb7o626awb5xs7jzu/Trix_Token.png",
+  "external_url": "https://tiktrix.gg",
+  "decimals": 18
+}

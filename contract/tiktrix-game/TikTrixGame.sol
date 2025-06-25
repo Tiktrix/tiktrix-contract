@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: MIT
+// TikTrix-Game 1.0.1
 pragma solidity ^0.8.26;
 
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/Multicall.sol";
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
-contract TikTrixGame is PermissionsEnumerable, Multicall {
+contract TikTrixGame is PermissionsEnumerable, Multicall, ContractMetadata {
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
+    address public deployer;
 
     struct GameInfo {
         uint256 gameSeq;
@@ -22,6 +25,10 @@ contract TikTrixGame is PermissionsEnumerable, Multicall {
     constructor() {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);
+    }
+
+    function _canSetContractURI() internal view override returns (bool) {
+        return msg.sender == deployer;
     }
 
     function gameRegister(uint256 gameSeq, uint256 memberSeq) external onlyRole(FACTORY_ROLE) {

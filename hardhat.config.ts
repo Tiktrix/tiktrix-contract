@@ -1,21 +1,17 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import "@typechain/hardhat";
+import "dotenv/config";
+
+const sourcePath = process.env.SOURCE_PATH || "./contract";
 
 const config: HardhatUserConfig = {
-  solidity: {
-    version: "0.8.26",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
-    }
-  },
-  typechain: {
-    outDir: "typechain",
-    target: "ethers-v6",
-  },
+  solidity: "0.8.28",
+  paths: {
+    sources: sourcePath,
+    artifacts: "./artifacts",
+    cache: "./cache",
+    tests: "./test"
+  }
 };
 
 export default config;

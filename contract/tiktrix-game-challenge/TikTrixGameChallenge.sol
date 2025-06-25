@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: MIT
+// TikTrix-Game-Challenge 1.0.1
 pragma solidity ^0.8.26;
 
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/Multicall.sol";
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
-contract TikTrixEscrow is PermissionsEnumerable, Multicall {
-    address public owner;
+contract TikTrixGameChallenge is PermissionsEnumerable, Multicall, ContractMetadata {
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
+    address public owner;
+    address public deployer;
     
     struct Deposit {
         uint256 amount;
@@ -29,6 +32,10 @@ contract TikTrixEscrow is PermissionsEnumerable, Multicall {
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can call this function");
         _;
+    }
+
+    function _canSetContractURI() internal view override returns (bool) {
+        return msg.sender == deployer;
     }
     
     function depositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) external payable {
