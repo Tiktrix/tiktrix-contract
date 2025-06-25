@@ -14,45 +14,17 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "ERC20Base",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC20Base__factory>;
-    getContractFactory(
-      name: "IERC20",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20__factory>;
-    getContractFactory(
-      name: "IERC20Metadata",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20Metadata__factory>;
-    getContractFactory(
-      name: "IERC20Permit",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20Permit__factory>;
-    getContractFactory(
       name: "ContractMetadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ContractMetadata__factory>;
-    getContractFactory(
-      name: "IBurnableERC20",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IBurnableERC20__factory>;
     getContractFactory(
       name: "IContractMetadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IContractMetadata__factory>;
     getContractFactory(
-      name: "IMintableERC20",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IMintableERC20__factory>;
-    getContractFactory(
       name: "IMulticall",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IMulticall__factory>;
-    getContractFactory(
-      name: "IOwnable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IOwnable__factory>;
     getContractFactory(
       name: "IPermissions",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -66,10 +38,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Multicall__factory>;
     getContractFactory(
-      name: "Ownable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Ownable__factory>;
-    getContractFactory(
       name: "Permissions",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Permissions__factory>;
@@ -78,72 +46,25 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PermissionsEnumerable__factory>;
     getContractFactory(
-      name: "ERC20",
+      name: "TikTrixGameScore",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC20__factory>;
-    getContractFactory(
-      name: "ERC20Permit",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC20Permit__factory>;
-    getContractFactory(
-      name: "ITokenERC20",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ITokenERC20__factory>;
-    getContractFactory(
-      name: "TikTrixGameReward",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.TikTrixGameReward__factory>;
+    ): Promise<Contracts.TikTrixGameScore__factory>;
 
-    getContractAt(
-      name: "ERC20Base",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ERC20Base>;
-    getContractAt(
-      name: "IERC20",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC20>;
-    getContractAt(
-      name: "IERC20Metadata",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC20Metadata>;
-    getContractAt(
-      name: "IERC20Permit",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC20Permit>;
     getContractAt(
       name: "ContractMetadata",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.ContractMetadata>;
     getContractAt(
-      name: "IBurnableERC20",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IBurnableERC20>;
-    getContractAt(
       name: "IContractMetadata",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.IContractMetadata>;
     getContractAt(
-      name: "IMintableERC20",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IMintableERC20>;
-    getContractAt(
       name: "IMulticall",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.IMulticall>;
-    getContractAt(
-      name: "IOwnable",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IOwnable>;
     getContractAt(
       name: "IPermissions",
       address: string | ethers.Addressable,
@@ -160,11 +81,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Multicall>;
     getContractAt(
-      name: "Ownable",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Ownable>;
-    getContractAt(
       name: "Permissions",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -175,66 +91,23 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.PermissionsEnumerable>;
     getContractAt(
-      name: "ERC20",
+      name: "TikTrixGameScore",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.ERC20>;
-    getContractAt(
-      name: "ERC20Permit",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ERC20Permit>;
-    getContractAt(
-      name: "ITokenERC20",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ITokenERC20>;
-    getContractAt(
-      name: "TikTrixGameReward",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.TikTrixGameReward>;
+    ): Promise<Contracts.TikTrixGameScore>;
 
-    deployContract(
-      name: "ERC20Base",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ERC20Base>;
-    deployContract(
-      name: "IERC20",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC20>;
-    deployContract(
-      name: "IERC20Metadata",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC20Metadata>;
-    deployContract(
-      name: "IERC20Permit",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC20Permit>;
     deployContract(
       name: "ContractMetadata",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ContractMetadata>;
     deployContract(
-      name: "IBurnableERC20",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IBurnableERC20>;
-    deployContract(
       name: "IContractMetadata",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IContractMetadata>;
     deployContract(
-      name: "IMintableERC20",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IMintableERC20>;
-    deployContract(
       name: "IMulticall",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IMulticall>;
-    deployContract(
-      name: "IOwnable",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IOwnable>;
     deployContract(
       name: "IPermissions",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -248,10 +121,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Multicall>;
     deployContract(
-      name: "Ownable",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Ownable>;
-    deployContract(
       name: "Permissions",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Permissions>;
@@ -260,72 +129,25 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PermissionsEnumerable>;
     deployContract(
-      name: "ERC20",
+      name: "TikTrixGameScore",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ERC20>;
-    deployContract(
-      name: "ERC20Permit",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ERC20Permit>;
-    deployContract(
-      name: "ITokenERC20",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ITokenERC20>;
-    deployContract(
-      name: "TikTrixGameReward",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.TikTrixGameReward>;
+    ): Promise<Contracts.TikTrixGameScore>;
 
-    deployContract(
-      name: "ERC20Base",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ERC20Base>;
-    deployContract(
-      name: "IERC20",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC20>;
-    deployContract(
-      name: "IERC20Metadata",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC20Metadata>;
-    deployContract(
-      name: "IERC20Permit",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC20Permit>;
     deployContract(
       name: "ContractMetadata",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ContractMetadata>;
     deployContract(
-      name: "IBurnableERC20",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IBurnableERC20>;
-    deployContract(
       name: "IContractMetadata",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IContractMetadata>;
     deployContract(
-      name: "IMintableERC20",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IMintableERC20>;
-    deployContract(
       name: "IMulticall",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IMulticall>;
-    deployContract(
-      name: "IOwnable",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IOwnable>;
     deployContract(
       name: "IPermissions",
       args: any[],
@@ -342,11 +164,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Multicall>;
     deployContract(
-      name: "Ownable",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Ownable>;
-    deployContract(
       name: "Permissions",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -357,25 +174,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PermissionsEnumerable>;
     deployContract(
-      name: "ERC20",
+      name: "TikTrixGameScore",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ERC20>;
-    deployContract(
-      name: "ERC20Permit",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ERC20Permit>;
-    deployContract(
-      name: "ITokenERC20",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ITokenERC20>;
-    deployContract(
-      name: "TikTrixGameReward",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.TikTrixGameReward>;
+    ): Promise<Contracts.TikTrixGameScore>;
 
     // default types
     getContractFactory(

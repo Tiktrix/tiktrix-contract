@@ -21,17 +21,14 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from "../../common";
 
-export interface TikTrixGameRewardInterface extends Interface {
+export interface TikTrixGameScoreInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FACTORY_ROLE"
-      | "batchManualReward"
-      | "checkRewardDistributed"
       | "contractURI"
-      | "dailyGameRankingReward"
       | "deployer"
       | "getRoleAdmin"
       | "getRoleMember"
@@ -39,22 +36,17 @@ export interface TikTrixGameRewardInterface extends Interface {
       | "grantRole"
       | "hasRole"
       | "hasRoleWithSwitch"
-      | "isRewardDistributed"
-      | "manualReward"
       | "multicall"
+      | "rankScoreUpdateNormal"
       | "renounceRole"
       | "revokeRole"
-      | "rewardToken"
       | "setContractURI"
-      | "setRewardToken"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
       | "ContractURIUpdated"
-      | "DailyGameRankingReward"
-      | "ManualReward"
-      | "ManualRewardBatch"
+      | "RankScoreUpdateNoraml"
       | "RoleAdminChanged"
       | "RoleGranted"
       | "RoleRevoked"
@@ -69,20 +61,8 @@ export interface TikTrixGameRewardInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "batchManualReward",
-    values: [AddressLike[], BigNumberish[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "checkRewardDistributed",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "contractURI",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "dailyGameRankingReward",
-    values: [BigNumberish, BigNumberish, AddressLike[], BigNumberish[]]
   ): string;
   encodeFunctionData(functionFragment: "deployer", values?: undefined): string;
   encodeFunctionData(
@@ -110,16 +90,12 @@ export interface TikTrixGameRewardInterface extends Interface {
     values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "isRewardDistributed",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "manualReward",
-    values: [AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "multicall",
     values: [BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "rankScoreUpdateNormal",
+    values: [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -130,16 +106,8 @@ export interface TikTrixGameRewardInterface extends Interface {
     values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "rewardToken",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "setContractURI",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setRewardToken",
-    values: [AddressLike]
   ): string;
 
   decodeFunctionResult(
@@ -151,19 +119,7 @@ export interface TikTrixGameRewardInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchManualReward",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "checkRewardDistributed",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "contractURI",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "dailyGameRankingReward",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deployer", data: BytesLike): Result;
@@ -185,30 +141,18 @@ export interface TikTrixGameRewardInterface extends Interface {
     functionFragment: "hasRoleWithSwitch",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "isRewardDistributed",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "manualReward",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "rankScoreUpdateNormal",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceRole",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "rewardToken",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "setContractURI",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setRewardToken",
     data: BytesLike
   ): Result;
 }
@@ -226,53 +170,24 @@ export namespace ContractURIUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace DailyGameRankingRewardEvent {
+export namespace RankScoreUpdateNoramlEvent {
   export type InputTuple = [
     yyyymmdd: BigNumberish,
     gameSeq: BigNumberish,
-    recipients: AddressLike[],
-    tokenAmounts: BigNumberish[]
+    memberSeq: BigNumberish,
+    newScore: BigNumberish
   ];
   export type OutputTuple = [
     yyyymmdd: bigint,
     gameSeq: bigint,
-    recipients: string[],
-    tokenAmounts: bigint[]
+    memberSeq: bigint,
+    newScore: bigint
   ];
   export interface OutputObject {
     yyyymmdd: bigint;
     gameSeq: bigint;
-    recipients: string[];
-    tokenAmounts: bigint[];
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace ManualRewardEvent {
-  export type InputTuple = [recipient: AddressLike, tokenAmount: BigNumberish];
-  export type OutputTuple = [recipient: string, tokenAmount: bigint];
-  export interface OutputObject {
-    recipient: string;
-    tokenAmount: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace ManualRewardBatchEvent {
-  export type InputTuple = [
-    recipients: AddressLike[],
-    tokenAmounts: BigNumberish[]
-  ];
-  export type OutputTuple = [recipients: string[], tokenAmounts: bigint[]];
-  export interface OutputObject {
-    recipients: string[];
-    tokenAmounts: bigint[];
+    memberSeq: bigint;
+    newScore: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -338,11 +253,11 @@ export namespace RoleRevokedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface TikTrixGameReward extends BaseContract {
-  connect(runner?: ContractRunner | null): TikTrixGameReward;
+export interface TikTrixGameScore extends BaseContract {
+  connect(runner?: ContractRunner | null): TikTrixGameScore;
   waitForDeployment(): Promise<this>;
 
-  interface: TikTrixGameRewardInterface;
+  interface: TikTrixGameScoreInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -385,30 +300,7 @@ export interface TikTrixGameReward extends BaseContract {
 
   FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
 
-  batchManualReward: TypedContractMethod<
-    [recipients: AddressLike[], tokenAmounts: BigNumberish[]],
-    [void],
-    "nonpayable"
-  >;
-
-  checkRewardDistributed: TypedContractMethod<
-    [yyyymmdd: BigNumberish, gameSeq: BigNumberish],
-    [boolean],
-    "view"
-  >;
-
   contractURI: TypedContractMethod<[], [string], "view">;
-
-  dailyGameRankingReward: TypedContractMethod<
-    [
-      yyyymmdd: BigNumberish,
-      gameSeq: BigNumberish,
-      recipients: AddressLike[],
-      tokenAmounts: BigNumberish[]
-    ],
-    [void],
-    "nonpayable"
-  >;
 
   deployer: TypedContractMethod<[], [string], "view">;
 
@@ -440,19 +332,18 @@ export interface TikTrixGameReward extends BaseContract {
     "view"
   >;
 
-  isRewardDistributed: TypedContractMethod<
-    [arg0: BigNumberish, arg1: BigNumberish],
-    [boolean],
-    "view"
-  >;
+  multicall: TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
 
-  manualReward: TypedContractMethod<
-    [recipient: AddressLike, tokenAmount: BigNumberish],
+  rankScoreUpdateNormal: TypedContractMethod<
+    [
+      yyyymmdd: BigNumberish,
+      gameSeq: BigNumberish,
+      memberSeq: BigNumberish,
+      newScore: BigNumberish
+    ],
     [void],
     "nonpayable"
   >;
-
-  multicall: TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
 
   renounceRole: TypedContractMethod<
     [role: BytesLike, account: AddressLike],
@@ -466,15 +357,7 @@ export interface TikTrixGameReward extends BaseContract {
     "nonpayable"
   >;
 
-  rewardToken: TypedContractMethod<[], [string], "view">;
-
   setContractURI: TypedContractMethod<[_uri: string], [void], "nonpayable">;
-
-  setRewardToken: TypedContractMethod<
-    [rewardTokenAddress: AddressLike],
-    [void],
-    "nonpayable"
-  >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -487,34 +370,8 @@ export interface TikTrixGameReward extends BaseContract {
     nameOrSignature: "FACTORY_ROLE"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "batchManualReward"
-  ): TypedContractMethod<
-    [recipients: AddressLike[], tokenAmounts: BigNumberish[]],
-    [void],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "checkRewardDistributed"
-  ): TypedContractMethod<
-    [yyyymmdd: BigNumberish, gameSeq: BigNumberish],
-    [boolean],
-    "view"
-  >;
-  getFunction(
     nameOrSignature: "contractURI"
   ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "dailyGameRankingReward"
-  ): TypedContractMethod<
-    [
-      yyyymmdd: BigNumberish,
-      gameSeq: BigNumberish,
-      recipients: AddressLike[],
-      tokenAmounts: BigNumberish[]
-    ],
-    [void],
-    "nonpayable"
-  >;
   getFunction(
     nameOrSignature: "deployer"
   ): TypedContractMethod<[], [string], "view">;
@@ -553,22 +410,20 @@ export interface TikTrixGameReward extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "isRewardDistributed"
-  ): TypedContractMethod<
-    [arg0: BigNumberish, arg1: BigNumberish],
-    [boolean],
-    "view"
-  >;
+    nameOrSignature: "multicall"
+  ): TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
   getFunction(
-    nameOrSignature: "manualReward"
+    nameOrSignature: "rankScoreUpdateNormal"
   ): TypedContractMethod<
-    [recipient: AddressLike, tokenAmount: BigNumberish],
+    [
+      yyyymmdd: BigNumberish,
+      gameSeq: BigNumberish,
+      memberSeq: BigNumberish,
+      newScore: BigNumberish
+    ],
     [void],
     "nonpayable"
   >;
-  getFunction(
-    nameOrSignature: "multicall"
-  ): TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
   getFunction(
     nameOrSignature: "renounceRole"
   ): TypedContractMethod<
@@ -584,18 +439,8 @@ export interface TikTrixGameReward extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "rewardToken"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
     nameOrSignature: "setContractURI"
   ): TypedContractMethod<[_uri: string], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "setRewardToken"
-  ): TypedContractMethod<
-    [rewardTokenAddress: AddressLike],
-    [void],
-    "nonpayable"
-  >;
 
   getEvent(
     key: "ContractURIUpdated"
@@ -605,25 +450,11 @@ export interface TikTrixGameReward extends BaseContract {
     ContractURIUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "DailyGameRankingReward"
+    key: "RankScoreUpdateNoraml"
   ): TypedContractEvent<
-    DailyGameRankingRewardEvent.InputTuple,
-    DailyGameRankingRewardEvent.OutputTuple,
-    DailyGameRankingRewardEvent.OutputObject
-  >;
-  getEvent(
-    key: "ManualReward"
-  ): TypedContractEvent<
-    ManualRewardEvent.InputTuple,
-    ManualRewardEvent.OutputTuple,
-    ManualRewardEvent.OutputObject
-  >;
-  getEvent(
-    key: "ManualRewardBatch"
-  ): TypedContractEvent<
-    ManualRewardBatchEvent.InputTuple,
-    ManualRewardBatchEvent.OutputTuple,
-    ManualRewardBatchEvent.OutputObject
+    RankScoreUpdateNoramlEvent.InputTuple,
+    RankScoreUpdateNoramlEvent.OutputTuple,
+    RankScoreUpdateNoramlEvent.OutputObject
   >;
   getEvent(
     key: "RoleAdminChanged"
@@ -659,37 +490,15 @@ export interface TikTrixGameReward extends BaseContract {
       ContractURIUpdatedEvent.OutputObject
     >;
 
-    "DailyGameRankingReward(uint256,uint256,address[],uint256[])": TypedContractEvent<
-      DailyGameRankingRewardEvent.InputTuple,
-      DailyGameRankingRewardEvent.OutputTuple,
-      DailyGameRankingRewardEvent.OutputObject
+    "RankScoreUpdateNoraml(uint256,uint256,uint256,uint256)": TypedContractEvent<
+      RankScoreUpdateNoramlEvent.InputTuple,
+      RankScoreUpdateNoramlEvent.OutputTuple,
+      RankScoreUpdateNoramlEvent.OutputObject
     >;
-    DailyGameRankingReward: TypedContractEvent<
-      DailyGameRankingRewardEvent.InputTuple,
-      DailyGameRankingRewardEvent.OutputTuple,
-      DailyGameRankingRewardEvent.OutputObject
-    >;
-
-    "ManualReward(address,uint256)": TypedContractEvent<
-      ManualRewardEvent.InputTuple,
-      ManualRewardEvent.OutputTuple,
-      ManualRewardEvent.OutputObject
-    >;
-    ManualReward: TypedContractEvent<
-      ManualRewardEvent.InputTuple,
-      ManualRewardEvent.OutputTuple,
-      ManualRewardEvent.OutputObject
-    >;
-
-    "ManualRewardBatch(address[],uint256[])": TypedContractEvent<
-      ManualRewardBatchEvent.InputTuple,
-      ManualRewardBatchEvent.OutputTuple,
-      ManualRewardBatchEvent.OutputObject
-    >;
-    ManualRewardBatch: TypedContractEvent<
-      ManualRewardBatchEvent.InputTuple,
-      ManualRewardBatchEvent.OutputTuple,
-      ManualRewardBatchEvent.OutputObject
+    RankScoreUpdateNoraml: TypedContractEvent<
+      RankScoreUpdateNoramlEvent.InputTuple,
+      RankScoreUpdateNoramlEvent.OutputTuple,
+      RankScoreUpdateNoramlEvent.OutputObject
     >;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<

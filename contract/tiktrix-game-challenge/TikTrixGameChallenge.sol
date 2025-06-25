@@ -16,13 +16,21 @@ contract TikTrixGameChallenge is PermissionsEnumerable, Multicall, ContractMetad
         bool isReturned;
         address depositor;
     }
-    
+
+    mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) public highScores;
     mapping(uint256 => mapping(uint256 => mapping(uint256 => Deposit))) public deposits;
     
     event DepositMade(uint256 baseDate, uint256 gameSeq, uint256 memberSeq, uint256 amount);
     event DepositReturned(uint256 baseDate, uint256 gameSeq, uint256 memberSeq, uint256 amount);
     event BatchDepositsReturned(uint256 baseDate, uint256 gameSeq, uint256 count, uint256 totalAmount);
-    
+    event RankScoreUpdateChallenge(
+        uint256 baseDate, 
+        uint256 gameSeq, 
+        uint256 memberSeq, 
+        uint256 newScore,
+        uint256 previousScore
+    );
+
     constructor(string memory _contractURI, address _deployer) {
         _setupContractURI(_contractURI);
         deployer = _deployer;
@@ -101,12 +109,39 @@ contract TikTrixGameChallenge is PermissionsEnumerable, Multicall, ContractMetad
     }
     
     function getDepositFee(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) 
-        external 
+        public 
         view 
         returns (uint256 amount, bool isReturned) 
     {
         Deposit memory deposit = deposits[baseDate][gameSeq][memberSeq];
         return (deposit.amount, deposit.isReturned);
+    }
+
+    function rankScoreUpdateChallenge(
+        uint256 baseDate,
+        uint256 gameSeq,
+        uint256 memberSeq,
+        uint256 newScore
+    ) external onlyRole(FACTORY_ROLE) {
+        (uint256 depositAmount, bool isReturned) = getDepositFee(baseDate, gameSeq, memberSeq);
+        require(depositAmount > 0, "No deposit found for this challenge");
+        require(!isReturned, "Deposit has already been returned");        
+
+        uint256 currentHighScore = highScores[baseDate][gameSeq][memberSeq];
+        
+        if(newScore > currentHighScore) {
+            highScores[baseDate][gameSeq][memberSeq] = newScore;
+        }
+        
+        emit RankScoreUpdateChallenge(baseDate, gameSeq, memberSeq, newScore, currentHighScore);
+    }
+
+    function getHighScore(uint256 baseDate, uint256 gameSeq, uint256 memberSeq) 
+        external 
+        view 
+        returns (uint256)
+    {
+        return highScores[baseDate][gameSeq][memberSeq];
     }
 }
 
