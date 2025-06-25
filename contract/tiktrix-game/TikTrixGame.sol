@@ -22,7 +22,9 @@ contract TikTrixGame is PermissionsEnumerable, Multicall, ContractMetadata {
     event GameUpdated(uint256 gameSeq);
     event GameDeleted(uint256 indexed gameSeq);
 
-    constructor() {
+    constructor(string memory _contractURI, address _deployer) {
+        _setupContractURI(_contractURI);
+        deployer = _deployer;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);
     }

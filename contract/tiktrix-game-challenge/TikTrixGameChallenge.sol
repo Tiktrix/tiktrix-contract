@@ -23,7 +23,9 @@ contract TikTrixGameChallenge is PermissionsEnumerable, Multicall, ContractMetad
     event DepositReturned(uint256 baseDate, uint256 gameSeq, uint256 memberSeq, uint256 amount);
     event BatchDepositsReturned(uint256 baseDate, uint256 gameSeq, uint256 count, uint256 totalAmount);
     
-    constructor() {
+    constructor(string memory _contractURI, address _deployer) {
+        _setupContractURI(_contractURI);
+        deployer = _deployer;
         owner = msg.sender;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);

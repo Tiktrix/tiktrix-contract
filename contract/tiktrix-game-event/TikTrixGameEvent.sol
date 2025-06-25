@@ -24,7 +24,9 @@ contract TikTrixGameEvent is PermissionsEnumerable, Multicall, ContractMetadata 
     event GameEnded(uint256 indexed gameSeq, uint256 indexed memberSeq);
     event GameLiked(uint256 indexed gameSeq, uint256 indexed memberSeq);
 
-    constructor() {
+    constructor(string memory _contractURI, address _deployer) {
+        _setupContractURI(_contractURI);
+        deployer = _deployer;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);
     }

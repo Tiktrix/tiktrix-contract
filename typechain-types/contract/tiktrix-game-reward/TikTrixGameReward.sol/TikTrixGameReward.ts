@@ -21,39 +21,40 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from "../../../common";
 
-export interface TikTrixGameChallengeInterface extends Interface {
+export interface TikTrixGameRewardInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FACTORY_ROLE"
-      | "batchReturnDepositFee"
+      | "batchManualReward"
+      | "checkRewardDistributed"
       | "contractURI"
+      | "dailyGameRankingReward"
       | "deployer"
-      | "depositFee"
-      | "deposits"
-      | "getDepositFee"
       | "getRoleAdmin"
       | "getRoleMember"
       | "getRoleMemberCount"
       | "grantRole"
       | "hasRole"
       | "hasRoleWithSwitch"
+      | "isRewardDistributed"
+      | "manualReward"
       | "multicall"
-      | "owner"
       | "renounceRole"
-      | "returnDepositFee"
       | "revokeRole"
+      | "rewardToken"
       | "setContractURI"
+      | "setRewardToken"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "BatchDepositsReturned"
       | "ContractURIUpdated"
-      | "DepositMade"
-      | "DepositReturned"
+      | "DailyGameRankingReward"
+      | "ManualReward"
+      | "ManualRewardBatch"
       | "RoleAdminChanged"
       | "RoleGranted"
       | "RoleRevoked"
@@ -68,26 +69,22 @@ export interface TikTrixGameChallengeInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "batchReturnDepositFee",
-    values: [BigNumberish, BigNumberish, BigNumberish[]]
+    functionFragment: "batchManualReward",
+    values: [AddressLike[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkRewardDistributed",
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "contractURI",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "dailyGameRankingReward",
+    values: [BigNumberish, BigNumberish, AddressLike[], BigNumberish[]]
+  ): string;
   encodeFunctionData(functionFragment: "deployer", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "depositFee",
-    values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "deposits",
-    values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getDepositFee",
-    values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
     values: [BytesLike]
@@ -113,25 +110,36 @@ export interface TikTrixGameChallengeInterface extends Interface {
     values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "isRewardDistributed",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "manualReward",
+    values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "multicall",
     values: [BytesLike[]]
   ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
     values: [BytesLike, AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "returnDepositFee",
-    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "revokeRole",
     values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "rewardToken",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "setContractURI",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setRewardToken",
+    values: [AddressLike]
   ): string;
 
   decodeFunctionResult(
@@ -143,20 +151,22 @@ export interface TikTrixGameChallengeInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "batchReturnDepositFee",
+    functionFragment: "batchManualReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkRewardDistributed",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "contractURI",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "deployer", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "depositFee", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "deposits", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getDepositFee",
+    functionFragment: "dailyGameRankingReward",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "deployer", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
@@ -175,46 +185,32 @@ export interface TikTrixGameChallengeInterface extends Interface {
     functionFragment: "hasRoleWithSwitch",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "isRewardDistributed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "manualReward",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceRole",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "returnDepositFee",
+    functionFragment: "rewardToken",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setContractURI",
     data: BytesLike
   ): Result;
-}
-
-export namespace BatchDepositsReturnedEvent {
-  export type InputTuple = [
-    baseDate: BigNumberish,
-    gameSeq: BigNumberish,
-    count: BigNumberish,
-    totalAmount: BigNumberish
-  ];
-  export type OutputTuple = [
-    baseDate: bigint,
-    gameSeq: bigint,
-    count: bigint,
-    totalAmount: bigint
-  ];
-  export interface OutputObject {
-    baseDate: bigint;
-    gameSeq: bigint;
-    count: bigint;
-    totalAmount: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
+  decodeFunctionResult(
+    functionFragment: "setRewardToken",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace ContractURIUpdatedEvent {
@@ -230,24 +226,24 @@ export namespace ContractURIUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace DepositMadeEvent {
+export namespace DailyGameRankingRewardEvent {
   export type InputTuple = [
-    baseDate: BigNumberish,
+    yyyymmdd: BigNumberish,
     gameSeq: BigNumberish,
-    memberSeq: BigNumberish,
-    amount: BigNumberish
+    recipients: AddressLike[],
+    tokenAmounts: BigNumberish[]
   ];
   export type OutputTuple = [
-    baseDate: bigint,
+    yyyymmdd: bigint,
     gameSeq: bigint,
-    memberSeq: bigint,
-    amount: bigint
+    recipients: string[],
+    tokenAmounts: bigint[]
   ];
   export interface OutputObject {
-    baseDate: bigint;
+    yyyymmdd: bigint;
     gameSeq: bigint;
-    memberSeq: bigint;
-    amount: bigint;
+    recipients: string[];
+    tokenAmounts: bigint[];
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -255,24 +251,28 @@ export namespace DepositMadeEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace DepositReturnedEvent {
-  export type InputTuple = [
-    baseDate: BigNumberish,
-    gameSeq: BigNumberish,
-    memberSeq: BigNumberish,
-    amount: BigNumberish
-  ];
-  export type OutputTuple = [
-    baseDate: bigint,
-    gameSeq: bigint,
-    memberSeq: bigint,
-    amount: bigint
-  ];
+export namespace ManualRewardEvent {
+  export type InputTuple = [recipient: AddressLike, tokenAmount: BigNumberish];
+  export type OutputTuple = [recipient: string, tokenAmount: bigint];
   export interface OutputObject {
-    baseDate: bigint;
-    gameSeq: bigint;
-    memberSeq: bigint;
-    amount: bigint;
+    recipient: string;
+    tokenAmount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace ManualRewardBatchEvent {
+  export type InputTuple = [
+    recipients: AddressLike[],
+    tokenAmounts: BigNumberish[]
+  ];
+  export type OutputTuple = [recipients: string[], tokenAmounts: bigint[]];
+  export interface OutputObject {
+    recipients: string[];
+    tokenAmounts: bigint[];
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -338,11 +338,11 @@ export namespace RoleRevokedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface TikTrixGameChallenge extends BaseContract {
-  connect(runner?: ContractRunner | null): TikTrixGameChallenge;
+export interface TikTrixGameReward extends BaseContract {
+  connect(runner?: ContractRunner | null): TikTrixGameReward;
   waitForDeployment(): Promise<this>;
 
-  interface: TikTrixGameChallengeInterface;
+  interface: TikTrixGameRewardInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -385,39 +385,32 @@ export interface TikTrixGameChallenge extends BaseContract {
 
   FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
 
-  batchReturnDepositFee: TypedContractMethod<
-    [baseDate: BigNumberish, gameSeq: BigNumberish, memberSeqs: BigNumberish[]],
+  batchManualReward: TypedContractMethod<
+    [recipients: AddressLike[], tokenAmounts: BigNumberish[]],
     [void],
     "nonpayable"
   >;
 
+  checkRewardDistributed: TypedContractMethod<
+    [yyyymmdd: BigNumberish, gameSeq: BigNumberish],
+    [boolean],
+    "view"
+  >;
+
   contractURI: TypedContractMethod<[], [string], "view">;
 
-  deployer: TypedContractMethod<[], [string], "view">;
-
-  depositFee: TypedContractMethod<
-    [baseDate: BigNumberish, gameSeq: BigNumberish, memberSeq: BigNumberish],
-    [void],
-    "payable"
-  >;
-
-  deposits: TypedContractMethod<
-    [arg0: BigNumberish, arg1: BigNumberish, arg2: BigNumberish],
+  dailyGameRankingReward: TypedContractMethod<
     [
-      [bigint, boolean, string] & {
-        amount: bigint;
-        isReturned: boolean;
-        depositor: string;
-      }
+      yyyymmdd: BigNumberish,
+      gameSeq: BigNumberish,
+      recipients: AddressLike[],
+      tokenAmounts: BigNumberish[]
     ],
-    "view"
+    [void],
+    "nonpayable"
   >;
 
-  getDepositFee: TypedContractMethod<
-    [baseDate: BigNumberish, gameSeq: BigNumberish, memberSeq: BigNumberish],
-    [[bigint, boolean] & { amount: bigint; isReturned: boolean }],
-    "view"
-  >;
+  deployer: TypedContractMethod<[], [string], "view">;
 
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
@@ -447,18 +440,22 @@ export interface TikTrixGameChallenge extends BaseContract {
     "view"
   >;
 
-  multicall: TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
+  isRewardDistributed: TypedContractMethod<
+    [arg0: BigNumberish, arg1: BigNumberish],
+    [boolean],
+    "view"
+  >;
 
-  owner: TypedContractMethod<[], [string], "view">;
-
-  renounceRole: TypedContractMethod<
-    [role: BytesLike, account: AddressLike],
+  manualReward: TypedContractMethod<
+    [recipient: AddressLike, tokenAmount: BigNumberish],
     [void],
     "nonpayable"
   >;
 
-  returnDepositFee: TypedContractMethod<
-    [baseDate: BigNumberish, gameSeq: BigNumberish, memberSeq: BigNumberish],
+  multicall: TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
+
+  renounceRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -469,7 +466,15 @@ export interface TikTrixGameChallenge extends BaseContract {
     "nonpayable"
   >;
 
+  rewardToken: TypedContractMethod<[], [string], "view">;
+
   setContractURI: TypedContractMethod<[_uri: string], [void], "nonpayable">;
+
+  setRewardToken: TypedContractMethod<
+    [rewardTokenAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -482,45 +487,37 @@ export interface TikTrixGameChallenge extends BaseContract {
     nameOrSignature: "FACTORY_ROLE"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "batchReturnDepositFee"
+    nameOrSignature: "batchManualReward"
   ): TypedContractMethod<
-    [baseDate: BigNumberish, gameSeq: BigNumberish, memberSeqs: BigNumberish[]],
+    [recipients: AddressLike[], tokenAmounts: BigNumberish[]],
     [void],
     "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "checkRewardDistributed"
+  ): TypedContractMethod<
+    [yyyymmdd: BigNumberish, gameSeq: BigNumberish],
+    [boolean],
+    "view"
   >;
   getFunction(
     nameOrSignature: "contractURI"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "dailyGameRankingReward"
+  ): TypedContractMethod<
+    [
+      yyyymmdd: BigNumberish,
+      gameSeq: BigNumberish,
+      recipients: AddressLike[],
+      tokenAmounts: BigNumberish[]
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "deployer"
   ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "depositFee"
-  ): TypedContractMethod<
-    [baseDate: BigNumberish, gameSeq: BigNumberish, memberSeq: BigNumberish],
-    [void],
-    "payable"
-  >;
-  getFunction(
-    nameOrSignature: "deposits"
-  ): TypedContractMethod<
-    [arg0: BigNumberish, arg1: BigNumberish, arg2: BigNumberish],
-    [
-      [bigint, boolean, string] & {
-        amount: bigint;
-        isReturned: boolean;
-        depositor: string;
-      }
-    ],
-    "view"
-  >;
-  getFunction(
-    nameOrSignature: "getDepositFee"
-  ): TypedContractMethod<
-    [baseDate: BigNumberish, gameSeq: BigNumberish, memberSeq: BigNumberish],
-    [[bigint, boolean] & { amount: bigint; isReturned: boolean }],
-    "view"
-  >;
   getFunction(
     nameOrSignature: "getRoleAdmin"
   ): TypedContractMethod<[role: BytesLike], [string], "view">;
@@ -556,22 +553,26 @@ export interface TikTrixGameChallenge extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "multicall"
-  ): TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
-  getFunction(
-    nameOrSignature: "owner"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "renounceRole"
+    nameOrSignature: "isRewardDistributed"
   ): TypedContractMethod<
-    [role: BytesLike, account: AddressLike],
+    [arg0: BigNumberish, arg1: BigNumberish],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "manualReward"
+  ): TypedContractMethod<
+    [recipient: AddressLike, tokenAmount: BigNumberish],
     [void],
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "returnDepositFee"
+    nameOrSignature: "multicall"
+  ): TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
+  getFunction(
+    nameOrSignature: "renounceRole"
   ): TypedContractMethod<
-    [baseDate: BigNumberish, gameSeq: BigNumberish, memberSeq: BigNumberish],
+    [role: BytesLike, account: AddressLike],
     [void],
     "nonpayable"
   >;
@@ -583,16 +584,19 @@ export interface TikTrixGameChallenge extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "rewardToken"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "setContractURI"
   ): TypedContractMethod<[_uri: string], [void], "nonpayable">;
-
-  getEvent(
-    key: "BatchDepositsReturned"
-  ): TypedContractEvent<
-    BatchDepositsReturnedEvent.InputTuple,
-    BatchDepositsReturnedEvent.OutputTuple,
-    BatchDepositsReturnedEvent.OutputObject
+  getFunction(
+    nameOrSignature: "setRewardToken"
+  ): TypedContractMethod<
+    [rewardTokenAddress: AddressLike],
+    [void],
+    "nonpayable"
   >;
+
   getEvent(
     key: "ContractURIUpdated"
   ): TypedContractEvent<
@@ -601,18 +605,25 @@ export interface TikTrixGameChallenge extends BaseContract {
     ContractURIUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "DepositMade"
+    key: "DailyGameRankingReward"
   ): TypedContractEvent<
-    DepositMadeEvent.InputTuple,
-    DepositMadeEvent.OutputTuple,
-    DepositMadeEvent.OutputObject
+    DailyGameRankingRewardEvent.InputTuple,
+    DailyGameRankingRewardEvent.OutputTuple,
+    DailyGameRankingRewardEvent.OutputObject
   >;
   getEvent(
-    key: "DepositReturned"
+    key: "ManualReward"
   ): TypedContractEvent<
-    DepositReturnedEvent.InputTuple,
-    DepositReturnedEvent.OutputTuple,
-    DepositReturnedEvent.OutputObject
+    ManualRewardEvent.InputTuple,
+    ManualRewardEvent.OutputTuple,
+    ManualRewardEvent.OutputObject
+  >;
+  getEvent(
+    key: "ManualRewardBatch"
+  ): TypedContractEvent<
+    ManualRewardBatchEvent.InputTuple,
+    ManualRewardBatchEvent.OutputTuple,
+    ManualRewardBatchEvent.OutputObject
   >;
   getEvent(
     key: "RoleAdminChanged"
@@ -637,17 +648,6 @@ export interface TikTrixGameChallenge extends BaseContract {
   >;
 
   filters: {
-    "BatchDepositsReturned(uint256,uint256,uint256,uint256)": TypedContractEvent<
-      BatchDepositsReturnedEvent.InputTuple,
-      BatchDepositsReturnedEvent.OutputTuple,
-      BatchDepositsReturnedEvent.OutputObject
-    >;
-    BatchDepositsReturned: TypedContractEvent<
-      BatchDepositsReturnedEvent.InputTuple,
-      BatchDepositsReturnedEvent.OutputTuple,
-      BatchDepositsReturnedEvent.OutputObject
-    >;
-
     "ContractURIUpdated(string,string)": TypedContractEvent<
       ContractURIUpdatedEvent.InputTuple,
       ContractURIUpdatedEvent.OutputTuple,
@@ -659,26 +659,37 @@ export interface TikTrixGameChallenge extends BaseContract {
       ContractURIUpdatedEvent.OutputObject
     >;
 
-    "DepositMade(uint256,uint256,uint256,uint256)": TypedContractEvent<
-      DepositMadeEvent.InputTuple,
-      DepositMadeEvent.OutputTuple,
-      DepositMadeEvent.OutputObject
+    "DailyGameRankingReward(uint256,uint256,address[],uint256[])": TypedContractEvent<
+      DailyGameRankingRewardEvent.InputTuple,
+      DailyGameRankingRewardEvent.OutputTuple,
+      DailyGameRankingRewardEvent.OutputObject
     >;
-    DepositMade: TypedContractEvent<
-      DepositMadeEvent.InputTuple,
-      DepositMadeEvent.OutputTuple,
-      DepositMadeEvent.OutputObject
+    DailyGameRankingReward: TypedContractEvent<
+      DailyGameRankingRewardEvent.InputTuple,
+      DailyGameRankingRewardEvent.OutputTuple,
+      DailyGameRankingRewardEvent.OutputObject
     >;
 
-    "DepositReturned(uint256,uint256,uint256,uint256)": TypedContractEvent<
-      DepositReturnedEvent.InputTuple,
-      DepositReturnedEvent.OutputTuple,
-      DepositReturnedEvent.OutputObject
+    "ManualReward(address,uint256)": TypedContractEvent<
+      ManualRewardEvent.InputTuple,
+      ManualRewardEvent.OutputTuple,
+      ManualRewardEvent.OutputObject
     >;
-    DepositReturned: TypedContractEvent<
-      DepositReturnedEvent.InputTuple,
-      DepositReturnedEvent.OutputTuple,
-      DepositReturnedEvent.OutputObject
+    ManualReward: TypedContractEvent<
+      ManualRewardEvent.InputTuple,
+      ManualRewardEvent.OutputTuple,
+      ManualRewardEvent.OutputObject
+    >;
+
+    "ManualRewardBatch(address[],uint256[])": TypedContractEvent<
+      ManualRewardBatchEvent.InputTuple,
+      ManualRewardBatchEvent.OutputTuple,
+      ManualRewardBatchEvent.OutputObject
+    >;
+    ManualRewardBatch: TypedContractEvent<
+      ManualRewardBatchEvent.InputTuple,
+      ManualRewardBatchEvent.OutputTuple,
+      ManualRewardBatchEvent.OutputObject
     >;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<

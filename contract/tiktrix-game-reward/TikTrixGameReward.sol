@@ -7,11 +7,11 @@ import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/Multicall.sol";
 import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
-interface IERC20Mintable is IERC20, ContractMetadata {
+interface IERC20Mintable is IERC20 {
     function mint(address to, uint256 amount) external;
 }
 
-contract TikTrixGameReward is PermissionsEnumerable, Multicall {
+contract TikTrixGameReward is PermissionsEnumerable, Multicall, ContractMetadata {
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     address public deployer;
 
@@ -28,7 +28,9 @@ contract TikTrixGameReward is PermissionsEnumerable, Multicall {
         uint256[] tokenAmounts
     );
 
-    constructor(address rewardTokenAddress) {
+    constructor(string memory _contractURI, address _deployer, address rewardTokenAddress) {
+        _setupContractURI(_contractURI);
+        deployer = _deployer;
         rewardToken = IERC20Mintable(rewardTokenAddress);
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);

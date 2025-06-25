@@ -24,7 +24,9 @@ contract TikTrixGameScore is PermissionsEnumerable, Multicall, ContractMetadata 
 
     event RankScoreUpdateNoraml(uint256 indexed yyyymmdd, uint256 indexed gameSeq, uint256 indexed memberSeq, uint256 newScore);
     
-    constructor(address _challengeAddress) {
+    constructor(string memory _contractURI, address _deployer, address _challengeAddress) {
+        _setupContractURI(_contractURI);
+        deployer = _deployer;
         challenge = TikTrixGameChallenge(_challengeAddress);
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);

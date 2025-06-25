@@ -14,6 +14,10 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20__factory>;
+    getContractFactory(
       name: "ContractMetadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ContractMetadata__factory>;
@@ -46,10 +50,19 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PermissionsEnumerable__factory>;
     getContractFactory(
-      name: "TikTrixGameChallenge",
+      name: "IERC20Mintable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.TikTrixGameChallenge__factory>;
+    ): Promise<Contracts.IERC20Mintable__factory>;
+    getContractFactory(
+      name: "TikTrixGameReward",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TikTrixGameReward__factory>;
 
+    getContractAt(
+      name: "IERC20",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20>;
     getContractAt(
       name: "ContractMetadata",
       address: string | ethers.Addressable,
@@ -91,11 +104,20 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.PermissionsEnumerable>;
     getContractAt(
-      name: "TikTrixGameChallenge",
+      name: "IERC20Mintable",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.TikTrixGameChallenge>;
+    ): Promise<Contracts.IERC20Mintable>;
+    getContractAt(
+      name: "TikTrixGameReward",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TikTrixGameReward>;
 
+    deployContract(
+      name: "IERC20",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IERC20>;
     deployContract(
       name: "ContractMetadata",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -129,10 +151,19 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PermissionsEnumerable>;
     deployContract(
-      name: "TikTrixGameChallenge",
+      name: "IERC20Mintable",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.TikTrixGameChallenge>;
+    ): Promise<Contracts.IERC20Mintable>;
+    deployContract(
+      name: "TikTrixGameReward",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TikTrixGameReward>;
 
+    deployContract(
+      name: "IERC20",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.IERC20>;
     deployContract(
       name: "ContractMetadata",
       args: any[],
@@ -174,10 +205,15 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PermissionsEnumerable>;
     deployContract(
-      name: "TikTrixGameChallenge",
+      name: "IERC20Mintable",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.TikTrixGameChallenge>;
+    ): Promise<Contracts.IERC20Mintable>;
+    deployContract(
+      name: "TikTrixGameReward",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TikTrixGameReward>;
 
     // default types
     getContractFactory(
