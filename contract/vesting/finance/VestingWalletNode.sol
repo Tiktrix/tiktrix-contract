@@ -41,9 +41,9 @@ contract VestingWalletNode is Context, Ownable, PermissionsEnumerable, ContractM
 
     constructor(string memory _contractURI, address _deployer, address beneficiary, address tokenAddress, uint64 startTimestamp) payable Ownable(beneficiary) {
         require(tokenAddress != address(0), "Token address cannot be zero");
-        _beneficiary = beneficiary;
         _token = IERC20(tokenAddress);
         _start = startTimestamp;
+        _beneficiary = beneficiary;
 
         _setupContractURI(_contractURI);
         deployer = _deployer;
