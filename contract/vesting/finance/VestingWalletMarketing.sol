@@ -19,8 +19,8 @@ contract CommunityVestingWallet is Context, Ownable {
     uint64 private constant INTERVAL = 30 days;
     uint64 private constant TOTAL_PHASES = 120;
 
-    // Fixed amount per phase: 3,333,333.3333333300 tokens (18 decimals)
-    uint256 private constant AMOUNT_PER_PHASE = 3_333_333_333333330000000000;
+    // Fixed amount per phase: 3,166,666.66666667 tokens (18 decimals)
+    uint256 private constant AMOUNT_PER_PHASE = 3_166_666_666666670000000;
 
     constructor(address beneficiary, address tokenAddress, uint64 startTimestamp) Ownable(beneficiary) {
         require(tokenAddress != address(0), "Token address cannot be zero");

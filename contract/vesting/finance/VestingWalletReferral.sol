@@ -19,8 +19,8 @@ contract VestingWallet is Context, Ownable {
     uint64 private constant INTERVAL = 30 days;
     uint64 private constant TOTAL_PHASES = 120;
 
-    // Fixed amount per phase: 833,333.333333333 tokens (18 decimals)
-    uint256 private constant AMOUNT_PER_PHASE = 833_333_333333333000000;
+    // Fixed amount per phase: 791,666.66666667 tokens (18 decimals)
+    uint256 private constant AMOUNT_PER_PHASE = 791_666_666666670000000;
 
     constructor(address beneficiary, address tokenAddress, uint64 startTimestamp) Ownable(beneficiary) {
         require(tokenAddress != address(0), "Token address cannot be zero");
