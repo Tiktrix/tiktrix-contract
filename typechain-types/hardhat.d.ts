@@ -46,9 +46,29 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.VestingWallet__factory>;
     getContractFactory(
+      name: "VestingWallet",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VestingWallet__factory>;
+    getContractFactory(
       name: "VestingWalletCliff",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.VestingWalletCliff__factory>;
+    getContractFactory(
+      name: "CommunityVestingWallet",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.CommunityVestingWallet__factory>;
+    getContractFactory(
+      name: "VestingWallet",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VestingWallet__factory>;
+    getContractFactory(
+      name: "CommunityVestingWallet",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.CommunityVestingWallet__factory>;
+    getContractFactory(
+      name: "VestingWallet",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VestingWallet__factory>;
     getContractFactory(
       name: "VestingWallet",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -123,10 +143,35 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.VestingWallet>;
     getContractAt(
+      name: "VestingWallet",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VestingWallet>;
+    getContractAt(
       name: "VestingWalletCliff",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.VestingWalletCliff>;
+    getContractAt(
+      name: "CommunityVestingWallet",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.CommunityVestingWallet>;
+    getContractAt(
+      name: "VestingWallet",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VestingWallet>;
+    getContractAt(
+      name: "CommunityVestingWallet",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.CommunityVestingWallet>;
+    getContractAt(
+      name: "VestingWallet",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VestingWallet>;
     getContractAt(
       name: "VestingWallet",
       address: string | ethers.Addressable,
@@ -201,9 +246,29 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.VestingWallet>;
     deployContract(
+      name: "VestingWallet",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VestingWallet>;
+    deployContract(
       name: "VestingWalletCliff",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.VestingWalletCliff>;
+    deployContract(
+      name: "CommunityVestingWallet",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.CommunityVestingWallet>;
+    deployContract(
+      name: "VestingWallet",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VestingWallet>;
+    deployContract(
+      name: "CommunityVestingWallet",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.CommunityVestingWallet>;
+    deployContract(
+      name: "VestingWallet",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VestingWallet>;
     deployContract(
       name: "VestingWallet",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -278,10 +343,35 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.VestingWallet>;
     deployContract(
+      name: "VestingWallet",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VestingWallet>;
+    deployContract(
       name: "VestingWalletCliff",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.VestingWalletCliff>;
+    deployContract(
+      name: "CommunityVestingWallet",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.CommunityVestingWallet>;
+    deployContract(
+      name: "VestingWallet",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VestingWallet>;
+    deployContract(
+      name: "CommunityVestingWallet",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.CommunityVestingWallet>;
+    deployContract(
+      name: "VestingWallet",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VestingWallet>;
     deployContract(
       name: "VestingWallet",
       args: any[],

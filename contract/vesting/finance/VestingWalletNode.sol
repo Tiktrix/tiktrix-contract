@@ -7,7 +7,13 @@ import {Address} from "../utils/Address.sol";
 import {Context} from "../utils/Context.sol";
 import {Ownable} from "../access/Ownable.sol";
 
-contract VestingWallet is Context, Ownable {
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
+
+contract VestingWallet is Context, Ownable, PermissionsEnumerable, ContractMetadata {
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
+    address public deployer;
+
     event EtherReleased(uint256 amount);
     event ERC20Released(address indexed token, uint256 amount);
 
@@ -29,8 +35,17 @@ contract VestingWallet is Context, Ownable {
     uint256 private constant AMOUNT_PHASE9 = 5231372333333330000000000;
     uint256 private constant AMOUNT_PHASE10 = 4721240500000000000000000;
 
-    constructor(address beneficiary, uint64 startTimestamp) payable Ownable(beneficiary) {
+    constructor(string memory _contractURI, address _deployer, address beneficiary, uint64 startTimestamp) payable Ownable(beneficiary) {
         _start = startTimestamp;
+
+        _setupContractURI(_contractURI);
+        deployer = _deployer;
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
+    }
+
+    function _canSetContractURI() internal view override returns (bool) {
+        return msg.sender == deployer;
     }
 
     receive() external payable virtual {}
@@ -59,14 +74,14 @@ contract VestingWallet is Context, Ownable {
         return vestedAmount(token, uint64(block.timestamp)) - released(token);
     }
 
-    function release() public virtual {
+    function release() external onlyRole(FACTORY_ROLE) {
         uint256 amount = releasable();
         _released += amount;
         emit EtherReleased(amount);
         Address.sendValue(payable(owner()), amount);
     }
 
-    function release(address token) public virtual {
+    function release(address token) external onlyRole(FACTORY_ROLE) {
         uint256 amount = releasable(token);
         _erc20Released[token] += amount;
         emit ERC20Released(token, amount);
