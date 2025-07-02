@@ -1,0 +1,119 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import {IERC20} from "../token/ERC20/IERC20.sol";
+import {SafeERC20} from "../token/ERC20/utils/SafeERC20.sol";
+import {Address} from "../utils/Address.sol";
+import {Context} from "../utils/Context.sol";
+import {Ownable} from "../access/Ownable.sol";
+
+contract VestingWallet is Context, Ownable {
+    event EtherReleased(uint256 amount);
+    event ERC20Released(address indexed token, uint256 amount);
+
+    uint256 private _released;
+    mapping(address token => uint256) private _erc20Released;
+    uint64 private immutable _start;
+    
+    uint64 private constant INTERVAL = 30 days;
+    uint64 private constant TOTAL_PHASES = 120;
+
+    uint256 private constant AMOUNT_PHASE1 = 12152777750000000000000000;
+    uint256 private constant AMOUNT_PHASE2 = 10937499916666670000000000;
+    uint256 private constant AMOUNT_PHASE3 = 9843749916666667000000000;
+    uint256 private constant AMOUNT_PHASE4 = 8859374916666667000000000;
+    uint256 private constant AMOUNT_PHASE5 = 7973437416666667000000000;
+    uint256 private constant AMOUNT_PHASE6 = 7176093666666667000000000;
+    uint256 private constant AMOUNT_PHASE7 = 6458484333333330000000000;
+    uint256 private constant AMOUNT_PHASE8 = 5812635916666667000000000;
+    uint256 private constant AMOUNT_PHASE9 = 5231372333333330000000000;
+    uint256 private constant AMOUNT_PHASE10 = 4721240500000000000000000;
+
+    constructor(address beneficiary, uint64 startTimestamp) payable Ownable(beneficiary) {
+        _start = startTimestamp;
+    }
+
+    receive() external payable virtual {}
+
+    function start() public view virtual returns (uint256) {
+        return _start;
+    }
+
+    function end() public view virtual returns (uint256) {
+        return start() + (INTERVAL * TOTAL_PHASES);
+    }
+
+    function released() public view virtual returns (uint256) {
+        return _released;
+    }
+
+    function released(address token) public view virtual returns (uint256) {
+        return _erc20Released[token];
+    }
+
+    function releasable() public view virtual returns (uint256) {
+        return vestedAmount(uint64(block.timestamp)) - released();
+    }
+
+    function releasable(address token) public view virtual returns (uint256) {
+        return vestedAmount(token, uint64(block.timestamp)) - released(token);
+    }
+
+    function release() public virtual {
+        uint256 amount = releasable();
+        _released += amount;
+        emit EtherReleased(amount);
+        Address.sendValue(payable(owner()), amount);
+    }
+
+    function release(address token) public virtual {
+        uint256 amount = releasable(token);
+        _erc20Released[token] += amount;
+        emit ERC20Released(token, amount);
+        SafeERC20.safeTransfer(IERC20(token), owner(), amount);
+    }
+
+    function vestedAmount(uint64 timestamp) public view virtual returns (uint256) {
+        return _customVesting(address(this).balance + released(), timestamp);
+    }
+
+    function vestedAmount(address token, uint64 timestamp) public view virtual returns (uint256) {
+        return _customVesting(IERC20(token).balanceOf(address(this)) + released(token), timestamp);
+    }
+
+    function _customVesting(uint256, uint64 timestamp) internal view returns (uint256) {
+        if (timestamp < _start) return 0;
+
+        uint64 elapsed = timestamp - _start;
+        uint64 phase = elapsed / INTERVAL;
+        if (phase >= TOTAL_PHASES) {
+            phase = TOTAL_PHASES - 1;
+        }
+
+        uint64 p = phase + 1;
+        uint256 vested = 0;
+
+        uint256[10] memory phaseAmounts = [
+            AMOUNT_PHASE1,
+            AMOUNT_PHASE2,
+            AMOUNT_PHASE3,
+            AMOUNT_PHASE4,
+            AMOUNT_PHASE5,
+            AMOUNT_PHASE6,
+            AMOUNT_PHASE7,
+            AMOUNT_PHASE8,
+            AMOUNT_PHASE9,
+            AMOUNT_PHASE10
+        ];
+
+        for (uint256 i = 0; i < 10; i++) {
+            uint64 start = uint64(i * 12);
+            if (p <= start) break;
+
+            uint64 count = p > start + 12 ? 12 : p - start;
+            vested += phaseAmounts[i] * count;
+        }
+
+        return vested;
+    }
+}
