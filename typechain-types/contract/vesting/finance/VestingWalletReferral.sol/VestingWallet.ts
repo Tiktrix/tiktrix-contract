@@ -26,12 +26,25 @@ import type {
 export interface VestingWalletInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "DEFAULT_ADMIN_ROLE"
+      | "FACTORY_ROLE"
+      | "contractURI"
+      | "deployer"
       | "end"
+      | "getRoleAdmin"
+      | "getRoleMember"
+      | "getRoleMemberCount"
+      | "grantRole"
+      | "hasRole"
+      | "hasRoleWithSwitch"
       | "owner"
       | "releasable"
       | "release"
       | "released"
       | "renounceOwnership"
+      | "renounceRole"
+      | "revokeRole"
+      | "setContractURI"
       | "start"
       | "token"
       | "transferOwnership"
@@ -39,10 +52,53 @@ export interface VestingWalletInterface extends Interface {
   ): FunctionFragment;
 
   getEvent(
-    nameOrSignatureOrTopic: "ERC20Released" | "OwnershipTransferred"
+    nameOrSignatureOrTopic:
+      | "ContractURIUpdated"
+      | "ERC20Released"
+      | "OwnershipTransferred"
+      | "RoleAdminChanged"
+      | "RoleGranted"
+      | "RoleRevoked"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "FACTORY_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "contractURI",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "deployer", values?: undefined): string;
   encodeFunctionData(functionFragment: "end", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getRoleAdmin",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRoleMember",
+    values: [BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRoleMemberCount",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "grantRole",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "hasRole",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "hasRoleWithSwitch",
+    values: [BytesLike, AddressLike]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "releasable",
@@ -53,6 +109,18 @@ export interface VestingWalletInterface extends Interface {
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceRole",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "revokeRole",
+    values: [BytesLike, AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setContractURI",
+    values: [string]
   ): string;
   encodeFunctionData(functionFragment: "start", values?: undefined): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
@@ -65,13 +133,53 @@ export interface VestingWalletInterface extends Interface {
     values: [BigNumberish]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "FACTORY_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "contractURI",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "deployer", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "end", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getRoleAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRoleMember",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRoleMemberCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "hasRoleWithSwitch",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "releasable", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "released", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceRole",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setContractURI",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "start", data: BytesLike): Result;
@@ -84,6 +192,19 @@ export interface VestingWalletInterface extends Interface {
     functionFragment: "vestedAmount",
     data: BytesLike
   ): Result;
+}
+
+export namespace ContractURIUpdatedEvent {
+  export type InputTuple = [prevURI: string, newURI: string];
+  export type OutputTuple = [prevURI: string, newURI: string];
+  export interface OutputObject {
+    prevURI: string;
+    newURI: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace ERC20ReleasedEvent {
@@ -105,6 +226,64 @@ export namespace OwnershipTransferredEvent {
   export interface OutputObject {
     previousOwner: string;
     newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleAdminChangedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    previousAdminRole: BytesLike,
+    newAdminRole: BytesLike
+  ];
+  export type OutputTuple = [
+    role: string,
+    previousAdminRole: string,
+    newAdminRole: string
+  ];
+  export interface OutputObject {
+    role: string;
+    previousAdminRole: string;
+    newAdminRole: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleGrantedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace RoleRevokedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -155,7 +334,43 @@ export interface VestingWallet extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
+
+  FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
+
+  contractURI: TypedContractMethod<[], [string], "view">;
+
+  deployer: TypedContractMethod<[], [string], "view">;
+
   end: TypedContractMethod<[], [bigint], "view">;
+
+  getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
+
+  getRoleMember: TypedContractMethod<
+    [role: BytesLike, index: BigNumberish],
+    [string],
+    "view"
+  >;
+
+  getRoleMemberCount: TypedContractMethod<[role: BytesLike], [bigint], "view">;
+
+  grantRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  hasRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
+
+  hasRoleWithSwitch: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
 
   owner: TypedContractMethod<[], [string], "view">;
 
@@ -166,6 +381,20 @@ export interface VestingWallet extends BaseContract {
   released: TypedContractMethod<[], [bigint], "view">;
 
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+
+  renounceRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  revokeRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  setContractURI: TypedContractMethod<[_uri: string], [void], "nonpayable">;
 
   start: TypedContractMethod<[], [bigint], "view">;
 
@@ -188,8 +417,54 @@ export interface VestingWallet extends BaseContract {
   ): T;
 
   getFunction(
+    nameOrSignature: "DEFAULT_ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "FACTORY_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "contractURI"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "deployer"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "end"
   ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getRoleAdmin"
+  ): TypedContractMethod<[role: BytesLike], [string], "view">;
+  getFunction(
+    nameOrSignature: "getRoleMember"
+  ): TypedContractMethod<
+    [role: BytesLike, index: BigNumberish],
+    [string],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "getRoleMemberCount"
+  ): TypedContractMethod<[role: BytesLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "grantRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "hasRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "hasRoleWithSwitch"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
@@ -206,6 +481,23 @@ export interface VestingWallet extends BaseContract {
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "renounceRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "revokeRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setContractURI"
+  ): TypedContractMethod<[_uri: string], [void], "nonpayable">;
+  getFunction(
     nameOrSignature: "start"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -218,6 +510,13 @@ export interface VestingWallet extends BaseContract {
     nameOrSignature: "vestedAmount"
   ): TypedContractMethod<[timestamp: BigNumberish], [bigint], "view">;
 
+  getEvent(
+    key: "ContractURIUpdated"
+  ): TypedContractEvent<
+    ContractURIUpdatedEvent.InputTuple,
+    ContractURIUpdatedEvent.OutputTuple,
+    ContractURIUpdatedEvent.OutputObject
+  >;
   getEvent(
     key: "ERC20Released"
   ): TypedContractEvent<
@@ -232,8 +531,40 @@ export interface VestingWallet extends BaseContract {
     OwnershipTransferredEvent.OutputTuple,
     OwnershipTransferredEvent.OutputObject
   >;
+  getEvent(
+    key: "RoleAdminChanged"
+  ): TypedContractEvent<
+    RoleAdminChangedEvent.InputTuple,
+    RoleAdminChangedEvent.OutputTuple,
+    RoleAdminChangedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleGranted"
+  ): TypedContractEvent<
+    RoleGrantedEvent.InputTuple,
+    RoleGrantedEvent.OutputTuple,
+    RoleGrantedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleRevoked"
+  ): TypedContractEvent<
+    RoleRevokedEvent.InputTuple,
+    RoleRevokedEvent.OutputTuple,
+    RoleRevokedEvent.OutputObject
+  >;
 
   filters: {
+    "ContractURIUpdated(string,string)": TypedContractEvent<
+      ContractURIUpdatedEvent.InputTuple,
+      ContractURIUpdatedEvent.OutputTuple,
+      ContractURIUpdatedEvent.OutputObject
+    >;
+    ContractURIUpdated: TypedContractEvent<
+      ContractURIUpdatedEvent.InputTuple,
+      ContractURIUpdatedEvent.OutputTuple,
+      ContractURIUpdatedEvent.OutputObject
+    >;
+
     "ERC20Released(address,uint256)": TypedContractEvent<
       ERC20ReleasedEvent.InputTuple,
       ERC20ReleasedEvent.OutputTuple,
@@ -254,6 +585,39 @@ export interface VestingWallet extends BaseContract {
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject
+    >;
+
+    "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+    RoleAdminChanged: TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+
+    "RoleGranted(bytes32,address,address)": TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+    RoleGranted: TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+
+    "RoleRevoked(bytes32,address,address)": TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
+    >;
+    RoleRevoked: TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
     >;
   };
 }
