@@ -9,7 +9,7 @@ import {Ownable} from "../access/Ownable.sol";
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
-contract CommunityVestingWallet is Context, Ownable, PermissionsEnumerable, ContractMetadata {
+contract VestingWalletMarketing is Context, Ownable, PermissionsEnumerable, ContractMetadata {
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     address public deployer;
 

@@ -5,8 +5,6 @@ import type * as vestingWalletAdvisorsSol from "./VestingWalletAdvisors.sol";
 export type { vestingWalletAdvisorsSol };
 import type * as vestingWalletCommunitySol from "./VestingWalletCommunity.sol";
 export type { vestingWalletCommunitySol };
-import type * as vestingWalletCoreteamSol from "./VestingWalletCoreteam.sol";
-export type { vestingWalletCoreteamSol };
 import type * as vestingWalletMarketingSol from "./VestingWalletMarketing.sol";
 export type { vestingWalletMarketingSol };
 import type * as vestingWalletNodeSol from "./VestingWalletNode.sol";

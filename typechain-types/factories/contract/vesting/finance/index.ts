@@ -3,7 +3,6 @@
 /* eslint-disable */
 export * as vestingWalletAdvisorsSol from "./VestingWalletAdvisors.sol";
 export * as vestingWalletCommunitySol from "./VestingWalletCommunity.sol";
-export * as vestingWalletCoreteamSol from "./VestingWalletCoreteam.sol";
 export * as vestingWalletMarketingSol from "./VestingWalletMarketing.sol";
 export * as vestingWalletNodeSol from "./VestingWalletNode.sol";
 export * as vestingWalletReferralSol from "./VestingWalletReferral.sol";

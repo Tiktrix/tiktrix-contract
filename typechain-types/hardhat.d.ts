@@ -58,10 +58,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CommunityVestingWallet__factory>;
     getContractFactory(
-      name: "VestingWallet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWallet__factory>;
-    getContractFactory(
       name: "CommunityVestingWallet",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CommunityVestingWallet__factory>;
@@ -158,11 +154,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.CommunityVestingWallet>;
     getContractAt(
-      name: "VestingWallet",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VestingWallet>;
-    getContractAt(
       name: "CommunityVestingWallet",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -257,10 +248,6 @@ declare module "hardhat/types/runtime" {
       name: "CommunityVestingWallet",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CommunityVestingWallet>;
-    deployContract(
-      name: "VestingWallet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWallet>;
     deployContract(
       name: "CommunityVestingWallet",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -357,11 +344,6 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CommunityVestingWallet>;
-    deployContract(
-      name: "VestingWallet",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWallet>;
     deployContract(
       name: "CommunityVestingWallet",
       args: any[],
