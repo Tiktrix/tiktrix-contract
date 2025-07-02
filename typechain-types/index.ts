@@ -24,6 +24,8 @@ export type { VestingWallet } from "./contract/vesting/finance/VestingWallet";
 export { VestingWallet__factory } from "./factories/contract/vesting/finance/VestingWallet__factory";
 export type { VestingWalletCliff } from "./contract/vesting/finance/VestingWalletCliff";
 export { VestingWalletCliff__factory } from "./factories/contract/vesting/finance/VestingWalletCliff__factory";
+export type { CommunityVestingWallet } from "./contract/vesting/finance/VestingWalletCommunity.sol/CommunityVestingWallet";
+export { CommunityVestingWallet__factory } from "./factories/contract/vesting/finance/VestingWalletCommunity.sol/CommunityVestingWallet__factory";
 export type { IERC1363 } from "./contract/vesting/interfaces/IERC1363";
 export { IERC1363__factory } from "./factories/contract/vesting/interfaces/IERC1363__factory";
 export type { IERC20 } from "./contract/vesting/token/ERC20/IERC20";
