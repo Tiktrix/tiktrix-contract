@@ -21,32 +21,47 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../common";
+} from "../../../common";
 
-export interface TikTrixGameScoreInterface extends Interface {
+export interface VestingWalletCliffInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FACTORY_ROLE"
+      | "cliff"
       | "contractURI"
       | "deployer"
+      | "duration"
+      | "end"
       | "getRoleAdmin"
       | "getRoleMember"
       | "getRoleMemberCount"
       | "grantRole"
       | "hasRole"
       | "hasRoleWithSwitch"
-      | "multicall"
-      | "rankScoreUpdateNormal"
+      | "owner"
+      | "releasable(address)"
+      | "releasable()"
+      | "release(address)"
+      | "release()"
+      | "released()"
+      | "released(address)"
+      | "renounceOwnership"
       | "renounceRole"
       | "revokeRole"
       | "setContractURI"
+      | "start"
+      | "transferOwnership"
+      | "vestedAmount(uint64)"
+      | "vestedAmount(address,uint64)"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
       | "ContractURIUpdated"
-      | "RankScoreUpdateNoraml"
+      | "ERC20Released"
+      | "EtherReleased"
+      | "OwnershipTransferred"
       | "RoleAdminChanged"
       | "RoleGranted"
       | "RoleRevoked"
@@ -60,11 +75,14 @@ export interface TikTrixGameScoreInterface extends Interface {
     functionFragment: "FACTORY_ROLE",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "cliff", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "contractURI",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "deployer", values?: undefined): string;
+  encodeFunctionData(functionFragment: "duration", values?: undefined): string;
+  encodeFunctionData(functionFragment: "end", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
     values: [BytesLike]
@@ -89,13 +107,31 @@ export interface TikTrixGameScoreInterface extends Interface {
     functionFragment: "hasRoleWithSwitch",
     values: [BytesLike, AddressLike]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "multicall",
-    values: [BytesLike[]]
+    functionFragment: "releasable(address)",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "rankScoreUpdateNormal",
-    values: [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
+    functionFragment: "releasable()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "release(address)",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(functionFragment: "release()", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "released()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "released(address)",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -109,6 +145,19 @@ export interface TikTrixGameScoreInterface extends Interface {
     functionFragment: "setContractURI",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "start", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "vestedAmount(uint64)",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "vestedAmount(address,uint64)",
+    values: [AddressLike, BigNumberish]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "DEFAULT_ADMIN_ROLE",
@@ -118,11 +167,14 @@ export interface TikTrixGameScoreInterface extends Interface {
     functionFragment: "FACTORY_ROLE",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "cliff", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "contractURI",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deployer", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "duration", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "end", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
@@ -141,9 +193,27 @@ export interface TikTrixGameScoreInterface extends Interface {
     functionFragment: "hasRoleWithSwitch",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "multicall", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "rankScoreUpdateNormal",
+    functionFragment: "releasable(address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "releasable()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "release(address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "release()", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "released()", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "released(address)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -153,6 +223,19 @@ export interface TikTrixGameScoreInterface extends Interface {
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setContractURI",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "start", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "vestedAmount(uint64)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "vestedAmount(address,uint64)",
     data: BytesLike
   ): Result;
 }
@@ -170,24 +253,37 @@ export namespace ContractURIUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace RankScoreUpdateNoramlEvent {
-  export type InputTuple = [
-    yyyymmdd: BigNumberish,
-    gameSeq: BigNumberish,
-    memberSeq: BigNumberish,
-    newScore: BigNumberish
-  ];
-  export type OutputTuple = [
-    yyyymmdd: bigint,
-    gameSeq: bigint,
-    memberSeq: bigint,
-    newScore: bigint
-  ];
+export namespace ERC20ReleasedEvent {
+  export type InputTuple = [token: AddressLike, amount: BigNumberish];
+  export type OutputTuple = [token: string, amount: bigint];
   export interface OutputObject {
-    yyyymmdd: bigint;
-    gameSeq: bigint;
-    memberSeq: bigint;
-    newScore: bigint;
+    token: string;
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace EtherReleasedEvent {
+  export type InputTuple = [amount: BigNumberish];
+  export type OutputTuple = [amount: bigint];
+  export interface OutputObject {
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace OwnershipTransferredEvent {
+  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [previousOwner: string, newOwner: string];
+  export interface OutputObject {
+    previousOwner: string;
+    newOwner: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -253,11 +349,11 @@ export namespace RoleRevokedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface TikTrixGameScore extends BaseContract {
-  connect(runner?: ContractRunner | null): TikTrixGameScore;
+export interface VestingWalletCliff extends BaseContract {
+  connect(runner?: ContractRunner | null): VestingWalletCliff;
   waitForDeployment(): Promise<this>;
 
-  interface: TikTrixGameScoreInterface;
+  interface: VestingWalletCliffInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -300,9 +396,15 @@ export interface TikTrixGameScore extends BaseContract {
 
   FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
 
+  cliff: TypedContractMethod<[], [bigint], "view">;
+
   contractURI: TypedContractMethod<[], [string], "view">;
 
   deployer: TypedContractMethod<[], [string], "view">;
+
+  duration: TypedContractMethod<[], [bigint], "view">;
+
+  end: TypedContractMethod<[], [bigint], "view">;
 
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
@@ -332,18 +434,33 @@ export interface TikTrixGameScore extends BaseContract {
     "view"
   >;
 
-  multicall: TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
+  owner: TypedContractMethod<[], [string], "view">;
 
-  rankScoreUpdateNormal: TypedContractMethod<
-    [
-      yyyymmdd: BigNumberish,
-      gameSeq: BigNumberish,
-      memberSeq: BigNumberish,
-      newScore: BigNumberish
-    ],
+  "releasable(address)": TypedContractMethod<
+    [token: AddressLike],
+    [bigint],
+    "view"
+  >;
+
+  "releasable()": TypedContractMethod<[], [bigint], "view">;
+
+  "release(address)": TypedContractMethod<
+    [token: AddressLike],
     [void],
     "nonpayable"
   >;
+
+  "release()": TypedContractMethod<[], [void], "nonpayable">;
+
+  "released()": TypedContractMethod<[], [bigint], "view">;
+
+  "released(address)": TypedContractMethod<
+    [token: AddressLike],
+    [bigint],
+    "view"
+  >;
+
+  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
   renounceRole: TypedContractMethod<
     [role: BytesLike, account: AddressLike],
@@ -359,6 +476,26 @@ export interface TikTrixGameScore extends BaseContract {
 
   setContractURI: TypedContractMethod<[_uri: string], [void], "nonpayable">;
 
+  start: TypedContractMethod<[], [bigint], "view">;
+
+  transferOwnership: TypedContractMethod<
+    [newOwner: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  "vestedAmount(uint64)": TypedContractMethod<
+    [timestamp: BigNumberish],
+    [bigint],
+    "view"
+  >;
+
+  "vestedAmount(address,uint64)": TypedContractMethod<
+    [token: AddressLike, timestamp: BigNumberish],
+    [bigint],
+    "view"
+  >;
+
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
@@ -370,11 +507,20 @@ export interface TikTrixGameScore extends BaseContract {
     nameOrSignature: "FACTORY_ROLE"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
+    nameOrSignature: "cliff"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "contractURI"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "deployer"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "duration"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "end"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "getRoleAdmin"
   ): TypedContractMethod<[role: BytesLike], [string], "view">;
@@ -410,20 +556,29 @@ export interface TikTrixGameScore extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "multicall"
-  ): TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
+    nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "rankScoreUpdateNormal"
-  ): TypedContractMethod<
-    [
-      yyyymmdd: BigNumberish,
-      gameSeq: BigNumberish,
-      memberSeq: BigNumberish,
-      newScore: BigNumberish
-    ],
-    [void],
-    "nonpayable"
-  >;
+    nameOrSignature: "releasable(address)"
+  ): TypedContractMethod<[token: AddressLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "releasable()"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "release(address)"
+  ): TypedContractMethod<[token: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "release()"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "released()"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "released(address)"
+  ): TypedContractMethod<[token: AddressLike], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "renounceOwnership"
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "renounceRole"
   ): TypedContractMethod<
@@ -441,6 +596,22 @@ export interface TikTrixGameScore extends BaseContract {
   getFunction(
     nameOrSignature: "setContractURI"
   ): TypedContractMethod<[_uri: string], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "start"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "transferOwnership"
+  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "vestedAmount(uint64)"
+  ): TypedContractMethod<[timestamp: BigNumberish], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "vestedAmount(address,uint64)"
+  ): TypedContractMethod<
+    [token: AddressLike, timestamp: BigNumberish],
+    [bigint],
+    "view"
+  >;
 
   getEvent(
     key: "ContractURIUpdated"
@@ -450,11 +621,25 @@ export interface TikTrixGameScore extends BaseContract {
     ContractURIUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "RankScoreUpdateNoraml"
+    key: "ERC20Released"
   ): TypedContractEvent<
-    RankScoreUpdateNoramlEvent.InputTuple,
-    RankScoreUpdateNoramlEvent.OutputTuple,
-    RankScoreUpdateNoramlEvent.OutputObject
+    ERC20ReleasedEvent.InputTuple,
+    ERC20ReleasedEvent.OutputTuple,
+    ERC20ReleasedEvent.OutputObject
+  >;
+  getEvent(
+    key: "EtherReleased"
+  ): TypedContractEvent<
+    EtherReleasedEvent.InputTuple,
+    EtherReleasedEvent.OutputTuple,
+    EtherReleasedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OwnershipTransferred"
+  ): TypedContractEvent<
+    OwnershipTransferredEvent.InputTuple,
+    OwnershipTransferredEvent.OutputTuple,
+    OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
     key: "RoleAdminChanged"
@@ -490,15 +675,37 @@ export interface TikTrixGameScore extends BaseContract {
       ContractURIUpdatedEvent.OutputObject
     >;
 
-    "RankScoreUpdateNoraml(uint256,uint256,uint256,uint256)": TypedContractEvent<
-      RankScoreUpdateNoramlEvent.InputTuple,
-      RankScoreUpdateNoramlEvent.OutputTuple,
-      RankScoreUpdateNoramlEvent.OutputObject
+    "ERC20Released(address,uint256)": TypedContractEvent<
+      ERC20ReleasedEvent.InputTuple,
+      ERC20ReleasedEvent.OutputTuple,
+      ERC20ReleasedEvent.OutputObject
     >;
-    RankScoreUpdateNoraml: TypedContractEvent<
-      RankScoreUpdateNoramlEvent.InputTuple,
-      RankScoreUpdateNoramlEvent.OutputTuple,
-      RankScoreUpdateNoramlEvent.OutputObject
+    ERC20Released: TypedContractEvent<
+      ERC20ReleasedEvent.InputTuple,
+      ERC20ReleasedEvent.OutputTuple,
+      ERC20ReleasedEvent.OutputObject
+    >;
+
+    "EtherReleased(uint256)": TypedContractEvent<
+      EtherReleasedEvent.InputTuple,
+      EtherReleasedEvent.OutputTuple,
+      EtherReleasedEvent.OutputObject
+    >;
+    EtherReleased: TypedContractEvent<
+      EtherReleasedEvent.InputTuple,
+      EtherReleasedEvent.OutputTuple,
+      EtherReleasedEvent.OutputObject
+    >;
+
+    "OwnershipTransferred(address,address)": TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
+    OwnershipTransferred: TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
     >;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<

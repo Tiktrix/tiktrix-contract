@@ -2,6 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export { IContractMetadata__factory } from "./IContractMetadata__factory";
-export { IMulticall__factory } from "./IMulticall__factory";
 export { IPermissions__factory } from "./IPermissions__factory";
 export { IPermissionsEnumerable__factory } from "./IPermissionsEnumerable__factory";

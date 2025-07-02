@@ -8,6 +8,9 @@ import {Address} from "../utils/Address.sol";
 import {Context} from "../utils/Context.sol";
 import {Ownable} from "../access/Ownable.sol";
 
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
+
 /**
  * @dev A vesting wallet is an ownable contract that can receive native currency and ERC-20 tokens, and release these
  * assets to the wallet owner, also referred to as "beneficiary", according to a vesting schedule.
@@ -32,7 +35,10 @@ import {Ownable} from "../access/Ownable.sol";
  * at 50% of the vesting period, the beneficiary can withdraw 50 A as ERC20 and 25 A as native currency (totaling 75 A).
  * Consider disabling one of the withdrawal methods.
  */
-contract VestingWallet is Context, Ownable {
+contract VestingWallet is Context, Ownable, PermissionsEnumerable, ContractMetadata {
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
+    address public deployer;
+
     event EtherReleased(uint256 amount);
     event ERC20Released(address indexed token, uint256 amount);
 
@@ -45,9 +51,18 @@ contract VestingWallet is Context, Ownable {
      * @dev Sets the beneficiary (owner), the start timestamp and the vesting duration (in seconds) of the vesting
      * wallet.
      */
-    constructor(address beneficiary, uint64 startTimestamp, uint64 durationSeconds) payable Ownable(beneficiary) {
+    constructor(string memory _contractURI, address _deployer, address beneficiary, uint64 startTimestamp, uint64 durationSeconds) payable Ownable(beneficiary) {
         _start = startTimestamp;
         _duration = durationSeconds;
+
+        _setupContractURI(_contractURI);
+        deployer = _deployer;
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
+    }
+
+    function _canSetContractURI() internal view override returns (bool) {
+        return msg.sender == deployer;
     }
 
     /**
@@ -110,7 +125,7 @@ contract VestingWallet is Context, Ownable {
      *
      * Emits a {EtherReleased} event.
      */
-    function release() public virtual {
+    function release() external onlyRole(FACTORY_ROLE) {
         uint256 amount = releasable();
         _released += amount;
         emit EtherReleased(amount);
@@ -122,7 +137,7 @@ contract VestingWallet is Context, Ownable {
      *
      * Emits a {ERC20Released} event.
      */
-    function release(address token) public virtual {
+    function release(address token) external onlyRole(FACTORY_ROLE) {
         uint256 amount = releasable(token);
         _erc20Released[token] += amount;
         emit ERC20Released(token, amount);
