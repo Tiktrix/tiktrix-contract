@@ -21,13 +21,15 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../../common";
+} from "../../../common";
 
-export interface VestingWalletInterface extends Interface {
+export interface VestingWalletAdvisorsInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FACTORY_ROLE"
+      | "_beneficiary"
+      | "beneficiary"
       | "contractURI"
       | "deployer"
       | "end"
@@ -67,6 +69,14 @@ export interface VestingWalletInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "FACTORY_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "_beneficiary",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "beneficiary",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -139,6 +149,14 @@ export interface VestingWalletInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "FACTORY_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "_beneficiary",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "beneficiary",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -291,11 +309,11 @@ export namespace RoleRevokedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface VestingWallet extends BaseContract {
-  connect(runner?: ContractRunner | null): VestingWallet;
+export interface VestingWalletAdvisors extends BaseContract {
+  connect(runner?: ContractRunner | null): VestingWalletAdvisors;
   waitForDeployment(): Promise<this>;
 
-  interface: VestingWalletInterface;
+  interface: VestingWalletAdvisorsInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -337,6 +355,10 @@ export interface VestingWallet extends BaseContract {
   DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
 
   FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
+
+  _beneficiary: TypedContractMethod<[], [string], "view">;
+
+  beneficiary: TypedContractMethod<[], [string], "view">;
 
   contractURI: TypedContractMethod<[], [string], "view">;
 
@@ -421,6 +443,12 @@ export interface VestingWallet extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "FACTORY_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "_beneficiary"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "beneficiary"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "contractURI"

@@ -21,13 +21,15 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../../common";
+} from "../../../common";
 
-export interface VestingWalletInterface extends Interface {
+export interface VestingWalletNodeInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FACTORY_ROLE"
+      | "_beneficiary"
+      | "beneficiary"
       | "contractURI"
       | "deployer"
       | "end"
@@ -55,6 +57,7 @@ export interface VestingWalletInterface extends Interface {
     nameOrSignatureOrTopic:
       | "ContractURIUpdated"
       | "ERC20Released"
+      | "EtherReleased"
       | "OwnershipTransferred"
       | "RoleAdminChanged"
       | "RoleGranted"
@@ -67,6 +70,14 @@ export interface VestingWalletInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "FACTORY_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "_beneficiary",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "beneficiary",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -139,6 +150,14 @@ export interface VestingWalletInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "FACTORY_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "_beneficiary",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "beneficiary",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -220,6 +239,18 @@ export namespace ERC20ReleasedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace EtherReleasedEvent {
+  export type InputTuple = [amount: BigNumberish];
+  export type OutputTuple = [amount: bigint];
+  export interface OutputObject {
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export namespace OwnershipTransferredEvent {
   export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
   export type OutputTuple = [previousOwner: string, newOwner: string];
@@ -291,11 +322,11 @@ export namespace RoleRevokedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface VestingWallet extends BaseContract {
-  connect(runner?: ContractRunner | null): VestingWallet;
+export interface VestingWalletNode extends BaseContract {
+  connect(runner?: ContractRunner | null): VestingWalletNode;
   waitForDeployment(): Promise<this>;
 
-  interface: VestingWalletInterface;
+  interface: VestingWalletNodeInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -337,6 +368,10 @@ export interface VestingWallet extends BaseContract {
   DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
 
   FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
+
+  _beneficiary: TypedContractMethod<[], [string], "view">;
+
+  beneficiary: TypedContractMethod<[], [string], "view">;
 
   contractURI: TypedContractMethod<[], [string], "view">;
 
@@ -421,6 +456,12 @@ export interface VestingWallet extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "FACTORY_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "_beneficiary"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "beneficiary"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "contractURI"
@@ -525,6 +566,13 @@ export interface VestingWallet extends BaseContract {
     ERC20ReleasedEvent.OutputObject
   >;
   getEvent(
+    key: "EtherReleased"
+  ): TypedContractEvent<
+    EtherReleasedEvent.InputTuple,
+    EtherReleasedEvent.OutputTuple,
+    EtherReleasedEvent.OutputObject
+  >;
+  getEvent(
     key: "OwnershipTransferred"
   ): TypedContractEvent<
     OwnershipTransferredEvent.InputTuple,
@@ -574,6 +622,17 @@ export interface VestingWallet extends BaseContract {
       ERC20ReleasedEvent.InputTuple,
       ERC20ReleasedEvent.OutputTuple,
       ERC20ReleasedEvent.OutputObject
+    >;
+
+    "EtherReleased(uint256)": TypedContractEvent<
+      EtherReleasedEvent.InputTuple,
+      EtherReleasedEvent.OutputTuple,
+      EtherReleasedEvent.OutputObject
+    >;
+    EtherReleased: TypedContractEvent<
+      EtherReleasedEvent.InputTuple,
+      EtherReleasedEvent.OutputTuple,
+      EtherReleasedEvent.OutputObject
     >;
 
     "OwnershipTransferred(address,address)": TypedContractEvent<

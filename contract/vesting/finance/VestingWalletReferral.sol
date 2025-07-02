@@ -12,6 +12,7 @@ import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 contract VestingWalletReferral is Context, Ownable, PermissionsEnumerable, ContractMetadata {
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     address public deployer;
+    address public _beneficiary;
 
     using SafeERC20 for IERC20;
 
@@ -30,6 +31,7 @@ contract VestingWalletReferral is Context, Ownable, PermissionsEnumerable, Contr
 
     constructor(string memory _contractURI, address _deployer, address beneficiary, address tokenAddress, uint64 startTimestamp) Ownable(beneficiary) {
         require(tokenAddress != address(0), "Token address cannot be zero");
+        _beneficiary = beneficiary;
         _token = IERC20(tokenAddress);
         _start = startTimestamp;
 
@@ -45,6 +47,10 @@ contract VestingWalletReferral is Context, Ownable, PermissionsEnumerable, Contr
 
     function token() public view returns (IERC20) {
         return _token;
+    }
+
+    function beneficiary() public view returns (address) {
+        return _beneficiary;
     }
 
     function start() public view returns (uint256) {

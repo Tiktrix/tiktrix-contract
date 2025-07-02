@@ -21,13 +21,15 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../../common";
+} from "../../../common";
 
-export interface VestingWalletInterface extends Interface {
+export interface VestingWalletMarketingInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FACTORY_ROLE"
+      | "_beneficiary"
+      | "beneficiary"
       | "contractURI"
       | "deployer"
       | "end"
@@ -38,27 +40,23 @@ export interface VestingWalletInterface extends Interface {
       | "hasRole"
       | "hasRoleWithSwitch"
       | "owner"
-      | "releasable(address)"
-      | "releasable()"
-      | "release(address)"
-      | "release()"
-      | "released()"
-      | "released(address)"
+      | "releasable"
+      | "release"
+      | "released"
       | "renounceOwnership"
       | "renounceRole"
       | "revokeRole"
       | "setContractURI"
       | "start"
+      | "token"
       | "transferOwnership"
-      | "vestedAmount(uint64)"
-      | "vestedAmount(address,uint64)"
+      | "vestedAmount"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
       | "ContractURIUpdated"
       | "ERC20Released"
-      | "EtherReleased"
       | "OwnershipTransferred"
       | "RoleAdminChanged"
       | "RoleGranted"
@@ -71,6 +69,14 @@ export interface VestingWalletInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "FACTORY_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "_beneficiary",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "beneficiary",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -105,26 +111,11 @@ export interface VestingWalletInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "releasable(address)",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "releasable()",
+    functionFragment: "releasable",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "release(address)",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(functionFragment: "release()", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "released()",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "released(address)",
-    values: [AddressLike]
-  ): string;
+  encodeFunctionData(functionFragment: "release", values?: undefined): string;
+  encodeFunctionData(functionFragment: "released", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -142,17 +133,14 @@ export interface VestingWalletInterface extends Interface {
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "start", values?: undefined): string;
+  encodeFunctionData(functionFragment: "token", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "vestedAmount(uint64)",
+    functionFragment: "vestedAmount",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "vestedAmount(address,uint64)",
-    values: [AddressLike, BigNumberish]
   ): string;
 
   decodeFunctionResult(
@@ -161,6 +149,14 @@ export interface VestingWalletInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "FACTORY_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "_beneficiary",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "beneficiary",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -188,24 +184,9 @@ export interface VestingWalletInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "releasable(address)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "releasable()",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "release(address)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "release()", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "released()", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "released(address)",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "releasable", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "released", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -220,16 +201,13 @@ export interface VestingWalletInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "start", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "vestedAmount(uint64)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "vestedAmount(address,uint64)",
+    functionFragment: "vestedAmount",
     data: BytesLike
   ): Result;
 }
@@ -252,18 +230,6 @@ export namespace ERC20ReleasedEvent {
   export type OutputTuple = [token: string, amount: bigint];
   export interface OutputObject {
     token: string;
-    amount: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace EtherReleasedEvent {
-  export type InputTuple = [amount: BigNumberish];
-  export type OutputTuple = [amount: bigint];
-  export interface OutputObject {
     amount: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -343,11 +309,11 @@ export namespace RoleRevokedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface VestingWallet extends BaseContract {
-  connect(runner?: ContractRunner | null): VestingWallet;
+export interface VestingWalletMarketing extends BaseContract {
+  connect(runner?: ContractRunner | null): VestingWalletMarketing;
   waitForDeployment(): Promise<this>;
 
-  interface: VestingWalletInterface;
+  interface: VestingWalletMarketingInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -390,6 +356,10 @@ export interface VestingWallet extends BaseContract {
 
   FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
 
+  _beneficiary: TypedContractMethod<[], [string], "view">;
+
+  beneficiary: TypedContractMethod<[], [string], "view">;
+
   contractURI: TypedContractMethod<[], [string], "view">;
 
   deployer: TypedContractMethod<[], [string], "view">;
@@ -426,29 +396,11 @@ export interface VestingWallet extends BaseContract {
 
   owner: TypedContractMethod<[], [string], "view">;
 
-  "releasable(address)": TypedContractMethod<
-    [token: AddressLike],
-    [bigint],
-    "view"
-  >;
+  releasable: TypedContractMethod<[], [bigint], "view">;
 
-  "releasable()": TypedContractMethod<[], [bigint], "view">;
+  release: TypedContractMethod<[], [void], "nonpayable">;
 
-  "release(address)": TypedContractMethod<
-    [token: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
-  "release()": TypedContractMethod<[], [void], "nonpayable">;
-
-  "released()": TypedContractMethod<[], [bigint], "view">;
-
-  "released(address)": TypedContractMethod<
-    [token: AddressLike],
-    [bigint],
-    "view"
-  >;
+  released: TypedContractMethod<[], [bigint], "view">;
 
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
@@ -468,20 +420,16 @@ export interface VestingWallet extends BaseContract {
 
   start: TypedContractMethod<[], [bigint], "view">;
 
+  token: TypedContractMethod<[], [string], "view">;
+
   transferOwnership: TypedContractMethod<
     [newOwner: AddressLike],
     [void],
     "nonpayable"
   >;
 
-  "vestedAmount(uint64)": TypedContractMethod<
+  vestedAmount: TypedContractMethod<
     [timestamp: BigNumberish],
-    [bigint],
-    "view"
-  >;
-
-  "vestedAmount(address,uint64)": TypedContractMethod<
-    [token: AddressLike, timestamp: BigNumberish],
     [bigint],
     "view"
   >;
@@ -495,6 +443,12 @@ export interface VestingWallet extends BaseContract {
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "FACTORY_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "_beneficiary"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "beneficiary"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
     nameOrSignature: "contractURI"
@@ -543,23 +497,14 @@ export interface VestingWallet extends BaseContract {
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "releasable(address)"
-  ): TypedContractMethod<[token: AddressLike], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "releasable()"
+    nameOrSignature: "releasable"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "release(address)"
-  ): TypedContractMethod<[token: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "release()"
+    nameOrSignature: "release"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "released()"
+    nameOrSignature: "released"
   ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "released(address)"
-  ): TypedContractMethod<[token: AddressLike], [bigint], "view">;
   getFunction(
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
@@ -584,18 +529,14 @@ export interface VestingWallet extends BaseContract {
     nameOrSignature: "start"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
+    nameOrSignature: "token"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "transferOwnership"
   ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "vestedAmount(uint64)"
+    nameOrSignature: "vestedAmount"
   ): TypedContractMethod<[timestamp: BigNumberish], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "vestedAmount(address,uint64)"
-  ): TypedContractMethod<
-    [token: AddressLike, timestamp: BigNumberish],
-    [bigint],
-    "view"
-  >;
 
   getEvent(
     key: "ContractURIUpdated"
@@ -610,13 +551,6 @@ export interface VestingWallet extends BaseContract {
     ERC20ReleasedEvent.InputTuple,
     ERC20ReleasedEvent.OutputTuple,
     ERC20ReleasedEvent.OutputObject
-  >;
-  getEvent(
-    key: "EtherReleased"
-  ): TypedContractEvent<
-    EtherReleasedEvent.InputTuple,
-    EtherReleasedEvent.OutputTuple,
-    EtherReleasedEvent.OutputObject
   >;
   getEvent(
     key: "OwnershipTransferred"
@@ -668,17 +602,6 @@ export interface VestingWallet extends BaseContract {
       ERC20ReleasedEvent.InputTuple,
       ERC20ReleasedEvent.OutputTuple,
       ERC20ReleasedEvent.OutputObject
-    >;
-
-    "EtherReleased(uint256)": TypedContractEvent<
-      EtherReleasedEvent.InputTuple,
-      EtherReleasedEvent.OutputTuple,
-      EtherReleasedEvent.OutputObject
-    >;
-    EtherReleased: TypedContractEvent<
-      EtherReleasedEvent.InputTuple,
-      EtherReleasedEvent.OutputTuple,
-      EtherReleasedEvent.OutputObject
     >;
 
     "OwnershipTransferred(address,address)": TypedContractEvent<

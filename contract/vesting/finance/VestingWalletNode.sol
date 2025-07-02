@@ -13,10 +13,14 @@ import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 contract VestingWalletNode is Context, Ownable, PermissionsEnumerable, ContractMetadata {
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     address public deployer;
+    address public _beneficiary;
+
+    using SafeERC20 for IERC20;
 
     event EtherReleased(uint256 amount);
     event ERC20Released(address indexed token, uint256 amount);
 
+    IERC20 private immutable _token;
     uint256 private _released;
     mapping(address token => uint256) private _erc20Released;
     uint64 private immutable _start;
@@ -35,7 +39,10 @@ contract VestingWalletNode is Context, Ownable, PermissionsEnumerable, ContractM
     uint256 private constant AMOUNT_PHASE9 = 5231372333333330000000000;
     uint256 private constant AMOUNT_PHASE10 = 4721240500000000000000000;
 
-    constructor(string memory _contractURI, address _deployer, address beneficiary, uint64 startTimestamp) payable Ownable(beneficiary) {
+    constructor(string memory _contractURI, address _deployer, address beneficiary, address tokenAddress, uint64 startTimestamp) payable Ownable(beneficiary) {
+        require(tokenAddress != address(0), "Token address cannot be zero");
+        _beneficiary = beneficiary;
+        _token = IERC20(tokenAddress);
         _start = startTimestamp;
 
         _setupContractURI(_contractURI);
@@ -58,45 +65,36 @@ contract VestingWalletNode is Context, Ownable, PermissionsEnumerable, ContractM
         return start() + (INTERVAL * TOTAL_PHASES);
     }
 
-    function released() public view virtual returns (uint256) {
-        return _released;
+    function token() public view returns (IERC20) {
+        return _token;
     }
 
-    function released(address token) public view virtual returns (uint256) {
-        return _erc20Released[token];
+    function beneficiary() public view returns (address) {
+        return _beneficiary;
+    }
+
+    function released() public view virtual returns (uint256) {
+        return _released;
     }
 
     function releasable() public view virtual returns (uint256) {
         return vestedAmount(uint64(block.timestamp)) - released();
     }
 
-    function releasable(address token) public view virtual returns (uint256) {
-        return vestedAmount(token, uint64(block.timestamp)) - released(token);
-    }
-
     function release() external onlyRole(FACTORY_ROLE) {
         uint256 amount = releasable();
-        _released += amount;
-        emit EtherReleased(amount);
-        Address.sendValue(payable(owner()), amount);
-    }
+        require(amount > 0, "No tokens to release");
 
-    function release(address token) external onlyRole(FACTORY_ROLE) {
-        uint256 amount = releasable(token);
-        _erc20Released[token] += amount;
-        emit ERC20Released(token, amount);
-        SafeERC20.safeTransfer(IERC20(token), owner(), amount);
+        _released += amount;
+        emit ERC20Released(address(_token), amount);
+        _token.safeTransfer(owner(), amount);
     }
 
     function vestedAmount(uint64 timestamp) public view virtual returns (uint256) {
-        return _customVesting(address(this).balance + released(), timestamp);
+        return _customVesting(timestamp);
     }
 
-    function vestedAmount(address token, uint64 timestamp) public view virtual returns (uint256) {
-        return _customVesting(IERC20(token).balanceOf(address(this)) + released(token), timestamp);
-    }
-
-    function _customVesting(uint256, uint64 timestamp) internal view returns (uint256) {
+    function _customVesting(uint64 timestamp) internal view returns (uint256) {
         if (timestamp < _start) return 0;
 
         uint64 elapsed = timestamp - _start;
