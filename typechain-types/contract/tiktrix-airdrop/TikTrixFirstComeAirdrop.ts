@@ -27,7 +27,6 @@ export interface TikTrixFirstComeAirdropInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
-      | "FACTORY_ROLE"
       | "airdropAmount"
       | "claim"
       | "contractURI"
@@ -35,6 +34,7 @@ export interface TikTrixFirstComeAirdropInterface extends Interface {
       | "emergencyWithdraw"
       | "getAirdropAmount"
       | "getMaxClaim"
+      | "getRemainingClaim"
       | "getRoleAdmin"
       | "getRoleMember"
       | "getRoleMemberCount"
@@ -65,10 +65,6 @@ export interface TikTrixFirstComeAirdropInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "FACTORY_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "airdropAmount",
     values?: undefined
   ): string;
@@ -88,6 +84,10 @@ export interface TikTrixFirstComeAirdropInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getMaxClaim",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRemainingClaim",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -142,10 +142,6 @@ export interface TikTrixFirstComeAirdropInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "FACTORY_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "airdropAmount",
     data: BytesLike
   ): Result;
@@ -165,6 +161,10 @@ export interface TikTrixFirstComeAirdropInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getMaxClaim",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRemainingClaim",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -345,8 +345,6 @@ export interface TikTrixFirstComeAirdrop extends BaseContract {
 
   DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
 
-  FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
-
   airdropAmount: TypedContractMethod<[], [bigint], "view">;
 
   claim: TypedContractMethod<[], [void], "nonpayable">;
@@ -360,6 +358,8 @@ export interface TikTrixFirstComeAirdrop extends BaseContract {
   getAirdropAmount: TypedContractMethod<[], [bigint], "view">;
 
   getMaxClaim: TypedContractMethod<[], [bigint], "view">;
+
+  getRemainingClaim: TypedContractMethod<[], [bigint], "view">;
 
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
@@ -419,9 +419,6 @@ export interface TikTrixFirstComeAirdrop extends BaseContract {
     nameOrSignature: "DEFAULT_ADMIN_ROLE"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "FACTORY_ROLE"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
     nameOrSignature: "airdropAmount"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -441,6 +438,9 @@ export interface TikTrixFirstComeAirdrop extends BaseContract {
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "getMaxClaim"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getRemainingClaim"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "getRoleAdmin"

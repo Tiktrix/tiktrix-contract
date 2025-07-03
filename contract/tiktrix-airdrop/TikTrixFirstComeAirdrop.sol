@@ -8,8 +8,6 @@ import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
 contract TikTrixFirstComeAirdrop is PermissionsEnumerable, ContractMetadata {
-    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
-
     address public owner;
     address public deployer;
 
@@ -34,7 +32,6 @@ contract TikTrixFirstComeAirdrop is PermissionsEnumerable, ContractMetadata {
         _setupContractURI(_contractURI);
         deployer = _deployer;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _setupRole(FACTORY_ROLE, msg.sender);
     }
 
     function _canSetContractURI() internal view override returns (bool) {
@@ -47,6 +44,10 @@ contract TikTrixFirstComeAirdrop is PermissionsEnumerable, ContractMetadata {
 
     function getMaxClaim() external view returns (uint256) {
         return maxClaim;
+    }
+
+    function getRemainingClaim() external view returns (uint256) {
+        return maxClaim - totalClaimed;
     }
 
     function claim() external {
