@@ -21,43 +21,40 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from "../../common";
 
-export interface VestingWalletReferralInterface extends Interface {
+export interface TikTrixFirstComeAirdropInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FACTORY_ROLE"
-      | "_beneficiary"
-      | "beneficiary"
+      | "airdropAmount"
+      | "claim"
       | "contractURI"
       | "deployer"
-      | "end"
+      | "emergencyWithdraw"
+      | "getAirdropAmount"
+      | "getMaxClaim"
       | "getRoleAdmin"
       | "getRoleMember"
       | "getRoleMemberCount"
       | "grantRole"
+      | "hasClaimed"
       | "hasRole"
       | "hasRoleWithSwitch"
+      | "maxClaim"
       | "owner"
-      | "releasable"
-      | "release"
-      | "released"
-      | "renounceOwnership"
       | "renounceRole"
       | "revokeRole"
       | "setContractURI"
-      | "start"
-      | "token"
-      | "transferOwnership"
-      | "vestedAmount"
+      | "totalClaimed"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
+      | "AirdropClaimed"
       | "ContractURIUpdated"
-      | "ERC20Released"
-      | "OwnershipTransferred"
+      | "EmergencyWithdrawn"
       | "RoleAdminChanged"
       | "RoleGranted"
       | "RoleRevoked"
@@ -72,19 +69,27 @@ export interface VestingWalletReferralInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "_beneficiary",
+    functionFragment: "airdropAmount",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "beneficiary",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "claim", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "contractURI",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "deployer", values?: undefined): string;
-  encodeFunctionData(functionFragment: "end", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "emergencyWithdraw",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAirdropAmount",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMaxClaim",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
     values: [BytesLike]
@@ -102,6 +107,10 @@ export interface VestingWalletReferralInterface extends Interface {
     values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "hasClaimed",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "hasRole",
     values: [BytesLike, AddressLike]
   ): string;
@@ -109,17 +118,8 @@ export interface VestingWalletReferralInterface extends Interface {
     functionFragment: "hasRoleWithSwitch",
     values: [BytesLike, AddressLike]
   ): string;
+  encodeFunctionData(functionFragment: "maxClaim", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "releasable",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "release", values?: undefined): string;
-  encodeFunctionData(functionFragment: "released", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
     values: [BytesLike, AddressLike]
@@ -132,15 +132,9 @@ export interface VestingWalletReferralInterface extends Interface {
     functionFragment: "setContractURI",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "start", values?: undefined): string;
-  encodeFunctionData(functionFragment: "token", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "vestedAmount",
-    values: [BigNumberish]
+    functionFragment: "totalClaimed",
+    values?: undefined
   ): string;
 
   decodeFunctionResult(
@@ -152,19 +146,27 @@ export interface VestingWalletReferralInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "_beneficiary",
+    functionFragment: "airdropAmount",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "beneficiary",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "contractURI",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deployer", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "end", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "emergencyWithdraw",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAirdropAmount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMaxClaim",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
     data: BytesLike
@@ -178,19 +180,14 @@ export interface VestingWalletReferralInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "hasClaimed", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "hasRoleWithSwitch",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "maxClaim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "releasable", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "released", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceOwnership",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceRole",
     data: BytesLike
@@ -200,16 +197,23 @@ export interface VestingWalletReferralInterface extends Interface {
     functionFragment: "setContractURI",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "start", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "transferOwnership",
+    functionFragment: "totalClaimed",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "vestedAmount",
-    data: BytesLike
-  ): Result;
+}
+
+export namespace AirdropClaimedEvent {
+  export type InputTuple = [claimer: AddressLike, amount: BigNumberish];
+  export type OutputTuple = [claimer: string, amount: bigint];
+  export interface OutputObject {
+    claimer: string;
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace ContractURIUpdatedEvent {
@@ -225,25 +229,12 @@ export namespace ContractURIUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace ERC20ReleasedEvent {
-  export type InputTuple = [token: AddressLike, amount: BigNumberish];
-  export type OutputTuple = [token: string, amount: bigint];
+export namespace EmergencyWithdrawnEvent {
+  export type InputTuple = [amount: BigNumberish, to: AddressLike];
+  export type OutputTuple = [amount: bigint, to: string];
   export interface OutputObject {
-    token: string;
     amount: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace OwnershipTransferredEvent {
-  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [previousOwner: string, newOwner: string];
-  export interface OutputObject {
-    previousOwner: string;
-    newOwner: string;
+    to: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -309,11 +300,11 @@ export namespace RoleRevokedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface VestingWalletReferral extends BaseContract {
-  connect(runner?: ContractRunner | null): VestingWalletReferral;
+export interface TikTrixFirstComeAirdrop extends BaseContract {
+  connect(runner?: ContractRunner | null): TikTrixFirstComeAirdrop;
   waitForDeployment(): Promise<this>;
 
-  interface: VestingWalletReferralInterface;
+  interface: TikTrixFirstComeAirdropInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -356,15 +347,19 @@ export interface VestingWalletReferral extends BaseContract {
 
   FACTORY_ROLE: TypedContractMethod<[], [string], "view">;
 
-  _beneficiary: TypedContractMethod<[], [string], "view">;
+  airdropAmount: TypedContractMethod<[], [bigint], "view">;
 
-  beneficiary: TypedContractMethod<[], [string], "view">;
+  claim: TypedContractMethod<[], [void], "nonpayable">;
 
   contractURI: TypedContractMethod<[], [string], "view">;
 
   deployer: TypedContractMethod<[], [string], "view">;
 
-  end: TypedContractMethod<[], [bigint], "view">;
+  emergencyWithdraw: TypedContractMethod<[], [void], "nonpayable">;
+
+  getAirdropAmount: TypedContractMethod<[], [bigint], "view">;
+
+  getMaxClaim: TypedContractMethod<[], [bigint], "view">;
 
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
 
@@ -382,6 +377,8 @@ export interface VestingWalletReferral extends BaseContract {
     "nonpayable"
   >;
 
+  hasClaimed: TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
+
   hasRole: TypedContractMethod<
     [role: BytesLike, account: AddressLike],
     [boolean],
@@ -394,15 +391,9 @@ export interface VestingWalletReferral extends BaseContract {
     "view"
   >;
 
+  maxClaim: TypedContractMethod<[], [bigint], "view">;
+
   owner: TypedContractMethod<[], [string], "view">;
-
-  releasable: TypedContractMethod<[], [bigint], "view">;
-
-  release: TypedContractMethod<[], [void], "nonpayable">;
-
-  released: TypedContractMethod<[], [bigint], "view">;
-
-  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
   renounceRole: TypedContractMethod<
     [role: BytesLike, account: AddressLike],
@@ -418,21 +409,7 @@ export interface VestingWalletReferral extends BaseContract {
 
   setContractURI: TypedContractMethod<[_uri: string], [void], "nonpayable">;
 
-  start: TypedContractMethod<[], [bigint], "view">;
-
-  token: TypedContractMethod<[], [string], "view">;
-
-  transferOwnership: TypedContractMethod<
-    [newOwner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
-  vestedAmount: TypedContractMethod<
-    [timestamp: BigNumberish],
-    [bigint],
-    "view"
-  >;
+  totalClaimed: TypedContractMethod<[], [bigint], "view">;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -445,11 +422,11 @@ export interface VestingWalletReferral extends BaseContract {
     nameOrSignature: "FACTORY_ROLE"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "_beneficiary"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: "airdropAmount"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
-    nameOrSignature: "beneficiary"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: "claim"
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "contractURI"
   ): TypedContractMethod<[], [string], "view">;
@@ -457,7 +434,13 @@ export interface VestingWalletReferral extends BaseContract {
     nameOrSignature: "deployer"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "end"
+    nameOrSignature: "emergencyWithdraw"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "getAirdropAmount"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "getMaxClaim"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "getRoleAdmin"
@@ -480,6 +463,9 @@ export interface VestingWalletReferral extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "hasClaimed"
+  ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
+  getFunction(
     nameOrSignature: "hasRole"
   ): TypedContractMethod<
     [role: BytesLike, account: AddressLike],
@@ -494,20 +480,11 @@ export interface VestingWalletReferral extends BaseContract {
     "view"
   >;
   getFunction(
+    nameOrSignature: "maxClaim"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "releasable"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "release"
-  ): TypedContractMethod<[], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "released"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "renounceOwnership"
-  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "renounceRole"
   ): TypedContractMethod<
@@ -526,18 +503,16 @@ export interface VestingWalletReferral extends BaseContract {
     nameOrSignature: "setContractURI"
   ): TypedContractMethod<[_uri: string], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "start"
+    nameOrSignature: "totalClaimed"
   ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "token"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "transferOwnership"
-  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "vestedAmount"
-  ): TypedContractMethod<[timestamp: BigNumberish], [bigint], "view">;
 
+  getEvent(
+    key: "AirdropClaimed"
+  ): TypedContractEvent<
+    AirdropClaimedEvent.InputTuple,
+    AirdropClaimedEvent.OutputTuple,
+    AirdropClaimedEvent.OutputObject
+  >;
   getEvent(
     key: "ContractURIUpdated"
   ): TypedContractEvent<
@@ -546,18 +521,11 @@ export interface VestingWalletReferral extends BaseContract {
     ContractURIUpdatedEvent.OutputObject
   >;
   getEvent(
-    key: "ERC20Released"
+    key: "EmergencyWithdrawn"
   ): TypedContractEvent<
-    ERC20ReleasedEvent.InputTuple,
-    ERC20ReleasedEvent.OutputTuple,
-    ERC20ReleasedEvent.OutputObject
-  >;
-  getEvent(
-    key: "OwnershipTransferred"
-  ): TypedContractEvent<
-    OwnershipTransferredEvent.InputTuple,
-    OwnershipTransferredEvent.OutputTuple,
-    OwnershipTransferredEvent.OutputObject
+    EmergencyWithdrawnEvent.InputTuple,
+    EmergencyWithdrawnEvent.OutputTuple,
+    EmergencyWithdrawnEvent.OutputObject
   >;
   getEvent(
     key: "RoleAdminChanged"
@@ -582,6 +550,17 @@ export interface VestingWalletReferral extends BaseContract {
   >;
 
   filters: {
+    "AirdropClaimed(address,uint256)": TypedContractEvent<
+      AirdropClaimedEvent.InputTuple,
+      AirdropClaimedEvent.OutputTuple,
+      AirdropClaimedEvent.OutputObject
+    >;
+    AirdropClaimed: TypedContractEvent<
+      AirdropClaimedEvent.InputTuple,
+      AirdropClaimedEvent.OutputTuple,
+      AirdropClaimedEvent.OutputObject
+    >;
+
     "ContractURIUpdated(string,string)": TypedContractEvent<
       ContractURIUpdatedEvent.InputTuple,
       ContractURIUpdatedEvent.OutputTuple,
@@ -593,26 +572,15 @@ export interface VestingWalletReferral extends BaseContract {
       ContractURIUpdatedEvent.OutputObject
     >;
 
-    "ERC20Released(address,uint256)": TypedContractEvent<
-      ERC20ReleasedEvent.InputTuple,
-      ERC20ReleasedEvent.OutputTuple,
-      ERC20ReleasedEvent.OutputObject
+    "EmergencyWithdrawn(uint256,address)": TypedContractEvent<
+      EmergencyWithdrawnEvent.InputTuple,
+      EmergencyWithdrawnEvent.OutputTuple,
+      EmergencyWithdrawnEvent.OutputObject
     >;
-    ERC20Released: TypedContractEvent<
-      ERC20ReleasedEvent.InputTuple,
-      ERC20ReleasedEvent.OutputTuple,
-      ERC20ReleasedEvent.OutputObject
-    >;
-
-    "OwnershipTransferred(address,address)": TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
-    >;
-    OwnershipTransferred: TypedContractEvent<
-      OwnershipTransferredEvent.InputTuple,
-      OwnershipTransferredEvent.OutputTuple,
-      OwnershipTransferredEvent.OutputObject
+    EmergencyWithdrawn: TypedContractEvent<
+      EmergencyWithdrawnEvent.InputTuple,
+      EmergencyWithdrawnEvent.OutputTuple,
+      EmergencyWithdrawnEvent.OutputObject
     >;
 
     "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<

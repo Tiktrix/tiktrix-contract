@@ -38,37 +38,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PermissionsEnumerable__factory>;
     getContractFactory(
-      name: "Ownable",
+      name: "TikTrixFirstComeAirdrop",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Ownable__factory>;
-    getContractFactory(
-      name: "VestingWallet",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWallet__factory>;
-    getContractFactory(
-      name: "VestingWalletAdvisors",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWalletAdvisors__factory>;
-    getContractFactory(
-      name: "VestingWalletCliff",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWalletCliff__factory>;
-    getContractFactory(
-      name: "VestingWalletCommunity",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWalletCommunity__factory>;
-    getContractFactory(
-      name: "VestingWalletMarketing",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWalletMarketing__factory>;
-    getContractFactory(
-      name: "VestingWalletNode",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWalletNode__factory>;
-    getContractFactory(
-      name: "VestingWalletReferral",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWalletReferral__factory>;
+    ): Promise<Contracts.TikTrixFirstComeAirdrop__factory>;
     getContractFactory(
       name: "IERC1363",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -82,21 +54,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.SafeERC20__factory>;
     getContractFactory(
-      name: "Address",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Address__factory>;
-    getContractFactory(
-      name: "Errors",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Errors__factory>;
-    getContractFactory(
       name: "IERC165",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
-    getContractFactory(
-      name: "SafeCast",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SafeCast__factory>;
 
     getContractAt(
       name: "ContractMetadata",
@@ -129,45 +89,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.PermissionsEnumerable>;
     getContractAt(
-      name: "Ownable",
+      name: "TikTrixFirstComeAirdrop",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.Ownable>;
-    getContractAt(
-      name: "VestingWallet",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VestingWallet>;
-    getContractAt(
-      name: "VestingWalletAdvisors",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VestingWalletAdvisors>;
-    getContractAt(
-      name: "VestingWalletCliff",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VestingWalletCliff>;
-    getContractAt(
-      name: "VestingWalletCommunity",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VestingWalletCommunity>;
-    getContractAt(
-      name: "VestingWalletMarketing",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VestingWalletMarketing>;
-    getContractAt(
-      name: "VestingWalletNode",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VestingWalletNode>;
-    getContractAt(
-      name: "VestingWalletReferral",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VestingWalletReferral>;
+    ): Promise<Contracts.TikTrixFirstComeAirdrop>;
     getContractAt(
       name: "IERC1363",
       address: string | ethers.Addressable,
@@ -184,25 +109,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.SafeERC20>;
     getContractAt(
-      name: "Address",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Address>;
-    getContractAt(
-      name: "Errors",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Errors>;
-    getContractAt(
       name: "IERC165",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
-    getContractAt(
-      name: "SafeCast",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.SafeCast>;
 
     deployContract(
       name: "ContractMetadata",
@@ -229,37 +139,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PermissionsEnumerable>;
     deployContract(
-      name: "Ownable",
+      name: "TikTrixFirstComeAirdrop",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Ownable>;
-    deployContract(
-      name: "VestingWallet",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWallet>;
-    deployContract(
-      name: "VestingWalletAdvisors",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletAdvisors>;
-    deployContract(
-      name: "VestingWalletCliff",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletCliff>;
-    deployContract(
-      name: "VestingWalletCommunity",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletCommunity>;
-    deployContract(
-      name: "VestingWalletMarketing",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletMarketing>;
-    deployContract(
-      name: "VestingWalletNode",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletNode>;
-    deployContract(
-      name: "VestingWalletReferral",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletReferral>;
+    ): Promise<Contracts.TikTrixFirstComeAirdrop>;
     deployContract(
       name: "IERC1363",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -273,21 +155,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.SafeERC20>;
     deployContract(
-      name: "Address",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Address>;
-    deployContract(
-      name: "Errors",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Errors>;
-    deployContract(
       name: "IERC165",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IERC165>;
-    deployContract(
-      name: "SafeCast",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.SafeCast>;
 
     deployContract(
       name: "ContractMetadata",
@@ -320,45 +190,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PermissionsEnumerable>;
     deployContract(
-      name: "Ownable",
+      name: "TikTrixFirstComeAirdrop",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Ownable>;
-    deployContract(
-      name: "VestingWallet",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWallet>;
-    deployContract(
-      name: "VestingWalletAdvisors",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletAdvisors>;
-    deployContract(
-      name: "VestingWalletCliff",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletCliff>;
-    deployContract(
-      name: "VestingWalletCommunity",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletCommunity>;
-    deployContract(
-      name: "VestingWalletMarketing",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletMarketing>;
-    deployContract(
-      name: "VestingWalletNode",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletNode>;
-    deployContract(
-      name: "VestingWalletReferral",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletReferral>;
+    ): Promise<Contracts.TikTrixFirstComeAirdrop>;
     deployContract(
       name: "IERC1363",
       args: any[],
@@ -375,25 +210,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.SafeERC20>;
     deployContract(
-      name: "Address",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Address>;
-    deployContract(
-      name: "Errors",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Errors>;
-    deployContract(
       name: "IERC165",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IERC165>;
-    deployContract(
-      name: "SafeCast",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.SafeCast>;
 
     // default types
     getContractFactory(
