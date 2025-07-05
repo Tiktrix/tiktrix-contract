@@ -20,6 +20,8 @@ export type { PermissionsEnumerable } from "./@thirdweb-dev/contracts/extension/
 export { PermissionsEnumerable__factory } from "./factories/@thirdweb-dev/contracts/extension/PermissionsEnumerable__factory";
 export type { TikTrixFirstComeAirdrop } from "./contract/tiktrix-airdrop/TikTrixFirstComeAirdrop";
 export { TikTrixFirstComeAirdrop__factory } from "./factories/contract/tiktrix-airdrop/TikTrixFirstComeAirdrop__factory";
+export type { TikTrixManualAirdrop } from "./contract/tiktrix-airdrop/TikTrixManualAirdrop";
+export { TikTrixManualAirdrop__factory } from "./factories/contract/tiktrix-airdrop/TikTrixManualAirdrop__factory";
 export type { IERC1363 } from "./contract/vesting/interfaces/IERC1363";
 export { IERC1363__factory } from "./factories/contract/vesting/interfaces/IERC1363__factory";
 export type { IERC20 } from "./contract/vesting/token/ERC20/IERC20";

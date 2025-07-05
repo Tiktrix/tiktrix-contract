@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { TikTrixFirstComeAirdrop } from "./TikTrixFirstComeAirdrop";
+export type { TikTrixManualAirdrop } from "./TikTrixManualAirdrop";

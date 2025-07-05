@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { TikTrixFirstComeAirdrop__factory } from "./TikTrixFirstComeAirdrop__factory";
+export { TikTrixManualAirdrop__factory } from "./TikTrixManualAirdrop__factory";
