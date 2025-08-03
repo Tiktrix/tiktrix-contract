@@ -9,7 +9,12 @@ import {Ownable} from "../access/Ownable.sol";
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
-contract VestingWalletMarketing is Context, Ownable, PermissionsEnumerable, ContractMetadata {
+contract VestingWalletMarketing is
+    Context,
+    Ownable,
+    PermissionsEnumerable,
+    ContractMetadata
+{
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     address public deployer;
     address public _beneficiary;
@@ -27,20 +32,26 @@ contract VestingWalletMarketing is Context, Ownable, PermissionsEnumerable, Cont
     uint64 private constant TOTAL_PHASES = 120;
 
     // Fixed amount per phase: 3,166,666.66666667 tokens (18 decimals)
-    uint256 private constant AMOUNT_PER_PHASE = 3_166_666_666666670000000;
+    uint256 private constant AMOUNT_PER_PHASE = 3_166_666_666666670000000000;
 
-    constructor(string memory _contractURI, address _deployer, address beneficiary, address tokenAddress, uint64 startTimestamp) Ownable(beneficiary) {
+    constructor(
+        string memory _contractURI,
+        address _deployer,
+        address beneficiary,
+        address tokenAddress,
+        uint64 startTimestamp
+    ) Ownable(beneficiary) {
         require(tokenAddress != address(0), "Token address cannot be zero");
         _beneficiary = beneficiary;
         _token = IERC20(tokenAddress);
         _start = startTimestamp;
 
-         _setupContractURI(_contractURI);
+        _setupContractURI(_contractURI);
         deployer = _deployer;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);
     }
-    
+
     function _canSetContractURI() internal view override returns (bool) {
         return msg.sender == deployer;
     }

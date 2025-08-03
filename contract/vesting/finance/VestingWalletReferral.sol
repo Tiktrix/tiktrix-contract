@@ -9,7 +9,12 @@ import {Ownable} from "../access/Ownable.sol";
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
-contract VestingWalletReferral is Context, Ownable, PermissionsEnumerable, ContractMetadata {
+contract VestingWalletReferral is
+    Context,
+    Ownable,
+    PermissionsEnumerable,
+    ContractMetadata
+{
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     address public deployer;
     address public _beneficiary;
@@ -27,9 +32,15 @@ contract VestingWalletReferral is Context, Ownable, PermissionsEnumerable, Contr
     uint64 private constant TOTAL_PHASES = 120;
 
     // Fixed amount per phase: 791,666.66666667 tokens (18 decimals)
-    uint256 private constant AMOUNT_PER_PHASE = 791_666_666666670000000;
+    uint256 private constant AMOUNT_PER_PHASE = 791_666_666666670000000000;
 
-    constructor(string memory _contractURI, address _deployer, address beneficiary, address tokenAddress, uint64 startTimestamp) Ownable(beneficiary) {
+    constructor(
+        string memory _contractURI,
+        address _deployer,
+        address beneficiary,
+        address tokenAddress,
+        uint64 startTimestamp
+    ) Ownable(beneficiary) {
         require(tokenAddress != address(0), "Token address cannot be zero");
         _beneficiary = beneficiary;
         _token = IERC20(tokenAddress);
