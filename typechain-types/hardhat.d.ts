@@ -14,224 +14,206 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "ContractMetadata",
+      name: "Ownable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ContractMetadata__factory>;
+    ): Promise<Contracts.Ownable__factory>;
     getContractFactory(
-      name: "IContractMetadata",
+      name: "IERC1155Errors",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IContractMetadata__factory>;
+    ): Promise<Contracts.IERC1155Errors__factory>;
     getContractFactory(
-      name: "IPermissions",
+      name: "IERC20Errors",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IPermissions__factory>;
+    ): Promise<Contracts.IERC20Errors__factory>;
     getContractFactory(
-      name: "IPermissionsEnumerable",
+      name: "IERC721Errors",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IPermissionsEnumerable__factory>;
+    ): Promise<Contracts.IERC721Errors__factory>;
     getContractFactory(
-      name: "Permissions",
+      name: "ERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Permissions__factory>;
+    ): Promise<Contracts.ERC20__factory>;
     getContractFactory(
-      name: "PermissionsEnumerable",
+      name: "IERC20Metadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PermissionsEnumerable__factory>;
-    getContractFactory(
-      name: "TikTrixFirstComeAirdrop",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.TikTrixFirstComeAirdrop__factory>;
-    getContractFactory(
-      name: "TikTrixManualAirdrop",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.TikTrixManualAirdrop__factory>;
-    getContractFactory(
-      name: "IERC1363",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC1363__factory>;
+    ): Promise<Contracts.IERC20Metadata__factory>;
     getContractFactory(
       name: "IERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
-      name: "SafeERC20",
+      name: "Address",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SafeERC20__factory>;
+    ): Promise<Contracts.Address__factory>;
     getContractFactory(
-      name: "IERC165",
+      name: "Errors",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC165__factory>;
+    ): Promise<Contracts.Errors__factory>;
+    getContractFactory(
+      name: "Multicall",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Multicall__factory>;
+    getContractFactory(
+      name: "TrixToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TrixToken__factory>;
 
     getContractAt(
-      name: "ContractMetadata",
+      name: "Ownable",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.ContractMetadata>;
+    ): Promise<Contracts.Ownable>;
     getContractAt(
-      name: "IContractMetadata",
+      name: "IERC1155Errors",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.IContractMetadata>;
+    ): Promise<Contracts.IERC1155Errors>;
     getContractAt(
-      name: "IPermissions",
+      name: "IERC20Errors",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.IPermissions>;
+    ): Promise<Contracts.IERC20Errors>;
     getContractAt(
-      name: "IPermissionsEnumerable",
+      name: "IERC721Errors",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.IPermissionsEnumerable>;
+    ): Promise<Contracts.IERC721Errors>;
     getContractAt(
-      name: "Permissions",
+      name: "ERC20",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.Permissions>;
+    ): Promise<Contracts.ERC20>;
     getContractAt(
-      name: "PermissionsEnumerable",
+      name: "IERC20Metadata",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.PermissionsEnumerable>;
-    getContractAt(
-      name: "TikTrixFirstComeAirdrop",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.TikTrixFirstComeAirdrop>;
-    getContractAt(
-      name: "TikTrixManualAirdrop",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.TikTrixManualAirdrop>;
-    getContractAt(
-      name: "IERC1363",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC1363>;
+    ): Promise<Contracts.IERC20Metadata>;
     getContractAt(
       name: "IERC20",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
     getContractAt(
-      name: "SafeERC20",
+      name: "Address",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.SafeERC20>;
+    ): Promise<Contracts.Address>;
     getContractAt(
-      name: "IERC165",
+      name: "Errors",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.IERC165>;
+    ): Promise<Contracts.Errors>;
+    getContractAt(
+      name: "Multicall",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Multicall>;
+    getContractAt(
+      name: "TrixToken",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TrixToken>;
 
     deployContract(
-      name: "ContractMetadata",
+      name: "Ownable",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ContractMetadata>;
+    ): Promise<Contracts.Ownable>;
     deployContract(
-      name: "IContractMetadata",
+      name: "IERC1155Errors",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IContractMetadata>;
+    ): Promise<Contracts.IERC1155Errors>;
     deployContract(
-      name: "IPermissions",
+      name: "IERC20Errors",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IPermissions>;
+    ): Promise<Contracts.IERC20Errors>;
     deployContract(
-      name: "IPermissionsEnumerable",
+      name: "IERC721Errors",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IPermissionsEnumerable>;
+    ): Promise<Contracts.IERC721Errors>;
     deployContract(
-      name: "Permissions",
+      name: "ERC20",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Permissions>;
+    ): Promise<Contracts.ERC20>;
     deployContract(
-      name: "PermissionsEnumerable",
+      name: "IERC20Metadata",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.PermissionsEnumerable>;
-    deployContract(
-      name: "TikTrixFirstComeAirdrop",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.TikTrixFirstComeAirdrop>;
-    deployContract(
-      name: "TikTrixManualAirdrop",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.TikTrixManualAirdrop>;
-    deployContract(
-      name: "IERC1363",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC1363>;
+    ): Promise<Contracts.IERC20Metadata>;
     deployContract(
       name: "IERC20",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IERC20>;
     deployContract(
-      name: "SafeERC20",
+      name: "Address",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.SafeERC20>;
+    ): Promise<Contracts.Address>;
     deployContract(
-      name: "IERC165",
+      name: "Errors",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC165>;
+    ): Promise<Contracts.Errors>;
+    deployContract(
+      name: "Multicall",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.Multicall>;
+    deployContract(
+      name: "TrixToken",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TrixToken>;
 
     deployContract(
-      name: "ContractMetadata",
+      name: "Ownable",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.ContractMetadata>;
+    ): Promise<Contracts.Ownable>;
     deployContract(
-      name: "IContractMetadata",
+      name: "IERC1155Errors",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IContractMetadata>;
+    ): Promise<Contracts.IERC1155Errors>;
     deployContract(
-      name: "IPermissions",
+      name: "IERC20Errors",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IPermissions>;
+    ): Promise<Contracts.IERC20Errors>;
     deployContract(
-      name: "IPermissionsEnumerable",
+      name: "IERC721Errors",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IPermissionsEnumerable>;
+    ): Promise<Contracts.IERC721Errors>;
     deployContract(
-      name: "Permissions",
+      name: "ERC20",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.Permissions>;
+    ): Promise<Contracts.ERC20>;
     deployContract(
-      name: "PermissionsEnumerable",
+      name: "IERC20Metadata",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.PermissionsEnumerable>;
-    deployContract(
-      name: "TikTrixFirstComeAirdrop",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.TikTrixFirstComeAirdrop>;
-    deployContract(
-      name: "TikTrixManualAirdrop",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.TikTrixManualAirdrop>;
-    deployContract(
-      name: "IERC1363",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC1363>;
+    ): Promise<Contracts.IERC20Metadata>;
     deployContract(
       name: "IERC20",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.IERC20>;
     deployContract(
-      name: "SafeERC20",
+      name: "Address",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.SafeERC20>;
+    ): Promise<Contracts.Address>;
     deployContract(
-      name: "IERC165",
+      name: "Errors",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IERC165>;
+    ): Promise<Contracts.Errors>;
+    deployContract(
+      name: "Multicall",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.Multicall>;
+    deployContract(
+      name: "TrixToken",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TrixToken>;
 
     // default types
     getContractFactory(
