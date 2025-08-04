@@ -62,12 +62,12 @@ contract VestingWalletNodeUpgradeable is
     function initialize(
         string memory _contractURI,
         address _deployer,
-        address beneficiary,
+        address beneficiaryAddress,
         address tokenAddress,
         uint64 startTimestamp
     ) public initializer {
         require(tokenAddress != address(0), "Token address cannot be zero");
-        require(beneficiary != address(0), "Beneficiary cannot be zero");
+        require(beneficiaryAddress != address(0), "Beneficiary cannot be zero");
         require(_deployer != address(0), "Deployer cannot be zero");
 
         __Context_init();
@@ -76,7 +76,7 @@ contract VestingWalletNodeUpgradeable is
 
         _token = IERC20Upgradeable(tokenAddress);
         _start = startTimestamp;
-        _beneficiary = beneficiary;
+        _beneficiary = beneficiaryAddress;
 
         _setupContractURI(_contractURI);
         deployer = _deployer;
