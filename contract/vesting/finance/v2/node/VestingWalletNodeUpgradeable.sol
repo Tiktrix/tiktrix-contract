@@ -29,7 +29,11 @@ contract VestingWalletNodeUpgradeable is
     address public _beneficiary;
 
     event EtherReleased(uint256 amount);
-    event ERC20Released(address indexed token, uint256 amount);
+    event ERC20Released(
+        address indexed token,
+        address indexed beneficiary,
+        uint256 amount
+    );
 
     IERC20Upgradeable private _token;
     uint256 private _released;
@@ -121,8 +125,8 @@ contract VestingWalletNodeUpgradeable is
         require(amount > 0, "No tokens to release");
 
         _released += amount;
-        emit ERC20Released(address(_token), amount);
-        _token.safeTransfer(owner(), amount);
+        emit ERC20Released(address(_token), beneficiary(), amount);
+        _token.safeTransfer(beneficiary(), amount);
     }
 
     function vestedAmount(

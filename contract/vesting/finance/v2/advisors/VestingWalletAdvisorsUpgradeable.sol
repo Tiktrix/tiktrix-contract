@@ -31,7 +31,11 @@ contract VestingWalletAdvisorsUpgradeable is
     address public deployer;
     address public _beneficiary;
 
-    event ERC20Released(address indexed token, uint256 amount);
+    event ERC20Released(
+        address indexed token,
+        address indexed beneficiary,
+        uint256 amount
+    );
     event BeneficiaryChanged(
         address indexed oldBeneficiary,
         address indexed newBeneficiary
@@ -127,8 +131,8 @@ contract VestingWalletAdvisorsUpgradeable is
         require(amount > 0, "No tokens to release");
 
         _released += amount;
-        emit ERC20Released(address(_token), amount);
-        _token.safeTransfer(_beneficiary, amount);
+        emit ERC20Released(address(_token), beneficiary(), amount);
+        _token.safeTransfer(beneficiary(), amount);
     }
 
     /**
