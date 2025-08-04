@@ -149,6 +149,7 @@ contract VestingWalletFactory is Ownable {
         proposal.newImplementation = newImplementation;
         proposal.signatures = 1;
         proposal.executed = false;
+        proposal.proposedAt = block.timestamp;
         proposal.hasSigned[msg.sender] = true;
 
         proposalIds.push(proposalId);
