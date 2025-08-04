@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {IERC20} from "../token/ERC20/IERC20.sol";
-import {SafeERC20} from "../token/ERC20/utils/SafeERC20.sol";
-import {Context} from "../utils/Context.sol";
-import {Ownable} from "../access/Ownable.sol";
+import {IERC20} from "../../token/ERC20/IERC20.sol";
+import {SafeERC20} from "../../token/ERC20/utils/SafeERC20.sol";
+import {Context} from "../../utils/Context.sol";
+import {Ownable} from "../../access/Ownable.sol";
 
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
