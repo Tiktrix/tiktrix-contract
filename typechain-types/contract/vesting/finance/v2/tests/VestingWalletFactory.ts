@@ -28,7 +28,6 @@ export interface VestingWalletFactoryInterface extends Interface {
     nameOrSignature:
       | "REQUIRED_SIGNATURES"
       | "TIMELOCK_DURATION"
-      | "addSigner"
       | "createVestingWallet"
       | "deployer"
       | "executeUpgrade"
@@ -41,7 +40,6 @@ export interface VestingWalletFactoryInterface extends Interface {
       | "owner"
       | "proposalIds"
       | "proposeUpgrade"
-      | "removeSigner"
       | "renounceOwnership"
       | "signUpgrade"
       | "signerCount"
@@ -55,8 +53,6 @@ export interface VestingWalletFactoryInterface extends Interface {
   getEvent(
     nameOrSignatureOrTopic:
       | "OwnershipTransferred"
-      | "SignerAdded"
-      | "SignerRemoved"
       | "UpgradeExecuted"
       | "UpgradeProposed"
       | "UpgradeSigned"
@@ -70,10 +66,6 @@ export interface VestingWalletFactoryInterface extends Interface {
   encodeFunctionData(
     functionFragment: "TIMELOCK_DURATION",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addSigner",
-    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "createVestingWallet",
@@ -118,10 +110,6 @@ export interface VestingWalletFactoryInterface extends Interface {
     values: [AddressLike, AddressLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "removeSigner",
-    values: [AddressLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
@@ -162,7 +150,6 @@ export interface VestingWalletFactoryInterface extends Interface {
     functionFragment: "TIMELOCK_DURATION",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "addSigner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createVestingWallet",
     data: BytesLike
@@ -206,10 +193,6 @@ export interface VestingWalletFactoryInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "removeSigner",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
@@ -246,30 +229,6 @@ export namespace OwnershipTransferredEvent {
   export interface OutputObject {
     previousOwner: string;
     newOwner: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace SignerAddedEvent {
-  export type InputTuple = [signer: AddressLike];
-  export type OutputTuple = [signer: string];
-  export interface OutputObject {
-    signer: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export namespace SignerRemovedEvent {
-  export type InputTuple = [signer: AddressLike];
-  export type OutputTuple = [signer: string];
-  export interface OutputObject {
-    signer: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -418,12 +377,6 @@ export interface VestingWalletFactory extends BaseContract {
 
   TIMELOCK_DURATION: TypedContractMethod<[], [bigint], "view">;
 
-  addSigner: TypedContractMethod<
-    [newSigner: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
   createVestingWallet: TypedContractMethod<
     [
       contractURI: string,
@@ -495,12 +448,6 @@ export interface VestingWalletFactory extends BaseContract {
     "nonpayable"
   >;
 
-  removeSigner: TypedContractMethod<
-    [signerToRemove: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
   signUpgrade: TypedContractMethod<
@@ -547,9 +494,6 @@ export interface VestingWalletFactory extends BaseContract {
   getFunction(
     nameOrSignature: "TIMELOCK_DURATION"
   ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "addSigner"
-  ): TypedContractMethod<[newSigner: AddressLike], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "createVestingWallet"
   ): TypedContractMethod<
@@ -630,9 +574,6 @@ export interface VestingWalletFactory extends BaseContract {
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "removeSigner"
-  ): TypedContractMethod<[signerToRemove: AddressLike], [void], "nonpayable">;
-  getFunction(
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
@@ -677,20 +618,6 @@ export interface VestingWalletFactory extends BaseContract {
     OwnershipTransferredEvent.OutputObject
   >;
   getEvent(
-    key: "SignerAdded"
-  ): TypedContractEvent<
-    SignerAddedEvent.InputTuple,
-    SignerAddedEvent.OutputTuple,
-    SignerAddedEvent.OutputObject
-  >;
-  getEvent(
-    key: "SignerRemoved"
-  ): TypedContractEvent<
-    SignerRemovedEvent.InputTuple,
-    SignerRemovedEvent.OutputTuple,
-    SignerRemovedEvent.OutputObject
-  >;
-  getEvent(
     key: "UpgradeExecuted"
   ): TypedContractEvent<
     UpgradeExecutedEvent.InputTuple,
@@ -729,28 +656,6 @@ export interface VestingWalletFactory extends BaseContract {
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject
-    >;
-
-    "SignerAdded(address)": TypedContractEvent<
-      SignerAddedEvent.InputTuple,
-      SignerAddedEvent.OutputTuple,
-      SignerAddedEvent.OutputObject
-    >;
-    SignerAdded: TypedContractEvent<
-      SignerAddedEvent.InputTuple,
-      SignerAddedEvent.OutputTuple,
-      SignerAddedEvent.OutputObject
-    >;
-
-    "SignerRemoved(address)": TypedContractEvent<
-      SignerRemovedEvent.InputTuple,
-      SignerRemovedEvent.OutputTuple,
-      SignerRemovedEvent.OutputObject
-    >;
-    SignerRemoved: TypedContractEvent<
-      SignerRemovedEvent.InputTuple,
-      SignerRemovedEvent.OutputTuple,
-      SignerRemovedEvent.OutputObject
     >;
 
     "UpgradeExecuted(bytes32,address,address)": TypedContractEvent<

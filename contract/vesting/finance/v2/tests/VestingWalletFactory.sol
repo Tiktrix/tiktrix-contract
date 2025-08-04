@@ -59,9 +59,6 @@ contract VestingWalletFactory is Ownable {
         address indexed newImplementation
     );
 
-    event SignerAdded(address indexed signer);
-    event SignerRemoved(address indexed signer);
-
     modifier onlySigner() {
         require(signers[msg.sender], "Not a valid signer");
         _;
@@ -211,45 +208,6 @@ contract VestingWalletFactory is Ownable {
             proposal.vestingWallet,
             proposal.newImplementation
         );
-    }
-
-    /**
-     * @dev Add a new signer (only owner)
-     */
-    function addSigner(address newSigner) external onlyOwner {
-        require(newSigner != address(0), "Invalid signer address");
-        require(!signers[newSigner], "Already a signer");
-
-        signers[newSigner] = true;
-        signersList.push(newSigner);
-        signerCount++;
-
-        emit SignerAdded(newSigner);
-    }
-
-    /**
-     * @dev Remove a signer (only owner)
-     */
-    function removeSigner(address signerToRemove) external onlyOwner {
-        require(signers[signerToRemove], "Not a signer");
-        require(
-            signerCount > REQUIRED_SIGNATURES,
-            "Cannot remove signer, would go below required minimum"
-        );
-
-        signers[signerToRemove] = false;
-        signerCount--;
-
-        // Remove from signersList array
-        for (uint256 i = 0; i < signersList.length; i++) {
-            if (signersList[i] == signerToRemove) {
-                signersList[i] = signersList[signersList.length - 1];
-                signersList.pop();
-                break;
-            }
-        }
-
-        emit SignerRemoved(signerToRemove);
     }
 
     /**
