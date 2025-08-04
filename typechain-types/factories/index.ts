@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as openzeppelin from "./@openzeppelin";
+export * as thirdwebDev from "./@thirdweb-dev";
 export * as contract from "./contract";
