@@ -26,8 +26,6 @@ import type {
 export interface VestingWalletFactoryInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "REQUIRED_SIGNATURES"
-      | "TIMELOCK_DURATION"
       | "createVestingWallet"
       | "deployer"
       | "executeUpgrade"
@@ -41,10 +39,12 @@ export interface VestingWalletFactoryInterface extends Interface {
       | "proposalIds"
       | "proposeUpgrade"
       | "renounceOwnership"
+      | "requiredSignatures"
       | "signUpgrade"
       | "signerCount"
       | "signers"
       | "signersList"
+      | "timelockDuration"
       | "transferOwnership"
       | "upgradeProposals"
       | "vestingImplementation"
@@ -59,14 +59,6 @@ export interface VestingWalletFactoryInterface extends Interface {
       | "VestingWalletCreated"
   ): EventFragment;
 
-  encodeFunctionData(
-    functionFragment: "REQUIRED_SIGNATURES",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "TIMELOCK_DURATION",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "createVestingWallet",
     values: [string, AddressLike, AddressLike, BigNumberish]
@@ -114,6 +106,10 @@ export interface VestingWalletFactoryInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "requiredSignatures",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "signUpgrade",
     values: [BytesLike]
   ): string;
@@ -130,6 +126,10 @@ export interface VestingWalletFactoryInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "timelockDuration",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [AddressLike]
   ): string;
@@ -142,14 +142,6 @@ export interface VestingWalletFactoryInterface extends Interface {
     values?: undefined
   ): string;
 
-  decodeFunctionResult(
-    functionFragment: "REQUIRED_SIGNATURES",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "TIMELOCK_DURATION",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "createVestingWallet",
     data: BytesLike
@@ -197,6 +189,10 @@ export interface VestingWalletFactoryInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "requiredSignatures",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "signUpgrade",
     data: BytesLike
   ): Result;
@@ -207,6 +203,10 @@ export interface VestingWalletFactoryInterface extends Interface {
   decodeFunctionResult(functionFragment: "signers", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "signersList",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "timelockDuration",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -373,10 +373,6 @@ export interface VestingWalletFactory extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  REQUIRED_SIGNATURES: TypedContractMethod<[], [bigint], "view">;
-
-  TIMELOCK_DURATION: TypedContractMethod<[], [bigint], "view">;
-
   createVestingWallet: TypedContractMethod<
     [
       contractURI: string,
@@ -450,6 +446,8 @@ export interface VestingWalletFactory extends BaseContract {
 
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
+  requiredSignatures: TypedContractMethod<[], [bigint], "view">;
+
   signUpgrade: TypedContractMethod<
     [proposalId: BytesLike],
     [void],
@@ -461,6 +459,8 @@ export interface VestingWalletFactory extends BaseContract {
   signers: TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
 
   signersList: TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+
+  timelockDuration: TypedContractMethod<[], [bigint], "view">;
 
   transferOwnership: TypedContractMethod<
     [newOwner: AddressLike],
@@ -488,12 +488,6 @@ export interface VestingWalletFactory extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
-  getFunction(
-    nameOrSignature: "REQUIRED_SIGNATURES"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "TIMELOCK_DURATION"
-  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "createVestingWallet"
   ): TypedContractMethod<
@@ -577,6 +571,9 @@ export interface VestingWalletFactory extends BaseContract {
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "requiredSignatures"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "signUpgrade"
   ): TypedContractMethod<[proposalId: BytesLike], [void], "nonpayable">;
   getFunction(
@@ -588,6 +585,9 @@ export interface VestingWalletFactory extends BaseContract {
   getFunction(
     nameOrSignature: "signersList"
   ): TypedContractMethod<[arg0: BigNumberish], [string], "view">;
+  getFunction(
+    nameOrSignature: "timelockDuration"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "transferOwnership"
   ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;

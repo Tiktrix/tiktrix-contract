@@ -3,9 +3,13 @@ pragma solidity ^0.8.20;
 
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {VestingWalletReferralUpgradeable} from "./VestingWalletReferralUpgradeable.sol";
+import {VestingWalletCommonUpgradeable} from "./VestingWalletCommonUpgradeable.sol";
 
-contract VestingWalletReferralFactory is Ownable {
+/**
+ * @title VestingWalletCommonFactory
+ * @dev Factory contract to deploy VestingWalletAdvisors proxies
+ */
+contract VestingWalletCommonFactory is Ownable {
     address public immutable vestingImplementation;
 
     // MultiSig upgrade configuration
@@ -32,6 +36,9 @@ contract VestingWalletReferralFactory is Ownable {
         address indexed vestingWallet,
         address indexed beneficiary,
         address indexed token,
+        uint64 interval,
+        uint64 totalPhases,
+        uint256 amountPerPhase,
         uint64 startTimestamp
     );
 
@@ -65,8 +72,8 @@ contract VestingWalletReferralFactory is Ownable {
     }
 
     constructor(
-        uint256 _timelockDuration,
         uint256 _requiredSignatures,
+        uint256 _timelockDuration,
         address[] memory _signers
     ) Ownable(msg.sender) {
         require(
@@ -74,12 +81,11 @@ contract VestingWalletReferralFactory is Ownable {
             "Not enough initial signers"
         );
         require(_timelockDuration > 0, "Timelock duration must be greater than 0");
-
         requiredSignatures = _requiredSignatures;
         timelockDuration = _timelockDuration;
 
         // Deploy the implementation contract
-        vestingImplementation = address(new VestingWalletReferralUpgradeable());
+        vestingImplementation = address(new VestingWalletCommonUpgradeable());
 
         // Set up initial signers
         for (uint256 i = 0; i < _signers.length; i++) {
@@ -92,10 +98,16 @@ contract VestingWalletReferralFactory is Ownable {
         signerCount = _signers.length;
     }
 
+    /**
+     * @dev Deploy a new vesting wallet proxy
+     */
     function createVestingWallet(
         string memory contractURI,
         address beneficiary,
         address tokenAddress,
+        uint64 interval,
+        uint64 totalPhases,
+        uint256 amountPerPhase,
         uint64 startTimestamp
     ) external returns (address) {
         require(beneficiary != address(0), "Beneficiary cannot be zero");
@@ -103,11 +115,14 @@ contract VestingWalletReferralFactory is Ownable {
 
         // Encode the initializer function call
         bytes memory initData = abi.encodeWithSelector(
-            VestingWalletReferralUpgradeable.initialize.selector,
+            VestingWalletCommonUpgradeable.initialize.selector,
             contractURI,
             msg.sender,
             beneficiary,
             tokenAddress,
+            interval,
+            totalPhases,
+            amountPerPhase,
             startTimestamp
         );
 
@@ -118,6 +133,9 @@ contract VestingWalletReferralFactory is Ownable {
             address(proxy),
             beneficiary,
             tokenAddress,
+            interval,
+            totalPhases,
+            amountPerPhase,
             startTimestamp
         );
 
@@ -202,7 +220,7 @@ contract VestingWalletReferralFactory is Ownable {
 
         proposal.executed = true;
 
-        VestingWalletReferralUpgradeable(proposal.vestingWallet)
+        VestingWalletCommonUpgradeable(proposal.vestingWallet)
             .upgradeToAndCall(proposal.newImplementation, "");
 
         emit UpgradeExecuted(

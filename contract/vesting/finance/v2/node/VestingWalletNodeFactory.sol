@@ -32,6 +32,8 @@ contract VestingWalletNodeFactory is Ownable {
         address indexed vestingWallet,
         address indexed beneficiary,
         address indexed token,
+        uint64 interval,
+        uint64 totalPhases,
         uint64 startTimestamp
     );
 
@@ -97,6 +99,8 @@ contract VestingWalletNodeFactory is Ownable {
         string memory contractURI,
         address beneficiary,
         address tokenAddress,
+        uint64 interval,
+        uint64 totalPhases,
         uint64 startTimestamp
     ) external payable returns (address) {
         require(beneficiary != address(0), "Beneficiary cannot be zero");
@@ -109,6 +113,8 @@ contract VestingWalletNodeFactory is Ownable {
             msg.sender,
             beneficiary,
             tokenAddress,
+            interval,
+            totalPhases,
             startTimestamp
         );
 
@@ -122,6 +128,8 @@ contract VestingWalletNodeFactory is Ownable {
             address(proxy),
             beneficiary,
             tokenAddress,
+            interval,
+            totalPhases,
             startTimestamp
         );
 
@@ -196,7 +204,7 @@ contract VestingWalletNodeFactory is Ownable {
         require(proposal.proposedAt != 0, "Proposal does not exist");
         require(!proposal.executed, "Proposal already executed");
         require(
-            proposal.signatures >= REQUIRED_SIGNATURES,
+            proposal.signatures >= requiredSignatures,
             "Not enough signatures"
         );
         require(

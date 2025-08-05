@@ -26,7 +26,7 @@ contract VestingWalletNodeUpgradeable is
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
     address public deployer;
-    address public _beneficiary;
+    address public beneficiary;
 
     event EtherReleased(uint256 amount);
     event ERC20Released(
@@ -35,13 +35,13 @@ contract VestingWalletNodeUpgradeable is
         uint256 amount
     );
 
-    IERC20Upgradeable private _token;
-    uint256 private _released;
-    mapping(address token => uint256) private _erc20Released;
-    uint64 private _start;
+    IERC20Upgradeable private token;
+    uint256 private released;
+    mapping(address token => uint256) private erc20Released;
+    uint64 private start;
 
-    uint64 private constant INTERVAL = 30 days;
-    uint64 private constant TOTAL_PHASES = 120;
+    uint64 public interval;
+    uint64 public totalPhases;
 
     uint256 private constant AMOUNT_PHASE1 = 12152777750000000000000000;
     uint256 private constant AMOUNT_PHASE2 = 10937499916666670000000000;
@@ -62,21 +62,25 @@ contract VestingWalletNodeUpgradeable is
     function initialize(
         string memory _contractURI,
         address _deployer,
-        address beneficiaryAddress,
-        address tokenAddress,
-        uint64 startTimestamp
+        address _beneficiary,
+        address _token,
+        uint64 _interval,
+        uint64 _totalPhases,
+        uint64 _start
     ) public initializer {
-        require(tokenAddress != address(0), "Token address cannot be zero");
-        require(beneficiaryAddress != address(0), "Beneficiary cannot be zero");
+        require(_token != address(0), "Token address cannot be zero");
+        require(_beneficiary != address(0), "Beneficiary cannot be zero");
         require(_deployer != address(0), "Deployer cannot be zero");
 
         __Context_init();
         __Ownable_init();
         __UUPSUpgradeable_init();
 
-        _token = IERC20Upgradeable(tokenAddress);
-        _start = startTimestamp;
-        _beneficiary = beneficiaryAddress;
+        token = IERC20Upgradeable(_token);
+        start = _start;
+        beneficiary = _beneficiary;
+        interval = _interval;
+        totalPhases = _totalPhases;
 
         _setupContractURI(_contractURI);
         deployer = _deployer;
@@ -84,7 +88,6 @@ contract VestingWalletNodeUpgradeable is
         // Setup roles
         _setupRole(DEFAULT_ADMIN_ROLE, _deployer);
         _setupRole(FACTORY_ROLE, _deployer);
-        _setupRole(FACTORY_ROLE, 0x6055A65b9A27F0B2Ffdb444DaA59cc46301Da720);
         _setupRole(UPGRADER_ROLE, _deployer);
     }
 
@@ -96,37 +99,21 @@ contract VestingWalletNodeUpgradeable is
         address newImplementation
     ) internal override onlyRole(UPGRADER_ROLE) {}
 
-    function start() public view virtual returns (uint256) {
-        return _start;
-    }
-
     function end() public view virtual returns (uint256) {
-        return start() + (INTERVAL * TOTAL_PHASES);
-    }
-
-    function token() public view returns (IERC20Upgradeable) {
-        return _token;
-    }
-
-    function beneficiary() public view returns (address) {
-        return _beneficiary;
-    }
-
-    function released() public view virtual returns (uint256) {
-        return _released;
+        return start + (interval * totalPhases);
     }
 
     function releasable() public view virtual returns (uint256) {
-        return vestedAmount(uint64(block.timestamp)) - released();
+        return vestedAmount(uint64(block.timestamp)) - released;
     }
 
     function release() external onlyRole(FACTORY_ROLE) {
         uint256 amount = releasable();
         require(amount > 0, "No tokens to release");
 
-        _released += amount;
-        emit ERC20Released(address(_token), beneficiary(), amount);
-        _token.safeTransfer(beneficiary(), amount);
+        released += amount;
+        emit ERC20Released(address(token), beneficiary, amount);
+        token.safeTransfer(beneficiary, amount);
     }
 
     function vestedAmount(
@@ -136,14 +123,14 @@ contract VestingWalletNodeUpgradeable is
     }
 
     function _customVesting(uint64 timestamp) public view returns (uint256) {
-        if (timestamp < _start) return 0;
+        if (timestamp < start) return 0;
 
-        uint64 elapsed = timestamp - _start;
-        uint64 currentPhase = elapsed / INTERVAL;
+        uint64 elapsed = timestamp - start;
+        uint64 currentPhase = elapsed / interval;
 
         // Cap at total phases
-        if (currentPhase >= TOTAL_PHASES) {
-            currentPhase = TOTAL_PHASES - 1;
+        if (currentPhase >= totalPhases) {
+            currentPhase = totalPhases - 1;
         }
 
         uint256 vested = 0;

@@ -12,10 +12,10 @@ import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
 /**
- * @title VestingWalletAdvisorsUpgradeable
- * @dev Upgradeable vesting wallet contract for advisors with fixed monthly releases
+ * @title VestingWalletCommonUpgradeable
+ * @dev Upgradeable vesting wallet contract for common vesting with fixed monthly releases
  */
-contract VestingWalletAdvisorsUpgradeable is
+contract VestingWalletCommonUpgradeable is
     Initializable,
     ContextUpgradeable,
     OwnableUpgradeable,
@@ -29,7 +29,7 @@ contract VestingWalletAdvisorsUpgradeable is
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
     address public deployer;
-    address public _beneficiary;
+    address public beneficiary;
 
     event ERC20Released(
         address indexed token,
@@ -41,16 +41,16 @@ contract VestingWalletAdvisorsUpgradeable is
         address indexed newBeneficiary
     );
 
-    IERC20 private _token;
-    uint256 private _released;
-    uint64 private _start;
+    IERC20 private token;
+    uint256 private released;
+    uint64 private start;
 
     // Vesting schedule parameters
-    uint64 private constant INTERVAL = 30 days;
-    uint64 private constant TOTAL_PHASES = 96;
+    uint64 public interval;
+    uint64 public totalPhases;
 
     // Fixed amount per phase: 989,583.33333333 tokens (18 decimals)
-    uint256 private constant AMOUNT_PER_PHASE = 989_583_333333330000000000;
+    uint256 public amountPerPhase;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -63,27 +63,36 @@ contract VestingWalletAdvisorsUpgradeable is
     function initialize(
         string memory _contractURI,
         address _deployer,
-        address beneficiaryAddress,
-        address tokenAddress,
-        uint64 startTimestamp
+        address _beneficiary,
+        address _token,
+        uint64 _interval,
+        uint64 _totalPhases,
+        uint256 _amountPerPhase,
+        uint64 _start
     ) public initializer {
-        require(tokenAddress != address(0), "Token address cannot be zero");
-        require(beneficiaryAddress != address(0), "Beneficiary cannot be zero");
+        require(_token != address(0), "Token address cannot be zero");
+        require(_beneficiary != address(0), "Beneficiary cannot be zero");
         require(_deployer != address(0), "Deployer cannot be zero");
+        require(_interval > 0, "Interval must be greater than 0");
+        require(_totalPhases > 0, "Total phases must be greater than 0");
+        require(_amountPerPhase > 0, "Amount per phase must be greater than 0");
+        require(_start > 0, "Start must be greater than 0");
 
         __Context_init();
         __Ownable_init();
         __UUPSUpgradeable_init();
 
-        _beneficiary = beneficiaryAddress;
-        _token = IERC20(tokenAddress);
-        _start = startTimestamp;
+        beneficiary = _beneficiary;
+        token = IERC20(_token);
+        interval = _interval;
+        totalPhases = _totalPhases;
+        amountPerPhase = _amountPerPhase;
+        start = _start;
 
         _setupContractURI(_contractURI);
         deployer = _deployer;
         _setupRole(DEFAULT_ADMIN_ROLE, _deployer);
         _setupRole(FACTORY_ROLE, _deployer);
-        _setupRole(FACTORY_ROLE, 0x6055A65b9A27F0B2Ffdb444DaA59cc46301Da720);
         _setupRole(UPGRADER_ROLE, _deployer);
     }
 
@@ -99,28 +108,12 @@ contract VestingWalletAdvisorsUpgradeable is
             msg.sender == deployer || hasRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function token() public view returns (IERC20) {
-        return _token;
-    }
-
-    function beneficiary() public view returns (address) {
-        return _beneficiary;
-    }
-
-    function start() public view returns (uint256) {
-        return _start;
-    }
-
     function end() public view returns (uint256) {
-        return start() + (INTERVAL * TOTAL_PHASES);
-    }
-
-    function released() public view returns (uint256) {
-        return _released;
+        return start + (interval * totalPhases);
     }
 
     function releasable() public view returns (uint256) {
-        return vestedAmount(uint64(block.timestamp)) - released();
+        return vestedAmount(uint64(block.timestamp)) - released;
     }
 
     /**
@@ -130,24 +123,24 @@ contract VestingWalletAdvisorsUpgradeable is
         uint256 amount = releasable();
         require(amount > 0, "No tokens to release");
 
-        _released += amount;
-        emit ERC20Released(address(_token), beneficiary(), amount);
-        _token.safeTransfer(beneficiary(), amount);
+        released += amount;
+        emit ERC20Released(address(token), beneficiary, amount);
+        token.safeTransfer(beneficiary, amount);
     }
 
     /**
      * @dev Calculate vested amount at given timestamp
      */
     function vestedAmount(uint64 timestamp) public view returns (uint256) {
-        if (timestamp < _start) return 0;
+        if (timestamp < start) return 0;
 
-        uint64 elapsed = timestamp - _start;
-        uint64 phase = elapsed / INTERVAL;
+        uint64 elapsed = timestamp - start;
+        uint64 phase = elapsed / interval;
 
-        if (phase > TOTAL_PHASES) {
-            phase = TOTAL_PHASES;
+        if (phase > totalPhases) {
+            phase = totalPhases;
         }
 
-        return AMOUNT_PER_PHASE * phase;
+        return amountPerPhase * phase;
     }
 }
