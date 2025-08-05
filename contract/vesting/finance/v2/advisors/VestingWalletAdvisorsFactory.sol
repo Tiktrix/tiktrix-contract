@@ -13,8 +13,8 @@ contract VestingWalletAdvisorsFactory is Ownable {
     address public immutable vestingImplementation;
 
     // MultiSig upgrade configuration
-    uint256 public constant REQUIRED_SIGNATURES = 3;
-    uint256 public constant TIMELOCK_DURATION = 48 hours;
+    uint256 public requiredSignatures;
+    uint256 public timelockDuration;
 
     mapping(address => bool) public signers;
     address[] public signersList;
@@ -68,11 +68,18 @@ contract VestingWalletAdvisorsFactory is Ownable {
         _;
     }
 
-    constructor(address[] memory _signers) Ownable(msg.sender) {
+    constructor(
+        uint256 _requiredSignatures,
+        uint256 _timelockDuration,
+        address[] memory _signers
+    ) Ownable(msg.sender) {
         require(
-            _signers.length >= REQUIRED_SIGNATURES,
+            _signers.length >= _requiredSignatures,
             "Not enough initial signers"
         );
+        require(_timelockDuration > 0, "Timelock duration must be greater than 0");
+        requiredSignatures = _requiredSignatures;
+        timelockDuration = _timelockDuration;
 
         // Deploy the implementation contract
         vestingImplementation = address(new VestingWalletAdvisorsUpgradeable());
@@ -191,11 +198,11 @@ contract VestingWalletAdvisorsFactory is Ownable {
         require(proposal.proposedAt != 0, "Proposal does not exist");
         require(!proposal.executed, "Proposal already executed");
         require(
-            proposal.signatures >= REQUIRED_SIGNATURES,
+            proposal.signatures >= requiredSignatures,
             "Not enough signatures"
         );
         require(
-            block.timestamp >= proposal.proposedAt + TIMELOCK_DURATION,
+            block.timestamp >= proposal.proposedAt + timelockDuration,
             "Timelock period not passed"
         );
 
@@ -241,8 +248,8 @@ contract VestingWalletAdvisorsFactory is Ownable {
         executed = proposal.executed;
         canExecute =
             !executed &&
-            signatures >= REQUIRED_SIGNATURES &&
-            block.timestamp >= proposedAt + TIMELOCK_DURATION;
+            signatures >= requiredSignatures &&
+            block.timestamp >= proposedAt + timelockDuration;
     }
 
     /**

@@ -2,7 +2,6 @@
 pragma solidity ^0.8.20;
 
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {VestingWalletNodeUpgradeable} from "./VestingWalletNodeUpgradeable.sol";
 
@@ -10,8 +9,8 @@ contract VestingWalletNodeFactory is Ownable {
     address public immutable vestingImplementation;
 
     // MultiSig upgrade configuration
-    uint256 public constant REQUIRED_SIGNATURES = 3;
-    uint256 public constant TIMELOCK_DURATION = 48 hours;
+    uint256 public requiredSignatures;
+    uint256 public timelockDuration;
 
     mapping(address => bool) public signers;
     address[] public signersList;
@@ -66,11 +65,19 @@ contract VestingWalletNodeFactory is Ownable {
         _;
     }
 
-    constructor(address[] memory _signers) Ownable(msg.sender) {
+    constructor(
+        uint256 _timelockDuration,
+        uint256 _requiredSignatures,
+        address[] memory _signers
+    ) Ownable(msg.sender) {
         require(
-            _signers.length >= REQUIRED_SIGNATURES,
+            _signers.length >= _requiredSignatures,
             "Not enough initial signers"
         );
+        require(_timelockDuration > 0, "Timelock duration must be greater than 0");
+
+        requiredSignatures = _requiredSignatures;
+        timelockDuration = _timelockDuration;
 
         // Deploy the implementation contract
         vestingImplementation = address(new VestingWalletNodeUpgradeable());
@@ -193,7 +200,7 @@ contract VestingWalletNodeFactory is Ownable {
             "Not enough signatures"
         );
         require(
-            block.timestamp >= proposal.proposedAt + TIMELOCK_DURATION,
+            block.timestamp >= proposal.proposedAt + timelockDuration,
             "Timelock period not passed"
         );
 
@@ -242,8 +249,8 @@ contract VestingWalletNodeFactory is Ownable {
         executed = proposal.executed;
         canExecute =
             !executed &&
-            signatures >= REQUIRED_SIGNATURES &&
-            block.timestamp >= proposedAt + TIMELOCK_DURATION;
+            signatures >= requiredSignatures &&
+            block.timestamp >= proposedAt + timelockDuration;
     }
 
     /**
