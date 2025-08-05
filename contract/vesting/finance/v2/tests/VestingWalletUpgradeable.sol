@@ -73,7 +73,7 @@ contract VestingWalletUpgradeable is
         require(amountPerPhase > 0, "Amount per phase must be greater than 0");
 
         __Context_init();
-        __Ownable_init();
+        __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
 
         _beneficiary = beneficiaryAddress;
@@ -164,4 +164,4 @@ contract VestingWalletUpgradeable is
     }
 }
 
-
+}

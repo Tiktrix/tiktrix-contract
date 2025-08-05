@@ -113,7 +113,7 @@ contract VestingWalletFactory is Ownable {
         bytes memory initData = abi.encodeWithSelector(
             VestingWalletUpgradeable.initialize.selector,
             contractURI,
-            address(this), // Factory가 owner가 됨
+            msg.sender, // Factory가 owner가 됨
             beneficiary,
             tokenAddress,
             startTimestamp,
@@ -301,47 +301,5 @@ contract VestingWalletFactory is Ownable {
         return vestingImplementation;
     }
 
-    /**
-     * @dev Get vesting wallet details
-     */
-    function getVestingWalletDetails(
-        address vestingWallet
-    )
-        external
-        view
-        returns (
-            address beneficiary,
-            address token,
-            uint256 start,
-            uint256 end,
-            uint256 released,
-            uint256 releasable
-        )
-    {
-        VestingWalletUpgradeable wallet = VestingWalletUpgradeable(
-            vestingWallet
-        );
-
-        beneficiary = wallet.beneficiary();
-        token = address(wallet.token());
-        start = wallet.start();
-        end = wallet.end();
-        released = wallet.released();
-        releasable = wallet.releasable();
-    }
-
-    /**
-     * @dev Emergency function to transfer ownership of a vesting wallet
-     * Only callable by factory owner in case of emergency
-     */
-    function emergencyTransferOwnership(
-        address vestingWallet,
-        address newOwner
-    ) external onlyOwner {
-        require(vestingWallet != address(0), "Vesting wallet cannot be zero");
-        require(newOwner != address(0), "New owner cannot be zero");
-        
-        VestingWalletUpgradeable(vestingWallet).transferOwnership(newOwner);
-    }
 }
 

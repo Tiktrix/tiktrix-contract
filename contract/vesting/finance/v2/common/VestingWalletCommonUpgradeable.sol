@@ -79,7 +79,7 @@ contract VestingWalletCommonUpgradeable is
         require(_start > 0, "Start must be greater than 0");
 
         __Context_init();
-        __Ownable_init();
+        __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
 
         beneficiary = _beneficiary;
