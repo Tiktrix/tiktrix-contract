@@ -113,7 +113,7 @@ contract VestingWalletFactory is Ownable {
         bytes memory initData = abi.encodeWithSelector(
             VestingWalletUpgradeable.initialize.selector,
             contractURI,
-            msg.sender, // Factory가 owner가 됨
+            address(this), // Factory가 owner가 됨
             beneficiary,
             tokenAddress,
             startTimestamp,

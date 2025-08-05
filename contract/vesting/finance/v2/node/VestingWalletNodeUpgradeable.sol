@@ -73,7 +73,7 @@ contract VestingWalletNodeUpgradeable is
         require(_deployer != address(0), "Deployer cannot be zero");
 
         __Context_init();
-        __Ownable_init(msg.sender);
+        __Ownable_init();
         __UUPSUpgradeable_init();
 
         token = IERC20Upgradeable(_token);
