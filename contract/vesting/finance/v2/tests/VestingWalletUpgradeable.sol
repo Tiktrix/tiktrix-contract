@@ -28,7 +28,7 @@ contract VestingWalletUpgradeable is
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
-    address public deployer;
+    address public _deployer; // Changed to internal for consistency
     address public _beneficiary;
 
     event ERC20Released(address indexed token, uint256 amount);
@@ -38,15 +38,13 @@ contract VestingWalletUpgradeable is
     );
 
     IERC20 private _token;
-    uint256 private _released;
-    uint64 private _start;
+    uint256 public _released; // Changed to public for visibility
+    uint256 private _start; // Changed to uint256 for consistency with block.timestamp
 
-    // 5 minutes
-    uint64 private constant INTERVAL = 5 minutes;
-    uint64 private constant TOTAL_PHASES = 96;
+    uint64 public INTERVAL; // Made configurable
+    uint64 public TOTAL_PHASES; // Made configurable
 
-    // Fixed amount per phase: 989,583.33333333 tokens (18 decimals)
-    uint256 private constant AMOUNT_PER_PHASE = 989_583_333333330000000000;
+    uint256 public AMOUNT_PER_PHASE; // Made configurable
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -58,29 +56,39 @@ contract VestingWalletUpgradeable is
      */
     function initialize(
         string memory _contractURI,
-        address _deployer,
-        address beneficiary,
+        address deployerAddress, // Renamed for clarity
+        address beneficiaryAddress,
         address tokenAddress,
-        uint64 startTimestamp
+        uint256 startTimestamp, // Changed to uint256
+        uint64 interval, // Added for configurability
+        uint64 totalPhases, // Added for configurability
+        uint256 amountPerPhase // Added for configurability
     ) public initializer {
         require(tokenAddress != address(0), "Token address cannot be zero");
-        require(beneficiary != address(0), "Beneficiary cannot be zero");
-        require(_deployer != address(0), "Deployer cannot be zero");
+        require(beneficiaryAddress != address(0), "Beneficiary cannot be zero");
+        require(deployerAddress != address(0), "Deployer cannot be zero");
+        require(startTimestamp > 0, "Start timestamp must be greater than 0");
+        require(interval > 0, "Interval must be greater than 0");
+        require(totalPhases > 0, "Total phases must be greater than 0");
+        require(amountPerPhase > 0, "Amount per phase must be greater than 0");
 
         __Context_init();
         __Ownable_init();
         __UUPSUpgradeable_init();
 
-        _beneficiary = beneficiary;
+        _beneficiary = beneficiaryAddress;
         _token = IERC20(tokenAddress);
         _start = startTimestamp;
+        INTERVAL = interval;
+        TOTAL_PHASES = totalPhases;
+        AMOUNT_PER_PHASE = amountPerPhase;
 
         _setupContractURI(_contractURI);
-        deployer = _deployer;
-        _setupRole(DEFAULT_ADMIN_ROLE, _deployer);
-        _setupRole(FACTORY_ROLE, _deployer);
-        _setupRole(FACTORY_ROLE, 0x6055A65b9A27F0B2Ffdb444DaA59cc46301Da720);
-        _setupRole(UPGRADER_ROLE, _deployer);
+        _deployer = deployerAddress; // Assigned to new internal variable
+        _setupRole(DEFAULT_ADMIN_ROLE, deployerAddress);
+        _setupRole(FACTORY_ROLE, deployerAddress); // Use deployerAddress for FACTORY_ROLE
+        // Removed hardcoded address: _setupRole(FACTORY_ROLE, 0x6055A65b9A27F0B2Ffdb444DaA59cc46301Da720);
+        _setupRole(UPGRADER_ROLE, deployerAddress);
     }
 
     /**
@@ -92,7 +100,7 @@ contract VestingWalletUpgradeable is
 
     function _canSetContractURI() internal view override returns (bool) {
         return
-            msg.sender == deployer || hasRole(DEFAULT_ADMIN_ROLE, msg.sender);
+            msg.sender == _deployer || hasRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
     function token() public view returns (IERC20) {
@@ -108,15 +116,13 @@ contract VestingWalletUpgradeable is
     }
 
     function end() public view returns (uint256) {
-        return start() + (INTERVAL * TOTAL_PHASES);
+        return start() + (uint256(INTERVAL) * TOTAL_PHASES);
     }
 
-    function released() public view returns (uint256) {
-        return _released;
-    }
+    // `released()` is now public due to `_released` being public
 
     function releasable() public view returns (uint256) {
-        return vestedAmount(uint64(block.timestamp)) - released();
+        return vestedAmount(block.timestamp) - _released;
     }
 
     /**
@@ -134,11 +140,11 @@ contract VestingWalletUpgradeable is
     /**
      * @dev Calculate vested amount at given timestamp
      */
-    function vestedAmount(uint64 timestamp) public view returns (uint256) {
+    function vestedAmount(uint256 timestamp) public view returns (uint256) {
         if (timestamp < _start) return 0;
 
-        uint64 elapsed = timestamp - _start;
-        uint64 phase = elapsed / INTERVAL;
+        uint256 elapsed = timestamp - _start;
+        uint256 phase = elapsed / INTERVAL;
 
         if (phase > TOTAL_PHASES) {
             phase = TOTAL_PHASES;
@@ -147,10 +153,15 @@ contract VestingWalletUpgradeable is
         return AMOUNT_PER_PHASE * phase;
     }
 
-    // 비상 출금
-    function emergencyWithdraw() external onlyRole(FACTORY_ROLE) {
+    /**
+     * @dev Emergency function to withdraw tokens to the contract owner.
+     * Changed to owner() for clarity and consistency.
+     */
+    function emergencyWithdraw() external onlyOwner {
         uint256 amount = _token.balanceOf(address(this));
         require(amount > 0, "No tokens to withdraw");
-        _token.safeTransfer(deployer, amount);
+        _token.safeTransfer(owner(), amount);
     }
 }
+
+

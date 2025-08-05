@@ -3,6 +3,7 @@ pragma solidity ^0.8.20;
 
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {VestingWalletUpgradeable} from "./VestingWalletUpgradeable.sol";
 
 /**
@@ -99,19 +100,26 @@ contract VestingWalletFactory is Ownable {
         string memory contractURI,
         address beneficiary,
         address tokenAddress,
-        uint64 startTimestamp
+        uint256 startTimestamp, // Changed to uint256
+        uint64 interval, // Added for configurability
+        uint64 totalPhases, // Added for configurability
+        uint256 amountPerPhase // Added for configurability
     ) external returns (address) {
         require(beneficiary != address(0), "Beneficiary cannot be zero");
         require(tokenAddress != address(0), "Token address cannot be zero");
 
         // Encode the initializer function call
+        // Factory 컨트랙트가 프록시의 owner가 되도록 설정
         bytes memory initData = abi.encodeWithSelector(
             VestingWalletUpgradeable.initialize.selector,
             contractURI,
-            msg.sender,
+            address(this), // Factory가 owner가 됨
             beneficiary,
             tokenAddress,
-            startTimestamp
+            startTimestamp,
+            interval,
+            totalPhases,
+            amountPerPhase
         );
 
         // Deploy the proxy
@@ -119,9 +127,9 @@ contract VestingWalletFactory is Ownable {
 
         emit VestingWalletCreated(
             address(proxy),
-            deployer,
+            msg.sender,
             tokenAddress,
-            startTimestamp
+            uint64(startTimestamp) // Cast back to uint64 for event
         );
 
         return address(proxy);
@@ -180,7 +188,6 @@ contract VestingWalletFactory is Ownable {
         require(!proposal.executed, "Proposal already executed");
         require(!proposal.hasSigned[msg.sender], "Already signed");
 
-        proposal.proposedAt = block.timestamp;
         proposal.hasSigned[msg.sender] = true;
         proposal.signatures++;
 
@@ -189,6 +196,7 @@ contract VestingWalletFactory is Ownable {
 
     /**
      * @dev Execute an upgrade proposal after timelock period
+     * 수정된 executeUpgrade 함수 - UUPS 패턴을 사용하여 업그레이드 실행
      */
     function executeUpgrade(bytes32 proposalId) external {
         UpgradeProposal storage proposal = upgradeProposals[proposalId];
@@ -205,31 +213,34 @@ contract VestingWalletFactory is Ownable {
         );
 
         proposal.executed = true;
-        // 로우레벨 call을 사용하여 프록시 업그레이드
-        bytes memory upgradeCall = abi.encodeWithSignature(
-            "upgradeTo(address)", 
-            proposal.newImplementation
-        );
-        
-        (bool success, bytes memory returnData) = proposal.vestingWallet.call(upgradeCall);
-        
-        if (!success) {
-            // returnData가 비어있지 않다면 에러를 디코드 시도
-            if (returnData.length > 0) {
+
+        // UUPS 패턴을 사용하여 업그레이드 실행
+        // Factory가 프록시의 owner이므로 직접 업그레이드 가능
+        try UUPSUpgradeable(proposal.vestingWallet).upgradeToAndCall(
+            proposal.newImplementation,
+            ""
+        ) {
+            emit UpgradeExecuted(
+                proposalId,
+                proposal.vestingWallet,
+                proposal.newImplementation
+            );
+        } catch Error(string memory reason) {
+            // 실행 실패 시 executed 상태를 되돌림
+            proposal.executed = false;
+            revert(string(abi.encodePacked("Upgrade failed: ", reason)));
+        } catch (bytes memory lowLevelData) {
+            // 실행 실패 시 executed 상태를 되돌림
+            proposal.executed = false;
+            if (lowLevelData.length > 0) {
                 assembly {
-                    let returnDataSize := mload(returnData)
-                    revert(add(32, returnData), returnDataSize)
+                    let returnDataSize := mload(lowLevelData)
+                    revert(add(32, lowLevelData), returnDataSize)
                 }
             } else {
-                revert("Upgrade failed");
+                revert("Upgrade failed with unknown error");
             }
         }
-
-        emit UpgradeExecuted(
-            proposalId,
-            proposal.vestingWallet,
-            proposal.newImplementation
-        );
     }
 
     /**
@@ -318,4 +329,19 @@ contract VestingWalletFactory is Ownable {
         released = wallet.released();
         releasable = wallet.releasable();
     }
+
+    /**
+     * @dev Emergency function to transfer ownership of a vesting wallet
+     * Only callable by factory owner in case of emergency
+     */
+    function emergencyTransferOwnership(
+        address vestingWallet,
+        address newOwner
+    ) external onlyOwner {
+        require(vestingWallet != address(0), "Vesting wallet cannot be zero");
+        require(newOwner != address(0), "New owner cannot be zero");
+        
+        VestingWalletUpgradeable(vestingWallet).transferOwnership(newOwner);
+    }
 }
+

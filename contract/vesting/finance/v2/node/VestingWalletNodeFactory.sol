@@ -214,24 +214,10 @@ contract VestingWalletNodeFactory is Ownable {
 
         proposal.executed = true;
 
-        // 로우레벨 call을 사용하여 프록시 업그레이드
-        bytes memory upgradeCall = abi.encodeWithSignature(
-            "upgradeTo(address)", 
-            proposal.newImplementation
-        );
-        
-        (bool success, bytes memory returnData) = proposal.vestingWallet.call(upgradeCall);
-        if (!success) {
-            // returnData가 비어있지 않다면 에러를 디코드 시도
-            if (returnData.length > 0) {
-                assembly {
-                    let returnDataSize := mload(returnData)
-                    revert(add(32, returnData), returnDataSize)
-                }
-            } else {
-                revert("Upgrade failed");
-            }
-        }
+        address oldImplementation = vestingImplementation;
+
+        VestingWalletNodeUpgradeable(payable(proposal.vestingWallet))
+            .upgradeToAndCall(proposal.newImplementation, "");
 
         emit UpgradeExecuted(
             proposalId,
