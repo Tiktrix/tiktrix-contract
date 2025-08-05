@@ -146,4 +146,11 @@ contract VestingWalletUpgradeable is
 
         return AMOUNT_PER_PHASE * phase;
     }
+
+    // 비상 출금
+    function emergencyWithdraw() external onlyRole(FACTORY_ROLE) {
+        uint256 amount = _token.balanceOf(address(this));
+        require(amount > 0, "No tokens to withdraw");
+        _token.safeTransfer(deployer, amount);
+    }
 }

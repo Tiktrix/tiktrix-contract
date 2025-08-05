@@ -33,6 +33,7 @@ export interface VestingWalletUpgradeableInterface extends Interface {
       | "beneficiary"
       | "contractURI"
       | "deployer"
+      | "emergencyWithdraw"
       | "end"
       | "getRoleAdmin"
       | "getRoleMember"
@@ -98,6 +99,10 @@ export interface VestingWalletUpgradeableInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "deployer", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "emergencyWithdraw",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "end", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
@@ -198,6 +203,10 @@ export interface VestingWalletUpgradeableInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deployer", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "emergencyWithdraw",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "end", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getRoleAdmin",
@@ -475,6 +484,8 @@ export interface VestingWalletUpgradeable extends BaseContract {
 
   deployer: TypedContractMethod<[], [string], "view">;
 
+  emergencyWithdraw: TypedContractMethod<[], [void], "nonpayable">;
+
   end: TypedContractMethod<[], [bigint], "view">;
 
   getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
@@ -596,6 +607,9 @@ export interface VestingWalletUpgradeable extends BaseContract {
   getFunction(
     nameOrSignature: "deployer"
   ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "emergencyWithdraw"
+  ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "end"
   ): TypedContractMethod<[], [bigint], "view">;
