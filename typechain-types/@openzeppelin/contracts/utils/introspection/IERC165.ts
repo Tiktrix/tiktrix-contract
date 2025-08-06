@@ -3,10 +3,10 @@
 /* eslint-disable */
 import type {
   BaseContract,
-  BigNumberish,
+  BytesLike,
   FunctionFragment,
+  Result,
   Interface,
-  EventFragment,
   ContractRunner,
   ContractMethod,
   Listener,
@@ -15,31 +15,29 @@ import type {
   TypedContractEvent,
   TypedDeferredTopicFilter,
   TypedEventLog,
-  TypedLogDescription,
   TypedListener,
-} from "../../../common";
+  TypedContractMethod,
+} from "../../../../common";
 
-export interface ContextUpgradeableInterface extends Interface {
-  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
+export interface IERC165Interface extends Interface {
+  getFunction(nameOrSignature: "supportsInterface"): FunctionFragment;
+
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
+  ): string;
+
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
 }
 
-export namespace InitializedEvent {
-  export type InputTuple = [version: BigNumberish];
-  export type OutputTuple = [version: bigint];
-  export interface OutputObject {
-    version: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
-export interface ContextUpgradeable extends BaseContract {
-  connect(runner?: ContractRunner | null): ContextUpgradeable;
+export interface IERC165 extends BaseContract {
+  connect(runner?: ContractRunner | null): IERC165;
   waitForDeployment(): Promise<this>;
 
-  interface: ContextUpgradeableInterface;
+  interface: IERC165Interface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -78,28 +76,19 @@ export interface ContextUpgradeable extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  supportsInterface: TypedContractMethod<
+    [interfaceId: BytesLike],
+    [boolean],
+    "view"
+  >;
+
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
-  getEvent(
-    key: "Initialized"
-  ): TypedContractEvent<
-    InitializedEvent.InputTuple,
-    InitializedEvent.OutputTuple,
-    InitializedEvent.OutputObject
-  >;
+  getFunction(
+    nameOrSignature: "supportsInterface"
+  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
 
-  filters: {
-    "Initialized(uint64)": TypedContractEvent<
-      InitializedEvent.InputTuple,
-      InitializedEvent.OutputTuple,
-      InitializedEvent.OutputObject
-    >;
-    Initialized: TypedContractEvent<
-      InitializedEvent.InputTuple,
-      InitializedEvent.OutputTuple,
-      InitializedEvent.OutputObject
-    >;
-  };
+  filters: {};
 }

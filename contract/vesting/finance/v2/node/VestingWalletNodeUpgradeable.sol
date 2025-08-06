@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import {SafeERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
-import {AddressUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {ContextUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
@@ -20,7 +19,7 @@ contract VestingWalletNodeUpgradeable is
     PermissionsEnumerable,
     ContractMetadata
 {
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+    using SafeERC20 for IERC20;
 
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
@@ -35,7 +34,7 @@ contract VestingWalletNodeUpgradeable is
         uint256 amount
     );
 
-    IERC20Upgradeable private token;
+    IERC20 private token;
     uint256 private released;
     mapping(address token => uint256) private erc20Released;
     uint64 private start;
@@ -73,10 +72,10 @@ contract VestingWalletNodeUpgradeable is
         require(_deployer != address(0), "Deployer cannot be zero");
 
         __Context_init();
-        __Ownable_init();
+        __Ownable_init(_deployer);
         __UUPSUpgradeable_init();
 
-        token = IERC20Upgradeable(_token);
+        token = IERC20(_token);
         start = _start;
         beneficiary = _beneficiary;
         interval = _interval;
