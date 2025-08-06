@@ -3,6 +3,7 @@ pragma solidity ^0.8.20;
 
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {VestingWalletNodeUpgradeable} from "./VestingWalletNodeUpgradeable.sol";
 
 contract VestingWalletNodeFactory is Ownable {
@@ -76,7 +77,10 @@ contract VestingWalletNodeFactory is Ownable {
             _signers.length >= _requiredSignatures,
             "Not enough initial signers"
         );
-        require(_timelockDuration > 0, "Timelock duration must be greater than 0");
+        require(
+            _timelockDuration > 0,
+            "Timelock duration must be greater than 0"
+        );
 
         requiredSignatures = _requiredSignatures;
         timelockDuration = _timelockDuration;
@@ -214,21 +218,35 @@ contract VestingWalletNodeFactory is Ownable {
 
         proposal.executed = true;
 
-        address oldImplementation = vestingImplementation;
-
-        VestingWalletNodeUpgradeable(payable(proposal.vestingWallet))
-            .upgradeToAndCall(proposal.newImplementation, "");
-
-        emit UpgradeExecuted(
-            proposalId,
-            proposal.vestingWallet,
-            proposal.newImplementation
-        );
-        emit ImplementationUpgraded(
-            proposal.vestingWallet,
-            oldImplementation,
-            proposal.newImplementation
-        );
+        // UUPS 패턴을 사용하여 업그레이드 실행
+        // Factory가 프록시의 owner이므로 직접 업그레이드 가능
+        try
+            UUPSUpgradeable(proposal.vestingWallet).upgradeToAndCall(
+                proposal.newImplementation,
+                ""
+            )
+        {
+            emit UpgradeExecuted(
+                proposalId,
+                proposal.vestingWallet,
+                proposal.newImplementation
+            );
+        } catch Error(string memory reason) {
+            // 실행 실패 시 executed 상태를 되돌림
+            proposal.executed = false;
+            revert(string(abi.encodePacked("Upgrade failed: ", reason)));
+        } catch (bytes memory lowLevelData) {
+            // 실행 실패 시 executed 상태를 되돌림
+            proposal.executed = false;
+            if (lowLevelData.length > 0) {
+                assembly {
+                    let returnDataSize := mload(lowLevelData)
+                    revert(add(32, lowLevelData), returnDataSize)
+                }
+            } else {
+                revert("Upgrade failed with unknown error");
+            }
+        }
     }
 
     /**
