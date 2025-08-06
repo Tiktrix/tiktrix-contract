@@ -74,7 +74,10 @@ contract VestingWalletFactory is Ownable {
             _signers.length >= _requiredSignatures,
             "Not enough initial signers"
         );
-        require(_timelockDuration > 0, "Timelock duration must be greater than 0");
+        require(
+            _timelockDuration > 0,
+            "Timelock duration must be greater than 0"
+        );
 
         requiredSignatures = _requiredSignatures;
         timelockDuration = _timelockDuration;
@@ -113,7 +116,7 @@ contract VestingWalletFactory is Ownable {
         bytes memory initData = abi.encodeWithSelector(
             VestingWalletUpgradeable.initialize.selector,
             contractURI,
-            address(this), // Factory가 owner가 됨
+            msg.sender, // Factory가 owner가 됨
             beneficiary,
             tokenAddress,
             startTimestamp,
@@ -216,10 +219,12 @@ contract VestingWalletFactory is Ownable {
 
         // UUPS 패턴을 사용하여 업그레이드 실행
         // Factory가 프록시의 owner이므로 직접 업그레이드 가능
-        try UUPSUpgradeable(proposal.vestingWallet).upgradeToAndCall(
-            proposal.newImplementation,
-            ""
-        ) {
+        try
+            UUPSUpgradeable(proposal.vestingWallet).upgradeToAndCall(
+                proposal.newImplementation,
+                ""
+            )
+        {
             emit UpgradeExecuted(
                 proposalId,
                 proposal.vestingWallet,
@@ -300,6 +305,4 @@ contract VestingWalletFactory is Ownable {
     function getImplementation() external view returns (address) {
         return vestingImplementation;
     }
-
 }
-

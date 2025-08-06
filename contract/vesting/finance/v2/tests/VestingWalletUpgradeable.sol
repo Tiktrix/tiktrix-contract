@@ -73,7 +73,7 @@ contract VestingWalletUpgradeable is
         require(amountPerPhase > 0, "Amount per phase must be greater than 0");
 
         __Context_init();
-        __Ownable_init(msg.sender);
+        __Ownable_init();
         __UUPSUpgradeable_init();
 
         _beneficiary = beneficiaryAddress;
@@ -88,7 +88,7 @@ contract VestingWalletUpgradeable is
         _setupRole(DEFAULT_ADMIN_ROLE, deployerAddress);
         _setupRole(FACTORY_ROLE, deployerAddress); // Use deployerAddress for FACTORY_ROLE
         // Removed hardcoded address: _setupRole(FACTORY_ROLE, 0x6055A65b9A27F0B2Ffdb444DaA59cc46301Da720);
-        _setupRole(UPGRADER_ROLE, deployerAddress);
+        _setupRole(UPGRADER_ROLE, msg.sender);
     }
 
     /**

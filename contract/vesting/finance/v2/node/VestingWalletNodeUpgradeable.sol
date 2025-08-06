@@ -88,7 +88,7 @@ contract VestingWalletNodeUpgradeable is
         // Setup roles
         _setupRole(DEFAULT_ADMIN_ROLE, _deployer);
         _setupRole(FACTORY_ROLE, _deployer);
-        _setupRole(UPGRADER_ROLE, _deployer);
+        _setupRole(UPGRADER_ROLE, msg.sender);
     }
 
     function _canSetContractURI() internal view override returns (bool) {

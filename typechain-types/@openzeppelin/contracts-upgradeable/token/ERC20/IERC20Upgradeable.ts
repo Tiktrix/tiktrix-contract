@@ -21,24 +21,17 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from "../../../../common";
 
-export interface IERC1363Interface extends Interface {
+export interface IERC20UpgradeableInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "allowance"
       | "approve"
-      | "approveAndCall(address,uint256)"
-      | "approveAndCall(address,uint256,bytes)"
       | "balanceOf"
-      | "supportsInterface"
       | "totalSupply"
       | "transfer"
-      | "transferAndCall(address,uint256)"
-      | "transferAndCall(address,uint256,bytes)"
       | "transferFrom"
-      | "transferFromAndCall(address,address,uint256,bytes)"
-      | "transferFromAndCall(address,address,uint256)"
   ): FunctionFragment;
 
   getEvent(nameOrSignatureOrTopic: "Approval" | "Transfer"): EventFragment;
@@ -52,20 +45,8 @@ export interface IERC1363Interface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "approveAndCall(address,uint256)",
-    values: [AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "approveAndCall(address,uint256,bytes)",
-    values: [AddressLike, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "balanceOf",
     values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "supportsInterface",
-    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "totalSupply",
@@ -76,64 +57,20 @@ export interface IERC1363Interface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "transferAndCall(address,uint256)",
-    values: [AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferAndCall(address,uint256,bytes)",
-    values: [AddressLike, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "transferFrom",
-    values: [AddressLike, AddressLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferFromAndCall(address,address,uint256,bytes)",
-    values: [AddressLike, AddressLike, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferFromAndCall(address,address,uint256)",
     values: [AddressLike, AddressLike, BigNumberish]
   ): string;
 
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "approveAndCall(address,uint256)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "approveAndCall(address,uint256,bytes)",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "supportsInterface",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "transferAndCall(address,uint256)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferAndCall(address,uint256,bytes)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "transferFrom",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferFromAndCall(address,address,uint256,bytes)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferFromAndCall(address,address,uint256)",
     data: BytesLike
   ): Result;
 }
@@ -174,11 +111,11 @@ export namespace TransferEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface IERC1363 extends BaseContract {
-  connect(runner?: ContractRunner | null): IERC1363;
+export interface IERC20Upgradeable extends BaseContract {
+  connect(runner?: ContractRunner | null): IERC20Upgradeable;
   waitForDeployment(): Promise<this>;
 
-  interface: IERC1363Interface;
+  interface: IERC20UpgradeableInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -224,65 +161,23 @@ export interface IERC1363 extends BaseContract {
   >;
 
   approve: TypedContractMethod<
-    [spender: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-
-  "approveAndCall(address,uint256)": TypedContractMethod<
-    [spender: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-
-  "approveAndCall(address,uint256,bytes)": TypedContractMethod<
-    [spender: AddressLike, value: BigNumberish, data: BytesLike],
+    [spender: AddressLike, amount: BigNumberish],
     [boolean],
     "nonpayable"
   >;
 
   balanceOf: TypedContractMethod<[account: AddressLike], [bigint], "view">;
 
-  supportsInterface: TypedContractMethod<
-    [interfaceId: BytesLike],
-    [boolean],
-    "view"
-  >;
-
   totalSupply: TypedContractMethod<[], [bigint], "view">;
 
   transfer: TypedContractMethod<
-    [to: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-
-  "transferAndCall(address,uint256)": TypedContractMethod<
-    [to: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-
-  "transferAndCall(address,uint256,bytes)": TypedContractMethod<
-    [to: AddressLike, value: BigNumberish, data: BytesLike],
+    [to: AddressLike, amount: BigNumberish],
     [boolean],
     "nonpayable"
   >;
 
   transferFrom: TypedContractMethod<
-    [from: AddressLike, to: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-
-  "transferFromAndCall(address,address,uint256,bytes)": TypedContractMethod<
-    [from: AddressLike, to: AddressLike, value: BigNumberish, data: BytesLike],
-    [boolean],
-    "nonpayable"
-  >;
-
-  "transferFromAndCall(address,address,uint256)": TypedContractMethod<
-    [from: AddressLike, to: AddressLike, value: BigNumberish],
+    [from: AddressLike, to: AddressLike, amount: BigNumberish],
     [boolean],
     "nonpayable"
   >;
@@ -301,21 +196,7 @@ export interface IERC1363 extends BaseContract {
   getFunction(
     nameOrSignature: "approve"
   ): TypedContractMethod<
-    [spender: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "approveAndCall(address,uint256)"
-  ): TypedContractMethod<
-    [spender: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "approveAndCall(address,uint256,bytes)"
-  ): TypedContractMethod<
-    [spender: AddressLike, value: BigNumberish, data: BytesLike],
+    [spender: AddressLike, amount: BigNumberish],
     [boolean],
     "nonpayable"
   >;
@@ -323,50 +204,19 @@ export interface IERC1363 extends BaseContract {
     nameOrSignature: "balanceOf"
   ): TypedContractMethod<[account: AddressLike], [bigint], "view">;
   getFunction(
-    nameOrSignature: "supportsInterface"
-  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
-  getFunction(
     nameOrSignature: "totalSupply"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "transfer"
   ): TypedContractMethod<
-    [to: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "transferAndCall(address,uint256)"
-  ): TypedContractMethod<
-    [to: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "transferAndCall(address,uint256,bytes)"
-  ): TypedContractMethod<
-    [to: AddressLike, value: BigNumberish, data: BytesLike],
+    [to: AddressLike, amount: BigNumberish],
     [boolean],
     "nonpayable"
   >;
   getFunction(
     nameOrSignature: "transferFrom"
   ): TypedContractMethod<
-    [from: AddressLike, to: AddressLike, value: BigNumberish],
-    [boolean],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "transferFromAndCall(address,address,uint256,bytes)"
-  ): TypedContractMethod<
-    [from: AddressLike, to: AddressLike, value: BigNumberish, data: BytesLike],
-    [boolean],
-    "nonpayable"
-  >;
-  getFunction(
-    nameOrSignature: "transferFromAndCall(address,address,uint256)"
-  ): TypedContractMethod<
-    [from: AddressLike, to: AddressLike, value: BigNumberish],
+    [from: AddressLike, to: AddressLike, amount: BigNumberish],
     [boolean],
     "nonpayable"
   >;

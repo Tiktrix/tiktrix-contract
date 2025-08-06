@@ -79,7 +79,7 @@ contract VestingWalletCommonUpgradeable is
         require(_start > 0, "Start must be greater than 0");
 
         __Context_init();
-        __Ownable_init(msg.sender);
+        __Ownable_init();
         __UUPSUpgradeable_init();
 
         beneficiary = _beneficiary;
@@ -93,7 +93,7 @@ contract VestingWalletCommonUpgradeable is
         deployer = _deployer;
         _setupRole(DEFAULT_ADMIN_ROLE, _deployer);
         _setupRole(FACTORY_ROLE, _deployer);
-        _setupRole(UPGRADER_ROLE, _deployer);
+        _setupRole(UPGRADER_ROLE, msg.sender);
     }
 
     /**

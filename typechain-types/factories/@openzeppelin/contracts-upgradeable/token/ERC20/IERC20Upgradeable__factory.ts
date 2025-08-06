@@ -4,9 +4,9 @@
 
 import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
-  IERC20,
-  IERC20Interface,
-} from "../../../../../@openzeppelin/contracts/token/ERC20/IERC20";
+  IERC20Upgradeable,
+  IERC20UpgradeableInterface,
+} from "../../../../../@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable";
 
 const _abi = [
   {
@@ -92,7 +92,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "value",
+        name: "amount",
         type: "uint256",
       },
     ],
@@ -148,7 +148,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "value",
+        name: "amount",
         type: "uint256",
       },
     ],
@@ -177,7 +177,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "value",
+        name: "amount",
         type: "uint256",
       },
     ],
@@ -194,12 +194,15 @@ const _abi = [
   },
 ] as const;
 
-export class IERC20__factory {
+export class IERC20Upgradeable__factory {
   static readonly abi = _abi;
-  static createInterface(): IERC20Interface {
-    return new Interface(_abi) as IERC20Interface;
+  static createInterface(): IERC20UpgradeableInterface {
+    return new Interface(_abi) as IERC20UpgradeableInterface;
   }
-  static connect(address: string, runner?: ContractRunner | null): IERC20 {
-    return new Contract(address, _abi, runner) as unknown as IERC20;
+  static connect(
+    address: string,
+    runner?: ContractRunner | null
+  ): IERC20Upgradeable {
+    return new Contract(address, _abi, runner) as unknown as IERC20Upgradeable;
   }
 }
