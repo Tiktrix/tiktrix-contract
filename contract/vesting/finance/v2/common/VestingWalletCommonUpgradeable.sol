@@ -49,7 +49,7 @@ contract VestingWalletCommonUpgradeable is
     uint64 public interval;
     uint64 public totalPhases;
 
-    // Fixed amount per phase: 989,583.33333333 tokens (18 decimals)
+    // Fixed amount per phase
     uint256 public amountPerPhase;
 
     /// @custom:oz-upgrades-unsafe-allow constructor
