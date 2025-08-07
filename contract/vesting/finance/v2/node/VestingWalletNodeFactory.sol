@@ -106,7 +106,7 @@ contract VestingWalletNodeFactory is Ownable {
         uint64 interval,
         uint64 totalPhases,
         uint64 startTimestamp
-    ) external payable returns (address) {
+    ) external returns (address) {
         require(beneficiary != address(0), "Beneficiary cannot be zero");
         require(tokenAddress != address(0), "Token address cannot be zero");
 
@@ -123,7 +123,7 @@ contract VestingWalletNodeFactory is Ownable {
         );
 
         // Deploy the proxy with any sent ETH
-        ERC1967Proxy proxy = new ERC1967Proxy{value: msg.value}(
+        ERC1967Proxy proxy = new ERC1967Proxy(
             vestingImplementation,
             initData
         );
