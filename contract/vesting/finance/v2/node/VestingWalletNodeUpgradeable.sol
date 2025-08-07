@@ -34,10 +34,9 @@ contract VestingWalletNodeUpgradeable is
         uint256 amount
     );
 
-    IERC20 private token;
-    uint256 private released;
-    mapping(address token => uint256) private erc20Released;
-    uint64 private start;
+    IERC20 public token;
+    uint256 public released;
+    uint64 public start;
 
     uint64 public interval;
     uint64 public totalPhases;

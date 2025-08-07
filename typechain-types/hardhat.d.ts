@@ -106,13 +106,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PermissionsEnumerable__factory>;
     getContractFactory(
-      name: "VestingWalletCommonFactory",
+      name: "VestingWalletNodeFactory",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWalletCommonFactory__factory>;
+    ): Promise<Contracts.VestingWalletNodeFactory__factory>;
     getContractFactory(
-      name: "VestingWalletCommonUpgradeable",
+      name: "VestingWalletNodeUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VestingWalletCommonUpgradeable__factory>;
+    ): Promise<Contracts.VestingWalletNodeUpgradeable__factory>;
 
     getContractAt(
       name: "OwnableUpgradeable",
@@ -230,15 +230,15 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.PermissionsEnumerable>;
     getContractAt(
-      name: "VestingWalletCommonFactory",
+      name: "VestingWalletNodeFactory",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.VestingWalletCommonFactory>;
+    ): Promise<Contracts.VestingWalletNodeFactory>;
     getContractAt(
-      name: "VestingWalletCommonUpgradeable",
+      name: "VestingWalletNodeUpgradeable",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.VestingWalletCommonUpgradeable>;
+    ): Promise<Contracts.VestingWalletNodeUpgradeable>;
 
     deployContract(
       name: "OwnableUpgradeable",
@@ -333,13 +333,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PermissionsEnumerable>;
     deployContract(
-      name: "VestingWalletCommonFactory",
+      name: "VestingWalletNodeFactory",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletCommonFactory>;
+    ): Promise<Contracts.VestingWalletNodeFactory>;
     deployContract(
-      name: "VestingWalletCommonUpgradeable",
+      name: "VestingWalletNodeUpgradeable",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletCommonUpgradeable>;
+    ): Promise<Contracts.VestingWalletNodeUpgradeable>;
 
     deployContract(
       name: "OwnableUpgradeable",
@@ -457,15 +457,15 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PermissionsEnumerable>;
     deployContract(
-      name: "VestingWalletCommonFactory",
+      name: "VestingWalletNodeFactory",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletCommonFactory>;
+    ): Promise<Contracts.VestingWalletNodeFactory>;
     deployContract(
-      name: "VestingWalletCommonUpgradeable",
+      name: "VestingWalletNodeUpgradeable",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VestingWalletCommonUpgradeable>;
+    ): Promise<Contracts.VestingWalletNodeUpgradeable>;
 
     // default types
     getContractFactory(

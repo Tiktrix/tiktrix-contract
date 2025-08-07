@@ -23,14 +23,14 @@ import type {
   TypedContractMethod,
 } from "../../../../../common";
 
-export interface VestingWalletCommonUpgradeableInterface extends Interface {
+export interface VestingWalletNodeUpgradeableInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "FACTORY_ROLE"
       | "UPGRADER_ROLE"
       | "UPGRADE_INTERFACE_VERSION"
-      | "amountPerPhase"
+      | "_customVesting"
       | "beneficiary"
       | "contractURI"
       | "deployer"
@@ -47,10 +47,13 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
       | "proxiableUUID"
       | "releasable"
       | "release"
+      | "released"
       | "renounceOwnership"
       | "renounceRole"
       | "revokeRole"
       | "setContractURI"
+      | "start"
+      | "token"
       | "totalPhases"
       | "transferOwnership"
       | "upgradeToAndCall"
@@ -59,9 +62,9 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "BeneficiaryChanged"
       | "ContractURIUpdated"
       | "ERC20Released"
+      | "EtherReleased"
       | "Initialized"
       | "OwnershipTransferred"
       | "RoleAdminChanged"
@@ -87,8 +90,8 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "amountPerPhase",
-    values?: undefined
+    functionFragment: "_customVesting",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "beneficiary",
@@ -133,7 +136,6 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
       AddressLike,
       BigNumberish,
       BigNumberish,
-      BigNumberish,
       BigNumberish
     ]
   ): string;
@@ -148,6 +150,7 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "release", values?: undefined): string;
+  encodeFunctionData(functionFragment: "released", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -164,6 +167,8 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
     functionFragment: "setContractURI",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "start", values?: undefined): string;
+  encodeFunctionData(functionFragment: "token", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalPhases",
     values?: undefined
@@ -198,7 +203,7 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "amountPerPhase",
+    functionFragment: "_customVesting",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -238,6 +243,7 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "releasable", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "released", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -251,6 +257,8 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
     functionFragment: "setContractURI",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "start", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalPhases",
     data: BytesLike
@@ -267,22 +275,6 @@ export interface VestingWalletCommonUpgradeableInterface extends Interface {
     functionFragment: "vestedAmount",
     data: BytesLike
   ): Result;
-}
-
-export namespace BeneficiaryChangedEvent {
-  export type InputTuple = [
-    oldBeneficiary: AddressLike,
-    newBeneficiary: AddressLike
-  ];
-  export type OutputTuple = [oldBeneficiary: string, newBeneficiary: string];
-  export interface OutputObject {
-    oldBeneficiary: string;
-    newBeneficiary: string;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
 }
 
 export namespace ContractURIUpdatedEvent {
@@ -312,6 +304,18 @@ export namespace ERC20ReleasedEvent {
   export interface OutputObject {
     token: string;
     beneficiary: string;
+    amount: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace EtherReleasedEvent {
+  export type InputTuple = [amount: BigNumberish];
+  export type OutputTuple = [amount: bigint];
+  export interface OutputObject {
     amount: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -415,11 +419,11 @@ export namespace UpgradedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface VestingWalletCommonUpgradeable extends BaseContract {
-  connect(runner?: ContractRunner | null): VestingWalletCommonUpgradeable;
+export interface VestingWalletNodeUpgradeable extends BaseContract {
+  connect(runner?: ContractRunner | null): VestingWalletNodeUpgradeable;
   waitForDeployment(): Promise<this>;
 
-  interface: VestingWalletCommonUpgradeableInterface;
+  interface: VestingWalletNodeUpgradeableInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -466,7 +470,11 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
 
   UPGRADE_INTERFACE_VERSION: TypedContractMethod<[], [string], "view">;
 
-  amountPerPhase: TypedContractMethod<[], [bigint], "view">;
+  _customVesting: TypedContractMethod<
+    [timestamp: BigNumberish],
+    [bigint],
+    "view"
+  >;
 
   beneficiary: TypedContractMethod<[], [string], "view">;
 
@@ -512,7 +520,6 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
       _token: AddressLike,
       _interval: BigNumberish,
       _totalPhases: BigNumberish,
-      _amountPerPhase: BigNumberish,
       _start: BigNumberish
     ],
     [void],
@@ -529,6 +536,8 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
 
   release: TypedContractMethod<[], [void], "nonpayable">;
 
+  released: TypedContractMethod<[], [bigint], "view">;
+
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
   renounceRole: TypedContractMethod<
@@ -544,6 +553,10 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
   >;
 
   setContractURI: TypedContractMethod<[_uri: string], [void], "nonpayable">;
+
+  start: TypedContractMethod<[], [bigint], "view">;
+
+  token: TypedContractMethod<[], [string], "view">;
 
   totalPhases: TypedContractMethod<[], [bigint], "view">;
 
@@ -582,8 +595,8 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
     nameOrSignature: "UPGRADE_INTERFACE_VERSION"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "amountPerPhase"
-  ): TypedContractMethod<[], [bigint], "view">;
+    nameOrSignature: "_customVesting"
+  ): TypedContractMethod<[timestamp: BigNumberish], [bigint], "view">;
   getFunction(
     nameOrSignature: "beneficiary"
   ): TypedContractMethod<[], [string], "view">;
@@ -640,7 +653,6 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
       _token: AddressLike,
       _interval: BigNumberish,
       _totalPhases: BigNumberish,
-      _amountPerPhase: BigNumberish,
       _start: BigNumberish
     ],
     [void],
@@ -662,6 +674,9 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
     nameOrSignature: "release"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "released"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
@@ -682,6 +697,12 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
     nameOrSignature: "setContractURI"
   ): TypedContractMethod<[_uri: string], [void], "nonpayable">;
   getFunction(
+    nameOrSignature: "start"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "token"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
     nameOrSignature: "totalPhases"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
@@ -699,13 +720,6 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
   ): TypedContractMethod<[timestamp: BigNumberish], [bigint], "view">;
 
   getEvent(
-    key: "BeneficiaryChanged"
-  ): TypedContractEvent<
-    BeneficiaryChangedEvent.InputTuple,
-    BeneficiaryChangedEvent.OutputTuple,
-    BeneficiaryChangedEvent.OutputObject
-  >;
-  getEvent(
     key: "ContractURIUpdated"
   ): TypedContractEvent<
     ContractURIUpdatedEvent.InputTuple,
@@ -718,6 +732,13 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
     ERC20ReleasedEvent.InputTuple,
     ERC20ReleasedEvent.OutputTuple,
     ERC20ReleasedEvent.OutputObject
+  >;
+  getEvent(
+    key: "EtherReleased"
+  ): TypedContractEvent<
+    EtherReleasedEvent.InputTuple,
+    EtherReleasedEvent.OutputTuple,
+    EtherReleasedEvent.OutputObject
   >;
   getEvent(
     key: "Initialized"
@@ -763,17 +784,6 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
   >;
 
   filters: {
-    "BeneficiaryChanged(address,address)": TypedContractEvent<
-      BeneficiaryChangedEvent.InputTuple,
-      BeneficiaryChangedEvent.OutputTuple,
-      BeneficiaryChangedEvent.OutputObject
-    >;
-    BeneficiaryChanged: TypedContractEvent<
-      BeneficiaryChangedEvent.InputTuple,
-      BeneficiaryChangedEvent.OutputTuple,
-      BeneficiaryChangedEvent.OutputObject
-    >;
-
     "ContractURIUpdated(string,string)": TypedContractEvent<
       ContractURIUpdatedEvent.InputTuple,
       ContractURIUpdatedEvent.OutputTuple,
@@ -794,6 +804,17 @@ export interface VestingWalletCommonUpgradeable extends BaseContract {
       ERC20ReleasedEvent.InputTuple,
       ERC20ReleasedEvent.OutputTuple,
       ERC20ReleasedEvent.OutputObject
+    >;
+
+    "EtherReleased(uint256)": TypedContractEvent<
+      EtherReleasedEvent.InputTuple,
+      EtherReleasedEvent.OutputTuple,
+      EtherReleasedEvent.OutputObject
+    >;
+    EtherReleased: TypedContractEvent<
+      EtherReleasedEvent.InputTuple,
+      EtherReleasedEvent.OutputTuple,
+      EtherReleasedEvent.OutputObject
     >;
 
     "Initialized(uint64)": TypedContractEvent<

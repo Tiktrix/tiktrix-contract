@@ -41,9 +41,9 @@ contract VestingWalletCommonUpgradeable is
         address indexed newBeneficiary
     );
 
-    IERC20 private token;
-    uint256 private released;
-    uint64 private start;
+    IERC20 public token;
+    uint256 public released;
+    uint64 public start;
 
     // Vesting schedule parameters
     uint64 public interval;

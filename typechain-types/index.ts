@@ -54,7 +54,7 @@ export type { Permissions } from "./@thirdweb-dev/contracts/extension/Permission
 export { Permissions__factory } from "./factories/@thirdweb-dev/contracts/extension/Permissions__factory";
 export type { PermissionsEnumerable } from "./@thirdweb-dev/contracts/extension/PermissionsEnumerable";
 export { PermissionsEnumerable__factory } from "./factories/@thirdweb-dev/contracts/extension/PermissionsEnumerable__factory";
-export type { VestingWalletCommonFactory } from "./contract/vesting/finance/v2/common/VestingWalletCommonFactory";
-export { VestingWalletCommonFactory__factory } from "./factories/contract/vesting/finance/v2/common/VestingWalletCommonFactory__factory";
-export type { VestingWalletCommonUpgradeable } from "./contract/vesting/finance/v2/common/VestingWalletCommonUpgradeable";
-export { VestingWalletCommonUpgradeable__factory } from "./factories/contract/vesting/finance/v2/common/VestingWalletCommonUpgradeable__factory";
+export type { VestingWalletNodeFactory } from "./contract/vesting/finance/v2/node/VestingWalletNodeFactory";
+export { VestingWalletNodeFactory__factory } from "./factories/contract/vesting/finance/v2/node/VestingWalletNodeFactory__factory";
+export type { VestingWalletNodeUpgradeable } from "./contract/vesting/finance/v2/node/VestingWalletNodeUpgradeable";
+export { VestingWalletNodeUpgradeable__factory } from "./factories/contract/vesting/finance/v2/node/VestingWalletNodeUpgradeable__factory";

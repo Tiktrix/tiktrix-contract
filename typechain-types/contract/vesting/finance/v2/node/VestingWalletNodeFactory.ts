@@ -23,7 +23,7 @@ import type {
   TypedContractMethod,
 } from "../../../../../common";
 
-export interface VestingWalletCommonFactoryInterface extends Interface {
+export interface VestingWalletNodeFactoryInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "createVestingWallet"
@@ -64,7 +64,6 @@ export interface VestingWalletCommonFactoryInterface extends Interface {
       string,
       AddressLike,
       AddressLike,
-      BigNumberish,
       BigNumberish,
       BigNumberish,
       BigNumberish
@@ -222,14 +221,17 @@ export interface VestingWalletCommonFactoryInterface extends Interface {
 
 export namespace ImplementationUpgradedEvent {
   export type InputTuple = [
+    vestingWallet: AddressLike,
     oldImplementation: AddressLike,
     newImplementation: AddressLike
   ];
   export type OutputTuple = [
+    vestingWallet: string,
     oldImplementation: string,
     newImplementation: string
   ];
   export interface OutputObject {
+    vestingWallet: string;
     oldImplementation: string;
     newImplementation: string;
   }
@@ -328,7 +330,6 @@ export namespace VestingWalletCreatedEvent {
     token: AddressLike,
     interval: BigNumberish,
     totalPhases: BigNumberish,
-    amountPerPhase: BigNumberish,
     startTimestamp: BigNumberish
   ];
   export type OutputTuple = [
@@ -337,7 +338,6 @@ export namespace VestingWalletCreatedEvent {
     token: string,
     interval: bigint,
     totalPhases: bigint,
-    amountPerPhase: bigint,
     startTimestamp: bigint
   ];
   export interface OutputObject {
@@ -346,7 +346,6 @@ export namespace VestingWalletCreatedEvent {
     token: string;
     interval: bigint;
     totalPhases: bigint;
-    amountPerPhase: bigint;
     startTimestamp: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
@@ -355,11 +354,11 @@ export namespace VestingWalletCreatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface VestingWalletCommonFactory extends BaseContract {
-  connect(runner?: ContractRunner | null): VestingWalletCommonFactory;
+export interface VestingWalletNodeFactory extends BaseContract {
+  connect(runner?: ContractRunner | null): VestingWalletNodeFactory;
   waitForDeployment(): Promise<this>;
 
-  interface: VestingWalletCommonFactoryInterface;
+  interface: VestingWalletNodeFactoryInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -405,7 +404,6 @@ export interface VestingWalletCommonFactory extends BaseContract {
       tokenAddress: AddressLike,
       interval: BigNumberish,
       totalPhases: BigNumberish,
-      amountPerPhase: BigNumberish,
       startTimestamp: BigNumberish
     ],
     [string],
@@ -508,7 +506,6 @@ export interface VestingWalletCommonFactory extends BaseContract {
       tokenAddress: AddressLike,
       interval: BigNumberish,
       totalPhases: BigNumberish,
-      amountPerPhase: BigNumberish,
       startTimestamp: BigNumberish
     ],
     [string],
@@ -649,7 +646,7 @@ export interface VestingWalletCommonFactory extends BaseContract {
   >;
 
   filters: {
-    "ImplementationUpgraded(address,address)": TypedContractEvent<
+    "ImplementationUpgraded(address,address,address)": TypedContractEvent<
       ImplementationUpgradedEvent.InputTuple,
       ImplementationUpgradedEvent.OutputTuple,
       ImplementationUpgradedEvent.OutputObject
@@ -704,7 +701,7 @@ export interface VestingWalletCommonFactory extends BaseContract {
       UpgradeSignedEvent.OutputObject
     >;
 
-    "VestingWalletCreated(address,address,address,uint64,uint64,uint256,uint64)": TypedContractEvent<
+    "VestingWalletCreated(address,address,address,uint64,uint64,uint64)": TypedContractEvent<
       VestingWalletCreatedEvent.InputTuple,
       VestingWalletCreatedEvent.OutputTuple,
       VestingWalletCreatedEvent.OutputObject
