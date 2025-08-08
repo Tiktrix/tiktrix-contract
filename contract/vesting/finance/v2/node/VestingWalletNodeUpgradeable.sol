@@ -124,11 +124,15 @@ contract VestingWalletNodeUpgradeable is
         if (timestamp < start) return 0;
 
         uint64 elapsed = timestamp - start;
-        uint64 currentPhase = elapsed / interval;
+        
+        // 완료된 전체 월수 계산 (1-based)
+        // elapsed / interval는 0-based이므로 +1을 하지 않고 그대로 사용
+        // 예: 30일 경과시 elapsed/interval = 1, 이는 1개월 완료를 의미
+        uint64 completedMonths = elapsed / interval;
 
-        // Cap at total phases
-        if (currentPhase >= totalPhases) {
-            currentPhase = totalPhases - 1;
+        // Cap at total phases (total months)
+        if (completedMonths >= totalPhases) {
+            completedMonths = totalPhases;
         }
 
         uint256 vested = 0;
@@ -146,22 +150,22 @@ contract VestingWalletNodeUpgradeable is
             AMOUNT_PHASE10
         ];
 
-        // Calculate vested amount up to currentPhase (inclusive)
+        // Calculate vested amount based on completed months
         for (uint256 i = 0; i < 10; i++) {
-            uint64 phaseStart = uint64(i * 12); // Phase group starts at month i*12
-            uint64 phaseEnd = phaseStart + 11; // Phase group ends at month i*12+11
+            uint64 phaseStartMonth = uint64(i * 12); // Phase group starts at month i*12
+            uint64 phaseEndMonth = phaseStartMonth + 12; // Phase group ends at month i*12+12
 
-            if (currentPhase < phaseStart) {
-                // Haven't reached this phase group yet
+            if (completedMonths <= phaseStartMonth) {
+                // Haven't completed enough months to reach this phase group
                 break;
             }
 
-            if (currentPhase >= phaseEnd) {
+            if (completedMonths >= phaseEndMonth) {
                 // Completed this entire phase group (12 months)
                 vested += phaseAmounts[i] * 12;
             } else {
                 // Partially completed this phase group
-                uint64 monthsInThisPhase = currentPhase - phaseStart + 1;
+                uint64 monthsInThisPhase = completedMonths - phaseStartMonth;
                 vested += phaseAmounts[i] * monthsInThisPhase;
             }
         }
