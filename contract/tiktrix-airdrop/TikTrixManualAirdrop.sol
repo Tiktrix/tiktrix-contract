@@ -53,7 +53,7 @@ contract TikTrixManualAirdrop is PermissionsEnumerable, ContractMetadata {
         airdropAmount = _airdropAmount;
     }
 
-    function multiSendAmount(
+    function multiSend(
         address[] calldata recipients
     ) external onlyRole(FACTORY_ROLE) {
         require(recipients.length > 0, "No recipients");
@@ -68,6 +68,23 @@ contract TikTrixManualAirdrop is PermissionsEnumerable, ContractMetadata {
         for (uint256 i = 0; i < recipients.length; i++) {
             _token.safeTransfer(recipients[i], airdropAmount);
             emit AirdropSend(recipients[i], airdropAmount);
+        }
+    }
+
+    function multiSendAmounts(
+        address[] calldata recipients,
+        uint256[] calldata amounts
+    ) external onlyRole(FACTORY_ROLE) {
+        require(recipients.length > 0, "No recipients");
+        require(recipients.length <= 1000, "Too many recipients");
+        require(
+            recipients.length == amounts.length,
+            "Recipients and amounts length mismatch"
+        );
+
+        for (uint256 i = 0; i < recipients.length; i++) {
+            _token.safeTransfer(recipients[i], amounts[i]);
+            emit AirdropSend(recipients[i], amounts[i]);
         }
     }
 
