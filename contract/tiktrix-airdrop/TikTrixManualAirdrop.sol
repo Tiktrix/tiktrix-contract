@@ -15,7 +15,7 @@ contract TikTrixManualAirdrop is PermissionsEnumerable, ContractMetadata {
 
     using SafeERC20 for IERC20;
     uint256 public airdropAmount;
-    IERC20 private immutable _token;
+    IERC20 public _token;
 
     mapping(address => bool) public hasClaimed;
 
@@ -41,6 +41,13 @@ contract TikTrixManualAirdrop is PermissionsEnumerable, ContractMetadata {
 
     function _canSetContractURI() internal view override returns (bool) {
         return msg.sender == deployer;
+    }
+
+    function setToken(
+        address tokenAddress
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(tokenAddress != address(0), "Invalid token");
+        _token = IERC20(tokenAddress);
     }
 
     function getAirdropAmount() external view returns (uint256) {
