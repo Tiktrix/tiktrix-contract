@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
+import "@thirdweb-dev/contracts/extension/Multicall.sol";
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
