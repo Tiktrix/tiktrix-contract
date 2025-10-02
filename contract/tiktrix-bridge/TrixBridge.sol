@@ -2,14 +2,21 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
 /**
  * @title TrixBridge
  * @dev Bridge contract for locking and releasing TRIX tokens between Ethereum and Meer Chain
  */
-contract TrixBridge is Ownable, ReentrancyGuard {
+contract TrixBridge is PermissionsEnumerable, ContractMetadata, Multicall, ReentrancyGuard {
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
+
+    address public owner;
+    address public deployer;
+
     IERC20 public trixToken;
 
     mapping(address => uint256) public lockedBalances;
@@ -22,9 +29,17 @@ contract TrixBridge is Ownable, ReentrancyGuard {
      * @dev Constructor
      * @param _trixToken Address of the TRIX token contract
      */
-    constructor(address _trixToken) Ownable(msg.sender) {
+    constructor(string memory _contractURI, address _trixToken) {
         require(_trixToken != address(0), "Invalid token address");
         trixToken = IERC20(_trixToken);
+        deployer = msg.sender;
+        _setupContractURI(_contractURI);
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
+    }
+
+    function _canSetContractURI() internal view override returns (bool) {
+        return msg.sender == deployer;
     }
 
     /**
@@ -51,7 +66,7 @@ contract TrixBridge is Ownable, ReentrancyGuard {
      * @param amount Amount of tokens to release
      * @param fromTxHash Transaction hash from the source chain Lock transaction
      */
-    function release(address user, uint256 amount, bytes32 fromTxHash) external onlyOwner nonReentrant {
+    function release(address user, uint256 amount, bytes32 fromTxHash) external onlyRole(FACTORY_ROLE) nonReentrant {
         require(amount > 0, "Amount must be greater than 0");
         require(fromTxHash != bytes32(0), "Invalid transaction hash");
         require(!processedTransactions[fromTxHash], "Transaction already processed");
@@ -81,12 +96,12 @@ contract TrixBridge is Ownable, ReentrancyGuard {
      * @dev Emergency withdraw function (only owner)
      * @param amount Amount to withdraw
      */
-    function emergencyWithdraw(uint256 amount) external onlyOwner {
+    function emergencyWithdraw(uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(
             trixToken.balanceOf(address(this)) >= amount,
             "Insufficient balance"
         );
-        require(trixToken.transfer(owner(), amount), "Transfer failed");
+        require(trixToken.transfer(msg.sender, amount), "Transfer failed");
     }
 
     /**

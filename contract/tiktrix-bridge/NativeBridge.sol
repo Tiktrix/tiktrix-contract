@@ -1,14 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
+import "@thirdweb-dev/contracts/extension/Multicall.sol";
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
 /**
  * @title NativeBridge
  * @dev Bridge contract for locking and releasing native coins (ETH) between chains
  */
-contract NativeBridge is Ownable, ReentrancyGuard {
+contract NativeBridge is PermissionsEnumerable, ContractMetadata, Multicall, ReentrancyGuard {
+    bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
+
+    address public owner;
+    address public deployer;
+
     mapping(address => uint256) public lockedBalances;
     mapping(bytes32 => bool) public processedTransactions;
 
@@ -19,7 +27,16 @@ contract NativeBridge is Ownable, ReentrancyGuard {
     /**
      * @dev Constructor
      */
-    constructor() Ownable(msg.sender) payable {}
+    constructor(string memory _contractURI) {
+        _setupContractURI(_contractURI);
+        deployer = msg.sender;
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(FACTORY_ROLE, msg.sender);
+    }
+
+    function _canSetContractURI() internal view override returns (bool) {
+        return msg.sender == deployer;
+    }
 
     /**
      * @dev Lock native coins in the bridge
@@ -38,7 +55,7 @@ contract NativeBridge is Ownable, ReentrancyGuard {
      * @param amount Amount of coins to release
      * @param fromTxHash Transaction hash from the source chain Lock transaction
      */
-    function release(address payable user, uint256 amount, bytes32 fromTxHash) external onlyOwner nonReentrant {
+    function release(address payable user, uint256 amount, bytes32 fromTxHash) external onlyRole(FACTORY_ROLE) nonReentrant {
         require(amount > 0, "Amount must be greater than 0");
         require(fromTxHash != bytes32(0), "Invalid transaction hash");
         require(!processedTransactions[fromTxHash], "Transaction already processed");
@@ -66,10 +83,10 @@ contract NativeBridge is Ownable, ReentrancyGuard {
      * @dev Emergency withdraw function (only owner)
      * @param amount Amount to withdraw
      */
-    function emergencyWithdraw(uint256 amount) external onlyOwner {
+    function emergencyWithdraw(uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(address(this).balance >= amount, "Insufficient balance");
 
-        (bool success, ) = payable(owner()).call{value: amount}("");
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
         require(success, "Transfer failed");
     }
 
