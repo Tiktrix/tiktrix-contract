@@ -16,3 +16,4 @@ cache
 .idea/modules.xml
 .idea/tiktrix-contract.iml
 .idea/vcs.xml
+.typechain-types/
