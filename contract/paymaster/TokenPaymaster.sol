@@ -5,19 +5,30 @@ import "@account-abstraction/contracts/interfaces/IPaymaster.sol";
 import "@account-abstraction/contracts/interfaces/IEntryPoint.sol";
 import "@thirdweb-dev/contracts/extension/PermissionsEnumerable.sol";
 import "@thirdweb-dev/contracts/extension/Multicall.sol";
+import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
 
+contract TokenPaymaster is IPaymaster, PermissionsEnumerable, Multicall, ContractMetadata {
+    address public owner;
+    address public deployer;
 
-contract TokenPaymaster is IPaymaster, PermissionsEnumerable, Multicall {
     IEntryPoint public immutable entryPoint;
     bytes32 public constant FACTORY_ROLE = keccak256("FACTORY_ROLE");
     
     mapping(address => bool) public supportedTokens;
     mapping(address => uint256) public userGasLimits;
     
-    constructor(IEntryPoint _entryPoint) {
+    constructor(string memory _contractURI, address _deployer, IEntryPoint _entryPoint) {
+        owner = msg.sender;
+        deployer = _deployer;
         entryPoint = _entryPoint;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(FACTORY_ROLE, msg.sender);
+
+        _setupContractURI(_contractURI);
+    }
+
+    function _canSetContractURI() internal view override returns (bool) {
+        return msg.sender == deployer;
     }
 
     function validatePaymasterUserOp(

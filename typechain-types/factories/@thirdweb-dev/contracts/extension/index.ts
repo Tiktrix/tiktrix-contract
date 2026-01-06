@@ -3,5 +3,6 @@
 /* eslint-disable */
 export * as interface from "./interface";
 export { ContractMetadata__factory } from "./ContractMetadata__factory";
+export { Multicall__factory } from "./Multicall__factory";
 export { Permissions__factory } from "./Permissions__factory";
 export { PermissionsEnumerable__factory } from "./PermissionsEnumerable__factory";

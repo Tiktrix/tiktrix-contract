@@ -2,5 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { IContractMetadata } from "./IContractMetadata";
+export type { IMulticall } from "./IMulticall";
 export type { IPermissions } from "./IPermissions";
 export type { IPermissionsEnumerable } from "./IPermissionsEnumerable";
