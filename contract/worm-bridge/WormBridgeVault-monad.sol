@@ -12,9 +12,11 @@ import "@thirdweb-dev/contracts/extension/ContractMetadata.sol";
  * @title WormBridgeVault
  * @dev Vault contract for releasing WORM tokens on Monad
  * Receives locked tokens from MeerChain bridge and releases to users
- * Uses meerTxHash for duplicate prevention - no role-based access control for release
+ * Uses RELAYER_ROLE for access control and meerTxHash for duplicate prevention
  */
 contract WormBridgeVault is PermissionsEnumerable, ContractMetadata, Multicall, ReentrancyGuard {
+    bytes32 public constant RELAYER_ROLE = keccak256("RELAYER_ROLE");
+
     address public deployer;
 
     IERC20 public wormToken;
@@ -35,6 +37,12 @@ contract WormBridgeVault is PermissionsEnumerable, ContractMetadata, Multicall, 
         uint256 timestamp
     );
 
+    event EmergencyWithdraw(
+        address indexed admin,
+        uint256 amount,
+        uint256 timestamp
+    );
+
     /**
      * @dev Constructor
      * @param _contractURI Metadata URI for the contract
@@ -46,6 +54,7 @@ contract WormBridgeVault is PermissionsEnumerable, ContractMetadata, Multicall, 
         deployer = msg.sender;
         _setupContractURI(_contractURI);
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(RELAYER_ROLE, msg.sender);
     }
 
     function _canSetContractURI() internal view override returns (bool) {
@@ -54,12 +63,12 @@ contract WormBridgeVault is PermissionsEnumerable, ContractMetadata, Multicall, 
 
     /**
      * @dev Release WORM tokens to a user
-     * No role restriction - meerTxHash uniqueness prevents double-spending
+     * Only accounts with RELAYER_ROLE can call this function
      * @param to Address of the recipient (user's AA wallet on Monad)
      * @param amount Amount of tokens to release
      * @param meerTxHash Lock transaction hash from MeerChain (prevents duplicate releases)
      */
-    function release(address to, uint256 amount, bytes32 meerTxHash) external nonReentrant {
+    function release(address to, uint256 amount, bytes32 meerTxHash) external onlyRole(RELAYER_ROLE) nonReentrant {
         require(!processedTransactions[meerTxHash], "Already processed");
         require(meerTxHash != bytes32(0), "Invalid meerTxHash");
         require(to != address(0), "Invalid recipient");
@@ -119,6 +128,8 @@ contract WormBridgeVault is PermissionsEnumerable, ContractMetadata, Multicall, 
             "Insufficient balance"
         );
         require(wormToken.transfer(msg.sender, amount), "Transfer failed");
+
+        emit EmergencyWithdraw(msg.sender, amount, block.timestamp);
     }
 }
 
