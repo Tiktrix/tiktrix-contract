@@ -49,6 +49,9 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
     // Locked balances per token per user (token => user => amount)
     mapping(address => mapping(address => uint256)) public lockedBalances;
 
+    // Native token address constant (address(0) represents native token)
+    address public constant NATIVE_TOKEN = address(0);
+
     // Events
     event Lock(
         address indexed user,
@@ -160,6 +163,33 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
     }
 
     /**
+     * @dev Lock native tokens to bridge to another chain
+     * @param targetChainId Target chain ID to bridge to
+     */
+    function lockNative(
+        uint256 targetChainId
+    ) external payable nonReentrant whenNotPaused onlyValidDestination(targetChainId) {
+        require(supportedTokens[NATIVE_TOKEN], "Native token not supported");
+        require(msg.value > 0, "Amount must be greater than 0");
+
+        // Calculate fee
+        uint256 fee = calculateFee(msg.value);
+        uint256 netAmount = msg.value - fee;
+        require(netAmount > 0, "Amount after fee must be greater than 0");
+
+        // Track collected fees
+        if (fee > 0) {
+            collectedFees[NATIVE_TOKEN] += fee;
+            emit FeeCollected(NATIVE_TOKEN, msg.sender, fee, block.timestamp);
+        }
+
+        // Update locked balance (net amount only)
+        lockedBalances[NATIVE_TOKEN][msg.sender] += netAmount;
+
+        emit Lock(msg.sender, NATIVE_TOKEN, netAmount, fee, targetChainId, block.timestamp);
+    }
+
+    /**
      * @dev Release tokens to a user (only relayer can call)
      * @param user Address of the user to release tokens to
      * @param token Address of the token to release
@@ -191,6 +221,37 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
         IERC20(token).safeTransfer(user, amount);
 
         emit Release(user, token, amount, sourceChainId, fromTxHash, block.timestamp);
+    }
+
+    /**
+     * @dev Release native tokens to a user (only relayer can call)
+     * @param user Address of the user to release tokens to
+     * @param amount Amount of native tokens to release
+     * @param sourceChainId Source chain ID where lock occurred
+     * @param fromTxHash Transaction hash from the source chain Lock transaction
+     */
+    function releaseNative(
+        address user,
+        uint256 amount,
+        uint256 sourceChainId,
+        bytes32 fromTxHash
+    ) external onlyRole(RELAYER_ROLE) nonReentrant whenNotPaused {
+        require(supportedTokens[NATIVE_TOKEN], "Native token not supported");
+        require(user != address(0), "Invalid user address");
+        require(amount > 0, "Amount must be greater than 0");
+        require(fromTxHash != bytes32(0), "Invalid transaction hash");
+        require(!processedTransactions[fromTxHash], "Transaction already processed");
+        require(sourceChainId != currentChainId, "Invalid source chain");
+        require(address(this).balance >= amount, "Insufficient bridge balance");
+
+        // Mark transaction as processed
+        processedTransactions[fromTxHash] = true;
+
+        // Transfer native tokens to user
+        (bool success, ) = payable(user).call{value: amount}("");
+        require(success, "Native transfer failed");
+
+        emit Release(user, NATIVE_TOKEN, amount, sourceChainId, fromTxHash, block.timestamp);
     }
 
     // ============ Token Management Functions ============
@@ -282,6 +343,19 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
     }
 
     /**
+     * @dev Emergency withdraw native tokens (only admin)
+     * @param amount Amount to withdraw
+     */
+    function emergencyWithdrawNative(uint256 amount) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(amount > 0, "Amount must be greater than 0");
+        require(address(this).balance >= amount, "Insufficient balance");
+
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
+        require(success, "Native transfer failed");
+        emit EmergencyWithdraw(msg.sender, NATIVE_TOKEN, amount, block.timestamp);
+    }
+
+    /**
      * @dev Deposit tokens to increase bridge liquidity
      * @param token Address of the token to deposit
      * @param amount Amount to deposit
@@ -291,6 +365,23 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
 
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
         emit Deposit(msg.sender, token, amount, block.timestamp);
+    }
+
+    /**
+     * @dev Deposit native tokens to increase bridge liquidity
+     */
+    function depositNative() external payable {
+        require(supportedTokens[NATIVE_TOKEN], "Native token not supported");
+        require(msg.value > 0, "Amount must be greater than 0");
+
+        emit Deposit(msg.sender, NATIVE_TOKEN, msg.value, block.timestamp);
+    }
+
+    /**
+     * @dev Receive function to accept native token deposits
+     */
+    receive() external payable {
+        // Accept native token transfers
     }
 
     // ============ Fee Management Functions ============
@@ -323,7 +414,7 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
 
     /**
      * @dev Withdraw collected fees (only admin)
-     * @param token Address of the token to withdraw fees for
+     * @param token Address of the token to withdraw fees for (use address(0) for native)
      */
     function withdrawFees(address token) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(feeRecipient != address(0), "Fee recipient not set");
@@ -332,14 +423,20 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
         require(feeAmount > 0, "No fees to withdraw");
 
         collectedFees[token] = 0;
-        IERC20(token).safeTransfer(feeRecipient, feeAmount);
+
+        if (token == NATIVE_TOKEN) {
+            (bool success, ) = payable(feeRecipient).call{value: feeAmount}("");
+            require(success, "Native transfer failed");
+        } else {
+            IERC20(token).safeTransfer(feeRecipient, feeAmount);
+        }
 
         emit FeeWithdrawn(token, feeRecipient, feeAmount, block.timestamp);
     }
 
     /**
      * @dev Withdraw collected fees to a specific address (only admin)
-     * @param token Address of the token to withdraw fees for
+     * @param token Address of the token to withdraw fees for (use address(0) for native)
      * @param recipient Address to send fees to
      */
     function withdrawFeesTo(address token, address recipient) external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -349,7 +446,13 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
         require(feeAmount > 0, "No fees to withdraw");
 
         collectedFees[token] = 0;
-        IERC20(token).safeTransfer(recipient, feeAmount);
+
+        if (token == NATIVE_TOKEN) {
+            (bool success, ) = payable(recipient).call{value: feeAmount}("");
+            require(success, "Native transfer failed");
+        } else {
+            IERC20(token).safeTransfer(recipient, feeAmount);
+        }
 
         emit FeeWithdrawn(token, recipient, feeAmount, block.timestamp);
     }
@@ -389,10 +492,13 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
 
     /**
      * @dev Get the bridge balance for a specific token
-     * @param token Address of the token
+     * @param token Address of the token (use address(0) for native token)
      * @return Balance of tokens in the bridge
      */
     function getBridgeBalance(address token) external view returns (uint256) {
+        if (token == NATIVE_TOKEN) {
+            return address(this).balance;
+        }
         return IERC20(token).balanceOf(address(this));
     }
 
