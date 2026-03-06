@@ -261,7 +261,6 @@ contract UnifiedBridge is PermissionsEnumerable, ContractMetadata, Multicall, Re
      * @param token Address of the token to add
      */
     function addSupportedToken(address token) external onlyRole(TOKEN_MANAGER_ROLE) {
-        require(token != address(0), "Invalid token address");
         require(!supportedTokens[token], "Token already supported");
 
         supportedTokens[token] = true;
